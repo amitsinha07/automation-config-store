@@ -327,4 +327,6 @@ jobs:
           cp -rf $GITHUB_WORKSPACE/api-service/src/config/* ./src/config/api-service/
           cp -rf $GITHUB_WORKSPACE/mock-service/src/config/mock-config/* ./src/config/mock-config/
           cp -rf $GITHUB_WORKSPACE/config-service/* ./src/config/config-service/
+          cp -rf $GITHUB_WORKSPACE/runner-config/test-config/* ./src/config/test-config/
+          
           
