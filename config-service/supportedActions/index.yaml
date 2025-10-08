@@ -1,22 +1,22 @@
 supportedActions:
-  null: ["search","select"]
+  null: ["search", "select"]
   search: ["on_search"]
-  on_search: ["search", "select","on_search"]
-  select: ["on_select","select"]
-  on_select: ["init","on_select","select"]
+  on_search: ["search", "select", "on_search"]
+  select: ["on_select", "select"]
+  on_select: ["init", "on_select", "select"]
   init: ["on_init"]
   on_init: ["init", "confirm"]
   confirm: ["on_confirm", "status"]
-  on_confirm: ["status", "cancel", "on_status", "on_update","update","on_cancel"]
+  on_confirm:
+    ["status", "cancel", "on_status", "on_update", "update", "on_cancel"]
   status: ["on_status"]
-  on_status: ["status", "cancel", "on_update","track","on_status","update"]
-  on_update: ["status","update","on_status","track"]
+  on_status: ["status", "cancel", "on_update", "track", "on_status", "update"]
+  on_update: ["status", "update", "on_status", "track"]
   cancel: ["on_cancel", "status"]
-  on_cancel: ["cancel", "status","on_status"]
+  on_cancel: ["cancel", "status", "on_status"]
   track: ["on_track"]
-  on_track: ["on_status","on_update"]
+  on_track: ["on_status", "on_update"]
   update: ["on_update"]
-
 apiProperties:
   search:
     async_predecessor: null
@@ -53,7 +53,7 @@ apiProperties:
     transaction_partner: ["confirm", "on_confirm"]
   on_cancel:
     async_predecessor: null
-    transaction_partner: ["confirm","on_confirm"]
+    transaction_partner: ["confirm", "on_confirm"]
   track:
     async_predecessor: null
     transaction_partner: ["init", "on_init", "confirm", "on_confirm"]
