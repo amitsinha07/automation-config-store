@@ -26,7 +26,7 @@ function getDetailsByActionId(
 	const entry = factoryData.codes.find(
 		(item: any) => item.action_id === actionId
 	);
-	console.log("entry>>>>>>>>>>>", actionId, "found:", !!entry);
+
 	if (entry) {
 		return {
 			default: entry.default,

@@ -191,7 +191,7 @@ export async function initDefaultGenerator(existingPayload: any, sessionData: an
           ]
         }
       ];
-      console.log("Applied Buyer_App_Fulfilling: BAP fulfillments without location");
+
       
     } else {
       // Default fallback - use session data or default structure
