@@ -4,6 +4,7 @@ import MockRunner, {
 import { MockAction, MockOutput, saveType } from "./mock-action";
 import logger from "@ondc/automation-logger";
 import { RedisService } from "ondc-automation-cache-lib";
+import { randomUUID } from "crypto";
 export type MockSessionData = any;
 
 export const actionConfig: any = {
@@ -18,6 +19,7 @@ export async function generateMockResponse(
 	action_id: string,
 	input?: any
 ) {
+	sessionData.transaction_id = sessionData.transaction_id || randomUUID();
 	const mockAction = await getMockActionObject(action_id, session_id);
 	sessionData.user_input = input || {};
 	const res = await mockAction.generator({}, sessionData);
@@ -32,6 +34,17 @@ export async function getMockActionObject(
 		throw new Error("Session not provided for getting mock action object");
 	}
 	const playgroundConfig = await loadPlaygroundConfig(sessionId);
+	let apiServiceUrl =
+		process.env.API_SERVICE_URL ||
+		"https://dev-automation.ondc.org/api-service";
+	if (apiServiceUrl.endsWith("/")) {
+		apiServiceUrl = apiServiceUrl.slice(0, -1);
+	}
+	const ownerId = apiServiceUrl.split("//")[1].split("/")[0];
+	playgroundConfig.transaction_data.bap_id =
+		playgroundConfig.transaction_data.bpp_id = ownerId;
+	playgroundConfig.transaction_data.bap_uri = `${apiServiceUrl}/${playgroundConfig.meta.domain}/${playgroundConfig.meta.version}/buyer`;
+	playgroundConfig.transaction_data.bpp_uri = `${apiServiceUrl}/${playgroundConfig.meta.domain}/${playgroundConfig.meta.version}/seller`;
 	return new ConfigAction(playgroundConfig, actionId);
 }
 
@@ -110,9 +123,12 @@ class ConfigAction implements MockAction {
 		return res.result ?? { success: false, message: "Requirements not met" };
 	}
 	get saveData(): saveType {
-		return {
+		const base = {
 			"save-data": this.step.mock.saveData || {},
 		};
+		base["save-data"].latestMessage_id = "$.context.message_id";
+		base["save-data"].latestTimestamp = "$.context.timestamp";
+		return base;
 	}
 	__forceSaveData(sessionData: MockSessionData): Promise<Record<string, any>> {
 		throw new Error("Method not implemented.");
