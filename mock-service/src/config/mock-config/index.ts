@@ -21,7 +21,7 @@ export async function generateMockResponse(
 ) {
 	sessionData.transaction_id = sessionData.transaction_id || randomUUID();
 	const mockAction = await getMockActionObject(action_id, session_id);
-	sessionData.user_input = input || {};
+	sessionData.user_inputs = input || {};
 	const res = await mockAction.generator({}, sessionData);
 	return res;
 }
