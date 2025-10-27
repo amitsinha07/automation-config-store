@@ -56,7 +56,7 @@ export async function onSelectGenerator(
     simplifiedStops.some((ss: any) => ss.id === stop.id)
   );
   const tags = [
-    generateSeatGridTag("0", "0", "0", "A1", "FEMALE", "I1"),
+    generateSeatGridTag("0", "0", "0", sessionData.seat_grid || "A1", "FEMALE", "I1"),
     generateSeatGridTag("1", "0", "1", "F1", "MALE", "I1"),
     generateSeatGridTag("1", "1", "1", "F2", "MALE", "I1"),
     generateSeatGridTag("0", "1", "1", "A3", "MALE", "I1"),

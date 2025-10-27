@@ -18,11 +18,12 @@ export async function selectGenerator(
       id: sessionData.item_ids[0],
       quantity: {
         selected: {
-          count: 2,
+          count: sessionData?.user_inputs?.seat_count || 1,
         },
       },
     },
   ];
+
   existingPayload.message.order.provider = { id: sessionData.provider_id };
 
   return existingPayload;

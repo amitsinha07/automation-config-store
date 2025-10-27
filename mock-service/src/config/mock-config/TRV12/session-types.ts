@@ -10,6 +10,8 @@ export interface SessionData {
 	bpp_id: string | undefined;
 	bpp_uri: string | undefined;
 	start_location: string | undefined;
+	seat_grid: string | undefined;
+	seat_count: string | undefined;
 	buyer_app_fee: string | undefined;
 	vehicle_type: string | undefined;
 	fulfillments: any | undefined;
@@ -122,4 +124,5 @@ export interface Input {
 	retailCategory?: string;
 	returnToOrigin?: string;
 	default_feature?: string[];
+	seat_count?: string;
 }

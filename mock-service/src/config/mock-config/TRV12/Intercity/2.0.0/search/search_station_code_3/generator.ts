@@ -25,7 +25,6 @@ export async function searchGenerator(
         pickupStop ? { id: pickupStop.id, type: pickupStop.type } : null,
         dropStop ? { id: dropStop.id, type: dropStop.type } : null,
       ].filter(Boolean),
-      vehicle: firstFulfillment.vehicle,
     };
   }
   existingPayload.message.intent.provider = { id: sessionData.provider_id };
