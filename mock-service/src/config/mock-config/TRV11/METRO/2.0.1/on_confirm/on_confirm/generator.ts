@@ -8,6 +8,7 @@ function generateQrToken(): string {
 function updateFulfillmentsWithParentInfo(fulfillments: any[]): void {
   
   //compute timestamp for valid_to (end of day IST)
+  const now = new Date();
   const istOffset = 5.5 * 60 * 60 * 1000; 
   const istNow = new Date(now.getTime() + istOffset);
   const y = istNow.getFullYear();
