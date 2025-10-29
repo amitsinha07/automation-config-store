@@ -23256,10 +23256,12 @@ x-validations:
         _RETURN_: attr are present
       - _NAME_: REQUIRED_MESSAGE_HOLIDAYS
         attr: $.message.intent.provider.time.schedule.holidays[*]
-        _RETURN_: attr are present
+        reg: ['^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$']
+        _RETURN_: attr follow regex reg
       - _NAME_: REQUIRED_MESSAGE_DURATION
         attr: $.message.intent.provider.time.duration
-        _RETURN_: attr are present
+        reg: ['^(P\\d+D|PT\\d+H|PT\\d+M)$']
+        _RETURN_: attr follow regex reg
       - _NAME_: REQUIRED_MESSAGE_START
         attr: $.message.intent.provider.time.range.start
         _RETURN_: attr are present
@@ -23276,7 +23278,9 @@ x-validations:
           - RTO
       - _NAME_: REQUIRED_MESSAGE_GPS
         attr: $.message.intent.fulfillment.start.location.gps
-        _RETURN_: attr are present
+        reg: ['^-?\\d+\\.\\d{4,},-?\\d+\\.\\d{4,}$']
+        _CONTINUE_: "!(fulfillmentType all in fulType)"
+        _RETURN_: attr follow regex reg
       - _NAME_: REQUIRED_MESSAGE_AREA_CODE
         attr: $.message.intent.fulfillment.start.location.address.area_code
         _RETURN_: attr are present
@@ -23284,8 +23288,9 @@ x-validations:
         fulfillmentType: $.message.intent.fulfillment.type
         fulType: ["Delivery"]
         attr: $.message.intent.fulfillment.end.location.gps
+        reg: ['^-?\\d+\\.\\d{4,},-?\\d+\\.\\d{4,}$']
         _CONTINUE_: "!(fulfillmentType all in fulType)"
-        _RETURN_: attr are present
+        _RETURN_: attr follow regex reg
       - _NAME_: REQUIRED_MESSAGE_AREA_CODE_22
         fulfillmentType: $.message.intent.fulfillment.type
         fulType: ["Delivery"]
