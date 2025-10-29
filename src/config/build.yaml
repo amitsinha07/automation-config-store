@@ -23279,7 +23279,6 @@ x-validations:
       - _NAME_: REQUIRED_MESSAGE_GPS
         attr: $.message.intent.fulfillment.start.location.gps
         reg: ['^-?\\d+\\.\\d{4,},-?\\d+\\.\\d{4,}$']
-        _CONTINUE_: "!(fulfillmentType all in fulType)"
         _RETURN_: attr follow regex reg
       - _NAME_: REQUIRED_MESSAGE_AREA_CODE
         attr: $.message.intent.fulfillment.start.location.address.area_code
