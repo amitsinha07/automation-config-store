@@ -6,10 +6,18 @@ function generateQrToken(): string {
 }
 
 function updateFulfillmentsWithParentInfo(fulfillments: any[]): void {
-    const validTo = "2024-07-23T23:59:59.999Z";
+  
+  //compute timestamp for valid_to (end of day IST)
+  const istOffset = 5.5 * 60 * 60 * 1000; 
+  const istNow = new Date(now.getTime() + istOffset);
+  const y = istNow.getFullYear();
+  const m = istNow.getMonth();
+  const d = istNow.getDate();
+  const endIST = new Date(Date.UTC(y, m, d + 1, 4 - 5, 30 - 30, 0)); 
+  const validTo = endIST.toISOString();
   
     fulfillments.forEach((fulfillment) => {
-      // Check if the fulfillment has a parent tag
+    
       const parentTag = fulfillment.tags?.find(
         (tag: any) =>
           tag.descriptor?.code === "INFO" &&

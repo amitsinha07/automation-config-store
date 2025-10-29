@@ -8,7 +8,7 @@ function updatePaymentDetails(
   
 	providers.forEach((provider: any) => {
 	  const payments = provider?.payments || [];
-  
+	  
 	  payments.forEach((payment: any) => {
 		// Update collected_by
 		payment.collected_by = sessionData.collected_by;
@@ -96,12 +96,28 @@ const createCustomRoute = (
 	});
 };
 
+function updateItemTimestamp(
+    payload: any,
+  ) {
+    const providers = payload?.message?.catalog?.providers || [];
+    providers.forEach((provider: any) => {
+      provider?.items.forEach((item: any) => {
+        const newTimestamp = new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString();
+        item.time.timestamp = newTimestamp;
+      });
+      
+    });
+  
+    return payload;
+  }
+
 export async function onSearch2Generator(
 	existingPayload: any,
 	sessionData: SessionData
 ) {
 	try {
 		existingPayload = updatePaymentDetails(existingPayload,sessionData)
+		existingPayload = updateItemTimestamp(existingPayload)
 		const route = createFullfillment(
 			sessionData.city_code ?? "std:011"
 		).fulfillments;

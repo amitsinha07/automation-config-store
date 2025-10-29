@@ -11,6 +11,10 @@ message:
               name: Ticket
               code: TICKET
             id: C1
+          - descriptor:
+              name: Pass
+              code: PASS
+            id: C2  
         time:
           range:
             start: 2023-09-14T05:30:00.000Z
