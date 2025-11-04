@@ -1,0 +1,132 @@
+{
+	"payload_inputs": {
+		"incremental_pull_journey": [
+			{
+				"actionId": "search_incremental_pull",
+				"input_data": {
+					"city_code": "std:080"
+				}
+			}
+		],
+		"seller_app_pagination_journey": [
+			{
+				"actionId": "search_seller_pagination",
+				"input_data": {
+					"city_code": "std:080"
+				}
+			}
+		],
+		"purchase_journey_without_form": [
+			{
+				"actionId": "select",
+				"input_data": {
+					"provider": "P1",
+					"items": [
+					{
+						"itemId": "I1",
+						"count": 1,
+						"addOns": [],
+						"parentItemId": "I0"
+					}
+					],
+					"fulfillment": "F1"	
+				}
+			}
+		],
+		"technical_cancellation": [
+			{
+				"actionId": "select",
+				"input_data": {
+					"provider": "P1",
+					"items": [
+					{
+						"itemId": "I1",
+						"count": 1,
+						"addOns": [],
+						"parentItemId": "I0"
+					}
+					],
+					"fulfillment": "F1"	
+				}
+			}
+		],
+		"User Cancellation (Full)": [
+			{
+				"actionId": "search_seller_pagination",
+				"input_data": {
+					"city_code": "std:080"
+				}
+			},
+			{
+				"actionId": "select",
+				"input_data": {
+					"provider": "P1",
+					"items": [
+					{
+						"itemId": "I1",
+						"count": 1,
+						"addOns": [],
+						"parentItemId": "I0"
+					}
+					],
+					"fulfillment": "F1"	
+				}
+			}
+		],
+		"User Cancellation (Partial)": [
+			{
+				"actionId": "search_seller_pagination",
+				"input_data": {
+					"city_code": "std:080"
+				}
+			},
+			{
+				"actionId": "select_for_partial_cancellation",
+				"input_data": {
+					"provider": "P1",
+					"items": [
+					{
+						"itemId": "I1",
+						"count": 2,
+						"addOns": [],
+						"parentItemId": "I0"
+					}
+					],
+					"fulfillment": "F1"	
+				}
+			},
+			{
+				"actionId": "on_select_form_submission",
+				"input_data": {
+					"select_input": {
+						"cancellation_reason_id": "1",
+						"cancellation_reason_text": "Ordered by mistake"
+					}
+				}
+			}
+		],
+		"Cancellation Rejected": [
+			{
+				"actionId": "search_seller_pagination",
+				"input_data": {
+					"city_code": "std:080"
+				}
+			},
+			{
+				"actionId": "select",
+				"input_data": {
+					"provider": "P1",
+					"items": [
+					{
+						"itemId": "I1",
+						"count": 1,
+						"addOns": [],
+						"parentItemId": "I0"
+					}
+					],
+					"fulfillment": "F1"	
+				}
+			}
+		]
+	}
+}
