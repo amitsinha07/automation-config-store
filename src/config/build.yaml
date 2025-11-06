@@ -1152,7 +1152,7 @@ components:
           type: string
         descriptor:
           allOf:
-            - $ref: "#/components/schemas/Descriptor"
+            - $ref: "#/components/schemas/DescriptorIgm"
             - type: object
               properties:
                 code:
@@ -2399,7 +2399,7 @@ components:
           type: string
           format: date-time
         descriptor:
-          $ref: "#/components/schemas/Descriptor"
+          $ref: "#/components/schemas/DescriptorIgm"
         tags:
           $ref: "#/components/schemas/Tag1"
         ref_id:
