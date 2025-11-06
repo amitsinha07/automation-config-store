@@ -59,11 +59,17 @@ import { MockOnStatusActiveMetro201Class } from "./METRO/2.0.1/on_status/on_stat
 import { MockOnStatusCancelMetro201Class } from "./METRO/2.0.1/on_status/on_status_cancelled/class";
 import { MockOnStatusCompleteMetro201Class } from "./METRO/2.0.1/on_status/on_status_complete/class";
 import { MockOnUpdateAcceptedMetro201Class } from "./METRO/2.0.1/on_update/on_update_accepted/class";
+import { MockOnUpdateEndStop1MetroClass } from "./METRO/2.0.1/on_update/on_update_end_stop_1/class";
+import { MockOnUpdateEndStop2MetroClass } from "./METRO/2.0.1/on_update/on_update_end_stop_2/class";
+import { MockOnUpdateEndStop3MetroClass } from "./METRO/2.0.1/on_update/on_update_end_stop_3/class";
 import { MockSearch1Metro201Class } from "./METRO/2.0.1/search/search1/class";
 import { MockSearch2Metro201Class } from "./METRO/2.0.1/search/search2/class";
 import { MockSelectMetro201Class } from "./METRO/2.0.1/select/class";
 import { MockStatusMetro201Class } from "./METRO/2.0.1/status/status_active/class";
 import { MockStatusTechCancelMetro201Class } from "./METRO/2.0.1/status/status_tech_cancel/class";
+import { MockUpdateEndStop1MetroClass } from "./METRO/2.0.1/update/update_end_stop_1/class";
+import { MockUpdateEndStop2MetroClass } from "./METRO/2.0.1/update/update_end_stop_2/class";
+import { MockUpdateEndStop3MetroClass } from "./METRO/2.0.1/update/update_end_stop_3/class";
 
 import { MockAction } from "./classes/mock-action";
 
@@ -110,7 +116,7 @@ const registry = {
   status_BUS_201: MockStatusBus201Class,
   update_BUS_201: MockUpdateBus201Class,
   update_BUS_QR_201: MockUpdateQrBus201Class,
-
+  
   // METRO 2.0.1
   cancel_METRO_201: MockCancelMetro201Class,
   cancel_hard_METRO_201: MockCancelHardMetro201Class,
@@ -137,6 +143,12 @@ const registry = {
   select_METRO_201: MockSelectMetro201Class,
   status_METRO_201: MockStatusMetro201Class,
   status_tech_cancel_METRO_201: MockStatusTechCancelMetro201Class,
+  update_end_stop_1: MockUpdateEndStop1MetroClass,
+  update_end_stop_2: MockUpdateEndStop2MetroClass,
+  update_end_stop_3: MockUpdateEndStop3MetroClass,
+  on_update_end_stop_1: MockOnUpdateEndStop1MetroClass,
+  on_update_end_stop_2: MockOnUpdateEndStop2MetroClass,
+  on_update_end_stop_3: MockOnUpdateEndStop3MetroClass,
 } as const satisfies Record<string, Ctor<MockAction>>;
 
 type MockActionId = keyof typeof registry;

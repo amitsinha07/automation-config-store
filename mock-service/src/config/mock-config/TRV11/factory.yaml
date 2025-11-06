@@ -549,32 +549,62 @@ codes:
     action: confirm
     default: BUS/2.0.1/confirm/confirm_veh_con_without/default.yaml
     message_id: true
-  - code: 191
+  - code: 207
     action_id: on_confirm_BUS_Without_update
     action: on_confirm
     default: BUS/2.0.1/on_confirm/on_confirm_vehicle_without_update/default.yaml 
     message_id: false
-  - code: 207
+  - code: 208
     action_id: on_confirm_user_confirmation
     action: on_confirm
     default: BUS/2.0.1/on_confirm/on_confirm_user_confirmation/default.yaml 
     message_id: false
-  - code: 208
+  - code: 209
     action_id: update_BUS_201
     action: update
     default: BUS/2.0.1/update/update_/default.yaml
     message_id: true
-  - code: 203
+  - code: 210
     action_id: on_update_veh_QR_BUS_201
     action: on_update
     default: BUS/2.0.1/on_update/on_update_vehicle_qr/default.yaml
     message_id: false
-  - code: 204
+  - code: 211
     action_id: select_unlimited_pass
     action: select
     default: BUS/2.0.1/select/select_unlimited_pass/default.yaml
     message_id: true
-  - code: 205
+  - code: 212
     action_id: on_select_unlimited_pass
     action: on_select
     default: BUS/2.0.1/on_select/on_select_unlimited_pass/default.yaml
+  - code: 213
+    action_id: update_end_stop_1
+    action: update
+    default: METRO/2.0.1/update/update_end_stop_1/default.yaml
+    message_id: true  
+  - code: 214
+    action_id: update_end_stop_2
+    action: update
+    default: METRO/2.0.1/update/update_end_stop_2/default.yaml
+    message_id: true  
+  - code: 215
+    action_id: update_end_stop_3
+    action: update
+    default: METRO/2.0.1/update/update_end_stop_3/default.yaml
+    message_id: true  
+  - code: 216
+    action_id: on_update_end_stop_1
+    action: on_update
+    default: METRO/2.0.1/on_update/on_update_end_stop_1/default.yaml
+    message_id: false  
+  - code: 217
+    action_id: on_update_end_stop_2
+    action: on_update
+    default: METRO/2.0.1/on_update/on_update_end_stop_2/default.yaml
+    message_id: false  
+  - code: 218
+    action_id: on_update_end_stop_3
+    action: on_update
+    default: METRO/2.0.1/on_update/on_update_end_stop_3/default.yaml
+    message_id: false  

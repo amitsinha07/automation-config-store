@@ -1,15 +1,11 @@
 import { readFileSync } from "fs";
 import yaml from "js-yaml";
 import path from "path";
-import {
-  MockAction,
-  MockOutput,
-  saveType,
-} from "../../../../classes/mock-action";
+import { MockAction, MockOutput, saveType } from "../../../../classes/mock-action";
 import { SessionData } from "../../../../session-types";
-import { onCancelSoftGenerator } from "./generator";
+import { updateEndStopGenerator } from "./generator";
 
-export class OnCancelSoftMetro201Class extends MockAction {
+export class MockUpdateEndStop1MetroClass extends MockAction {
   get saveData(): saveType {
     return yaml.load(
       readFileSync(path.resolve(__dirname, "../save-data.yaml"), "utf8")
@@ -24,36 +20,18 @@ export class OnCancelSoftMetro201Class extends MockAction {
     return {};
   }
   name(): string {
-    return "on_cancel_soft_METRO_201";
-  }
-  generator(existingPayload: any, sessionData: SessionData): Promise<any> {
-    return onCancelSoftGenerator(existingPayload, sessionData);
+    return "";
   }
   get description(): string {
-    return "Mock for on_cancel_soft_METRO_201";
+    return "";
+  }
+  generator(existingPayload: any, sessionData: SessionData): Promise<any> {
+    return updateEndStopGenerator(existingPayload, sessionData);
   }
   async validate(
     targetPayload: any,
     sessionData: SessionData
   ): Promise<MockOutput> {
-    const { order_id, descriptor } = targetPayload.message;
-
-    // if (order_id !== sessionData.order_id) {
-    //   return {
-    //     valid: false,
-    //     message: "Incorrect order_id in the payload",
-    //     code: "MISSING_ORDER_ID",
-    //   };
-    // }
-
-    // if (descriptor?.code !== "SOFT_CANCEL") {
-    //   return {
-    //     valid: false,
-    //     message: "Incorrect descriptor code in the payload",
-    //     code: "INVALID_DESCRIPTOR_CODE",
-    //   };
-    // }
-
     return { valid: true };
   }
   async meetRequirements(sessionData: SessionData): Promise<MockOutput> {

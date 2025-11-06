@@ -1,5 +1,6 @@
-export async function onCancelInitGenerator(existingPayload: any,sessionData: any){
-    if (sessionData.updated_payments.length > 0) {
+
+export async function onUpdateStopEndGenerator(existingPayload: any,sessionData: any){
+  if (sessionData.updated_payments.length > 0) {
 		existingPayload.message.order.payments = sessionData.updated_payments;
 	  }
 	
@@ -10,27 +11,18 @@ export async function onCancelInitGenerator(existingPayload: any,sessionData: an
 	if (sessionData.fulfillments.length > 0) {
 	existingPayload.message.order.fulfillments = sessionData.fulfillments;
 	}
-	
 	if (sessionData.order_id) {
 	existingPayload.message.order.id = sessionData.order_id;
 	}
 	if(sessionData.quote != null){
 	existingPayload.message.order.quote = sessionData.quote
 	}
-	existingPayload.message.order.cancellation={
-		cancelled_by:"CONSUMER",
-		reason: {
-		  descriptor: {
-			  "code": sessionData.cancellation_reason_id
-		  }
-	  }
-	  }
-	  if(sessionData.provider){
+  if(sessionData.provider){
 		existingPayload.message.order.provider=sessionData.provider
 	}
-    existingPayload.message.order.status = "CANCELLATION_INITIATED"
-	const now = new Date().toISOString();
-  	existingPayload.message.order.created_at = sessionData.created_at
-  	existingPayload.message.order.updated_at = now
+  existingPayload.message.order.provider=sessionData.provider
+  const now = new Date().toISOString();
+  existingPayload.message.order.created_at = sessionData.created_at
+  existingPayload.message.order.updated_at = now
     return existingPayload;
 }

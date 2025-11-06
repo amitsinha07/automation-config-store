@@ -1,0 +1,14 @@
+message:
+  update_target: order.fulfillments
+  order:
+    id: 077b248f
+    status: SOFT_UPDATE
+    fulfillments:
+      - id: F1
+        stops:
+          - type: END
+            location:
+              descriptor:
+                name: IFFCO Chowk
+                code: IFFCO_CHOWK
+              gps: "28.707358, 77.180910"
