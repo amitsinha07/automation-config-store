@@ -28465,6 +28465,7 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_MESSAGE_SHORT_DESC_27
       attr: $.message.issue.actions[*].descriptor.short_desc
+      _CONTINUE_: "!(attr are present)"
       _RETURN_: attr are present
     - _NAME_: REQUIRED_MESSAGE_UPDATED_AT_28
       attr: $.message.issue.actions[*].updated_at
@@ -28648,6 +28649,7 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_MESSAGE_SHORT_DESC_27
       attr: $.message.issue.actions[*].descriptor.short_desc
+      _CONTINUE_: "!(attr are present)"
       _RETURN_: attr are present
     - _NAME_: REQUIRED_MESSAGE_UPDATED_AT_28
       attr: $.message.issue.actions[*].updated_at
