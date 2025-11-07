@@ -84,7 +84,7 @@ function createAndAppendFulfillments(items: any[], fulfillments: any[]): void {
 	});
 }
 
-function updateItemTimestamp(payload: any) {
+function updateProviderTimestamp(payload: any) {
 	const now = new Date();
 	const istNow = new Date(now.getTime());
 	const y = istNow.getFullYear();
@@ -134,7 +134,7 @@ export async function onSelectGenerator(
 	sessionData: SessionData
 ) {
 	console.log("session data before the on_select call is ",sessionData)
-	existingPayload= updateItemTimestamp(existingPayload)
+	existingPayload= updateProviderTimestamp(existingPayload)
 	let items = filterItemsBySelectedIds(
 		sessionData.items,
 		sessionData.selected_item_ids

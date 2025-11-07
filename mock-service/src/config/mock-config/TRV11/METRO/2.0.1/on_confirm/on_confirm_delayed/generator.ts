@@ -114,6 +114,6 @@ export async function onConfirmDelayedGenerator(existingPayload: any,sessionData
 	}
   existingPayload.message.order.created_at = now
   existingPayload.message.order.updated_at = now 
-  await delay(delay_duration*1000);
+  // await delay(delay_duration*1000);
   return existingPayload;
 }

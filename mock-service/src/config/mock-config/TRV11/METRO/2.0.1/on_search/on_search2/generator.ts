@@ -94,7 +94,8 @@ const createCustomRoute = (
   });
 };
 
-function updateItemTimestamp(payload: any) {
+// provider.time & item.time update function
+function updateTimestamps(payload: any) {
   const now = new Date();
   const istNow = new Date(now.getTime());
   const y = istNow.getFullYear();
@@ -109,7 +110,7 @@ function updateItemTimestamp(payload: any) {
 
     provider?.items.forEach((item: any) => {
       const newTimestamp = new Date(
-        Date.now() + 3 * 60 * 60 * 1000
+        Date.now() + 2 * 24 * 60 * 60 * 1000
       ).toISOString();
       item.time.timestamp = newTimestamp;
     });
@@ -124,7 +125,7 @@ export async function onSearch2Generator(
 ) {
   try {
     existingPayload = updatePaymentDetails(existingPayload, sessionData);
-    existingPayload = updateItemTimestamp(existingPayload);
+    existingPayload = updateTimestamps(existingPayload);
     const route = createFullfillment(
       sessionData.city_code ?? "std:011"
     ).fulfillments;
