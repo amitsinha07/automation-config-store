@@ -51,6 +51,7 @@ export async function getMockActionObject(
 		playgroundConfig.transaction_data.bpp_id = ownerId;
 	playgroundConfig.transaction_data.bap_uri = `${apiServiceUrl}/${playgroundConfig.meta.domain}/${playgroundConfig.meta.version}/buyer`;
 	playgroundConfig.transaction_data.bpp_uri = `${apiServiceUrl}/${playgroundConfig.meta.domain}/${playgroundConfig.meta.version}/seller`;
+	logger.info("creating mock action object for action ID: " + actionId);
 	return new ConfigAction(playgroundConfig, actionId);
 }
 
@@ -81,6 +82,7 @@ class ConfigAction implements MockAction {
 		} else {
 			actionId = actionId;
 		}
+		logger.info("Setting up ConfigAction for action ID: " + actionId);
 		this.playgroundConfig = playgroundConfig;
 		if (
 			playgroundConfig.steps.findIndex(
@@ -89,6 +91,7 @@ class ConfigAction implements MockAction {
 		) {
 			throw new Error(`Action ID ${actionId} not found in playground config`);
 		}
+		logger.info(`ConfigAction initialized for action ID: ${actionId}`);
 		this.actionId = actionId;
 		this.step = playgroundConfig.steps.find(
 			(step) => step.action_id === this.actionId
