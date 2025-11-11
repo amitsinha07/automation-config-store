@@ -76,9 +76,9 @@ class ConfigAction implements MockAction {
 	runner: MockRunner;
 	constructor(playgroundConfig: MockPlaygroundConfigType, actionId: string) {
 		this.runner = new MockRunner(playgroundConfig);
-		// GENERATED_1_search or GENERATED_22_init -> search or init
-		if (actionId.startsWith("GENERATED_")) {
-			actionId = actionId.split("_")[2];
+		// GENERATED#1#search or GENERATED#22#init -> search or init
+		if (actionId.startsWith("GENERATED#")) {
+			actionId = actionId.split("#")[2];
 		} else {
 			actionId = actionId;
 		}
