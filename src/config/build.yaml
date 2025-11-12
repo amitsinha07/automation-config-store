@@ -23259,6 +23259,7 @@ x-validations:
       - _NAME_: REQUIRED_MESSAGE_HOLIDAYS
         attr: $.message.intent.provider.time.schedule.holidays[*]
         reg: ['^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$']
+        _CONTINUE_: "!(attr are present)"
         _RETURN_: attr follow regex reg
       - _NAME_: REQUIRED_MESSAGE_DURATION
         attr: $.message.intent.provider.time.duration
