@@ -26958,6 +26958,7 @@ x-validations:
       - _NAME_: REQUIRED_MESSAGE_STATUS
         attr: $.message.order.payment.status
         _RETURN_: attr are present
+        _CONTINUE_: "!(attr are present)"
       - _NAME_: REQUIRED_MESSAGE_NAME
         attr: $.message.order.billing.name
         _RETURN_: attr are present
