@@ -1,4 +1,5 @@
 import { SessionData } from "../../../../session-types";
+
 function updateCollectedByAndBuyerFees(
   payload: any,
   sessionData: SessionData
@@ -69,7 +70,7 @@ function updateSettlementAmount(payload: any, sessionData: SessionData) {
   return payload;
 }
 
-export async function initGenerator(existingPayload: any,sessionData: SessionData){
+export async function initUnlimitedPassGenerator(existingPayload: any,sessionData: SessionData){
     if (sessionData.billing && Object.keys(sessionData.billing).length > 0) {
         existingPayload.message.order.billing = sessionData.billing;
       }
@@ -89,10 +90,17 @@ export async function initGenerator(existingPayload: any,sessionData: SessionDat
       )
       ];
       const formattedFulfillmentIds = uniqueFulfillmentIds.map(id => ({ id }));
-      existingPayload.message.order.fulfillments = formattedFulfillmentIds
-      
+
+	   const fulfillmentType= sessionData.fulfillments.find((fulfillment:any)=> fulfillment.type ==="PASS").type
+     existingPayload.message.order.fulfillments = formattedFulfillmentIds
      
+     if(fulfillmentType === "PASS"){
+     existingPayload.message.order.fulfillments = sessionData.fulfillments 
+
+   }
     existingPayload = updateSettlementAmount(existingPayload,sessionData)
     existingPayload = updateCollectedByAndBuyerFees(existingPayload,sessionData)
     return existingPayload;
 }
+
+

@@ -46,6 +46,7 @@ export interface SessionData {
 	buyer_side_fulfillment_ids: any[]
 	first_form_testing: any[]
 	user_inputs: any
+	cancellation_reason_id: string
 }
 
 export type BecknContext = {

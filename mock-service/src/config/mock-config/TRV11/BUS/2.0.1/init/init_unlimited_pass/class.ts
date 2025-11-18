@@ -2,9 +2,9 @@ import { readFileSync } from "fs";
 import yaml from "js-yaml";
 import path from "path";
 
-import { initGenerator } from "./generator";
 import { SessionData } from "../../../../session-types";
 import { MockAction, MockOutput, saveType } from "../../../../classes/mock-action";
+import { initUnlimitedPassGenerator } from "./generator";
 
 export class MockInitUnlimitedPassBus201Class extends MockAction {
   get saveData(): saveType {
@@ -21,13 +21,13 @@ export class MockInitUnlimitedPassBus201Class extends MockAction {
     return {};
   }
   name(): string {
-    return "init_BUS_201";
+    return "init_unlimited_pass_BUS_201";
   }
   generator(existingPayload: any, sessionData: SessionData): Promise<any> {
-    return initGenerator(existingPayload, sessionData);
+    return initUnlimitedPassGenerator(existingPayload, sessionData);
   }
   get description(): string {
-    return "Mock for cancel_hard_BUS_201";
+    return "Mock for init_BUS_201";
   }
   async validate(
     targetPayload: any,

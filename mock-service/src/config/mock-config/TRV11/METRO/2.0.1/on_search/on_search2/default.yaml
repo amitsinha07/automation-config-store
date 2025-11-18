@@ -202,7 +202,7 @@ message:
                   gps: 28.427076, 77.446632
                 id: "15"
                 parent_stop_id: "14"
-              - type: TRANSIT_STOP
+              - type: INTERMEDIATE_STOP
                 instructions:
                   name: Stop 15
                   short_desc: Please Change here for Yellow Line

@@ -27,7 +27,7 @@ export class MockInitBus201Class extends MockAction {
     return initGenerator(existingPayload, sessionData);
   }
   get description(): string {
-    return "Mock for cancel_hard_BUS_201";
+    return "Mock for init_BUS_201";
   }
   async validate(
     targetPayload: any,

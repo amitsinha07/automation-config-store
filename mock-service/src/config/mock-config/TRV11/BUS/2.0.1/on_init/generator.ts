@@ -30,12 +30,12 @@ export async function onInitGenerator(
 	if (sessionData.fulfillments.length > 0) {
 	existingPayload.message.order.fulfillments = sessionData.fulfillments;
 	}
-	const fulfillmentType= sessionData.fulfillments.find((fulfillment:any)=> fulfillment.type ==="PASS").type 
+// 	const fulfillmentType= sessionData.fulfillments.find((fulfillment:any)=> fulfillment.type ==="PASS").type 
 
-     if(fulfillmentType === "PASS"){
-     existingPayload.message.order.fulfillments = [sessionData.onselect_fulfillments ]
+//      if(fulfillmentType === "PASS"){
+//      existingPayload.message.order.fulfillments = [sessionData.onselect_fulfillments ]
 
-   }
+//    }
 	if(sessionData.quote != null){
 	existingPayload.message.order.quote = sessionData.quote
 	}

@@ -24,27 +24,6 @@ type Price = {
     breakup: Breakup[];
   };
 
-  function stripTicketAuthorizations(order:any) {
-    if (!order.fulfillments) return order;
-  
-    order.fulfillments = order.fulfillments.map((fulfillment:any) => {
-      if (fulfillment.type === "TICKET") {
-        return {
-          ...fulfillment,
-          stops: fulfillment.stops.map((stop:any) => {
-            const { authorization, ...rest } = stop;
-            return rest;
-          })
-        };
-      }
-      return fulfillment;
-    });
-  
-    return order;
-  }
-  
-  // Example usage:
-
 function applyCancellation(quote: Quote, cancellationCharges: number): Quote {
     // Parse the current price
     const currentTotal = parseFloat(quote.price.value);
@@ -109,7 +88,6 @@ function applyCancellation(quote: Quote, cancellationCharges: number): Quote {
   
     if (sessionData.fulfillments.length > 0) {
     existingPayload.message.order.fulfillments = sessionData.fulfillments;
-    existingPayload.message.order = stripTicketAuthorizations(existingPayload.message.order)
     }
     if (sessionData.order_id) {
     existingPayload.message.order.id = sessionData.order_id;
@@ -117,6 +95,9 @@ function applyCancellation(quote: Quote, cancellationCharges: number): Quote {
 
     if(sessionData.quote != null){
     existingPayload.message.order.quote = applyCancellation(sessionData.quote,15)
+    }
+    if(sessionData.cancellation_reason_id){
+      existingPayload.message.order.cancellation.reason.descriptor.code = sessionData.cancellation_reason_id
     }
     const now = new Date().toISOString();
     existingPayload.message.order.created_at = sessionData.created_at

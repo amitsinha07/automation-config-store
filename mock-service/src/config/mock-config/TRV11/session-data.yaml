@@ -39,3 +39,4 @@ session_data:
   buyer_side_fulfillment_ids: []
   user_inputs: null
   first_form_testing: []
+  cancellation_reason_id: null

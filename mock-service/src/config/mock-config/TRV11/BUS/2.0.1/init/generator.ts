@@ -1,4 +1,6 @@
 import { SessionData } from "../../../session-types";
+
+
 function updateCollectedByAndBuyerFees(
   payload: any,
   sessionData: SessionData
@@ -89,13 +91,9 @@ export async function initGenerator(existingPayload: any,sessionData: SessionDat
       )
       ];
       const formattedFulfillmentIds = uniqueFulfillmentIds.map(id => ({ id }));
-	   const fulfillmentType= sessionData.fulfillments.find((fulfillment:any)=> fulfillment.type ==="PASS").type 
-     existingPayload.message.order.fulfillments = formattedFulfillmentIds
+      existingPayload.message.order.fulfillments = formattedFulfillmentIds
+      
      
-     if(fulfillmentType === "PASS"){
-     existingPayload.message.order.fulfillments = sessionData.fulfillments 
-
-   }
     existingPayload = updateSettlementAmount(existingPayload,sessionData)
     existingPayload = updateCollectedByAndBuyerFees(existingPayload,sessionData)
     return existingPayload;

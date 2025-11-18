@@ -578,6 +578,7 @@ codes:
     action_id: on_select_unlimited_pass
     action: on_select
     default: BUS/2.0.1/on_select/on_select_unlimited_pass/default.yaml
+    message_id: false
   - code: 213
     action_id: update_end_stop_1
     action: update
