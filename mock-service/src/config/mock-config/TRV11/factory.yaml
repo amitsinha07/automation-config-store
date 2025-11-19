@@ -608,4 +608,14 @@ codes:
     action_id: on_update_end_stop_3
     action: on_update
     default: METRO/2.0.1/on_update/on_update_end_stop_3/default.yaml
-    message_id: false  
+    message_id: false
+  - code: 219
+    action_id: status_purchase_flow_BUS_201
+    action: status
+    default: BUS/2.0.1/status/default.yaml
+    message_id: true  
+  - code: 220
+    action_id: on_status_complete_BUS_201
+    action: on_status
+    default: BUS/2.0.1/on_status/on_status_complete/default.yaml
+    message_id: false

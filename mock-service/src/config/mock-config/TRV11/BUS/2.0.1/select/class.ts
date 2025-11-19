@@ -23,7 +23,7 @@ export class MockSelectBus201Class extends MockAction {
     return "select_BUS_201";
   }
   get description(): string {
-    return "Mock for select_BUS_200";
+    return "Mock for select_BUS_201";
   }
   generator(existingPayload: any, sessionData: SessionData): Promise<any> {
     return selectGenerator(existingPayload, sessionData);

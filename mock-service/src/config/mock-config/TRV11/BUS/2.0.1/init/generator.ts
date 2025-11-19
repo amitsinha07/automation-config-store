@@ -1,5 +1,4 @@
-import { SessionData } from "../../../session-types";
-
+import { SessionData } from "config/mock-config/TRV11/session-types";
 
 function updateCollectedByAndBuyerFees(
   payload: any,

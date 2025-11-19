@@ -14,13 +14,13 @@ message:
           - F5
         price:
           currency: INR
-          value: '35'
+          value: "35"
         quantity:
           selected:
             count: 2
         time:
           label: Validity
-          duration: PT2D
+          duration: P2D
     provider:
       id: P1
       descriptor:
@@ -38,8 +38,8 @@ message:
               descriptor:
                 name: kashmere gate
                 code: KASHMERE_GATE
-              gps: '28.666576, 77.233332'
-            id: '1'
+              gps: "28.666576, 77.233332"
+            id: "1"
           - type: INTERMEDIATE_STOP
             instructions:
               name: Stop 1
@@ -47,9 +47,9 @@ message:
               descriptor:
                 name: Indira Gandhi Technical Unviversity
                 code: INDIRA_GANDHI_TECHNICAL_UNIV
-              gps: '28.624097, 77.204991'
-            id: '2'
-            parent_stop_id: '1'
+              gps: "28.624097, 77.204991"
+            id: "2"
+            parent_stop_id: "1"
           - type: INTERMEDIATE_STOP
             instructions:
               name: Stop 2
@@ -57,9 +57,9 @@ message:
               descriptor:
                 name: Yamuna Bazar
                 code: YAMUNA_BAZAR
-              gps: '28.625972,77.209917'
-            id: '3'
-            parent_stop_id: '2'
+              gps: "28.625972,77.209917"
+            id: "3"
+            parent_stop_id: "2"
           - type: INTERMEDIATE_STOP
             instructions:
               name: Stop 3
@@ -67,9 +67,9 @@ message:
               descriptor:
                 name: dhaula kuan
                 code: DHAULA_KUAN
-              gps: '28.610972,77.201717'
-            id: '4'
-            parent_stop_id: '3'
+              gps: "28.610972,77.201717"
+            id: "4"
+            parent_stop_id: "3"
           - type: INTERMEDIATE_STOP
             instructions:
               name: Stop 4
@@ -77,17 +77,17 @@ message:
               descriptor:
                 name: gpo
                 code: GPO
-              gps: '28.623097,77.209917'
-            id: '5'
-            parent_stop_id: '4'
+              gps: "28.623097,77.209917"
+            id: "5"
+            parent_stop_id: "4"
           - type: END
             location:
               descriptor:
                 name: Greater Kailash
                 code: GREATER_KAILASH
-              gps: '28.548230, 77.238039'
-            id: '6'
-            parent_stop_id: '5'
+              gps: "28.548230, 77.238039"
+            id: "6"
+            parent_stop_id: "5"
         vehicle:
           category: BUS
         tags:
@@ -96,7 +96,7 @@ message:
             list:
               - descriptor:
                   code: ROUTE_ID
-                value: '242'
+                value: "242"
               - descriptor:
                   code: ROUTE_DIRECTION
                 value: UP
@@ -108,8 +108,8 @@ message:
               descriptor:
                 name: kashmere gate
                 code: KASHMERE_GATE
-              gps: '28.666576, 77.233332'
-            id: '1'
+              gps: "28.666576, 77.233332"
+            id: "1"
           - type: INTERMEDIATE_STOP
             instructions:
               name: Stop 1
@@ -117,9 +117,9 @@ message:
               descriptor:
                 name: Indira Gandhi Technical Unviversity
                 code: INDIRA_GANDHI_TECHNICAL_UNIV
-              gps: '28.624097, 77.204991'
-            id: '2'
-            parent_stop_id: '1'
+              gps: "28.624097, 77.204991"
+            id: "2"
+            parent_stop_id: "1"
           - type: INTERMEDIATE_STOP
             instructions:
               name: Stop 2
@@ -127,9 +127,9 @@ message:
               descriptor:
                 name: Yamuna Bazar
                 code: YAMUNA_BAZAR
-              gps: '28.625972,77.209917'
-            id: '3'
-            parent_stop_id: '2'
+              gps: "28.625972,77.209917"
+            id: "3"
+            parent_stop_id: "2"
           - type: INTERMEDIATE_STOP
             instructions:
               name: Stop 3
@@ -137,9 +137,9 @@ message:
               descriptor:
                 name: dhaula kuan
                 code: DHAULA_KUAN
-              gps: '28.610972,77.201717'
-            id: '4'
-            parent_stop_id: '3'
+              gps: "28.610972,77.201717"
+            id: "4"
+            parent_stop_id: "3"
           - type: INTERMEDIATE_STOP
             instructions:
               name: Stop 4
@@ -147,17 +147,17 @@ message:
               descriptor:
                 name: gpo
                 code: GPO
-              gps: '28.623097,77.209917'
-            id: '5'
-            parent_stop_id: '4'
+              gps: "28.623097,77.209917"
+            id: "5"
+            parent_stop_id: "4"
           - type: END
             location:
               descriptor:
                 name: Greater Kailash
                 code: GREATER_KAILASH
-              gps: '28.548230, 77.238039'
-            id: '6'
-            parent_stop_id: '5'
+              gps: "28.548230, 77.238039"
+            id: "6"
+            parent_stop_id: "5"
         vehicle:
           category: BUS
         tags:
@@ -166,7 +166,7 @@ message:
             list:
               - descriptor:
                   code: ROUTE_ID
-                value: '242'
+                value: "242"
               - descriptor:
                   code: ROUTE_DIRECTION
                 value: UP
@@ -174,14 +174,14 @@ message:
       - cancel_by:
           duration: PT60M
         cancellation_fee:
-          percentage: '0'
+          percentage: "0"
     billing:
       name: John Doe
       email: john.doe@example.com
       phone: +91-9897867564
     quote:
       price:
-        value: '70'
+        value: "70"
         currency: INR
       breakup:
         - title: BASE_FARE
@@ -189,21 +189,21 @@ message:
             id: I1
             price:
               currency: INR
-              value: '35'
+              value: "35"
             quantity:
               selected:
                 count: 2
           price:
             currency: INR
-            value: '70'
+            value: "70"
         - title: OFFER
           price:
             currency: INR
-            value: '0'
+            value: "0"
         - title: TOLL
           price:
             currency: INR
-            value: '0'
+            value: "0"
     payments:
       - id: PA1
         collected_by: BAP
@@ -219,7 +219,7 @@ message:
             list:
               - descriptor:
                   code: BUYER_FINDER_FEES_PERCENTAGE
-                value: '1'
+                value: "1"
               - descriptor:
                   code: BUYER_FINDER_FEES_TYPE
                 value: percent-annualized
@@ -238,16 +238,16 @@ message:
                 value: neft
               - descriptor:
                   code: MANDATORY_ARBITRATION
-                value: 'true'
+                value: "true"
               - descriptor:
                   code: COURT_JURISDICTION
                 value: New Delhi
               - descriptor:
                   code: DELAY_INTEREST
-                value: '2.5'
+                value: "2.5"
               - descriptor:
                   code: STATIC_TERMS
-                value: 'https://www.abc.com/settlement-terms/'
+                value: "https://www.abc.com/settlement-terms/"
               - descriptor:
                   code: SETTLEMENT_AMOUNT
-                value: '70'
+                value: "70"
