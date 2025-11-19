@@ -412,53 +412,59 @@ export default async function onSearch(
           );
         }
 
-        try {
-          const customGroupCategory = extractCustomGroups(categories);
-          const baseTreeNodes = mapItemToTreeNode(items);
-          const customItems = mapCustomItemToTreeNode(
-            items,
-            customGroupCategory
-          );
-          const mapItems = mapCustomizationsToBaseItems(
-            baseTreeNodes,
-            customItems
-          );
-          const default_selection = calculateDefaultSelectionPrice(mapItems);
+        if (categories && categories.length > 0) {
+          try {
+            const customGroupCategory = extractCustomGroups(categories);
+            const baseTreeNodes = mapItemToTreeNode(items);
+            const customItems = mapCustomItemToTreeNode(
+              items,
+              customGroupCategory
+            );
+            const mapItems = mapCustomizationsToBaseItems(
+              baseTreeNodes,
+              customItems
+            );
+            const default_selection = calculateDefaultSelectionPrice(mapItems);
 
-          default_selection.forEach(
-            ({
-              base_item,
-              default_selection_calculated,
-              default_selection_actual,
-            }: {
-              base_item: string;
-              default_selection_calculated: { min: number; max: number };
-              default_selection_actual: { min: number; max: number };
-            }) => {
-              const calcMin = default_selection_calculated?.min;
-              const calcMax = default_selection_calculated?.max;
-              const actualMin = default_selection_actual?.min;
-              const actualMax = default_selection_actual?.max;
-          
-              if (calcMin !== actualMin || calcMax !== actualMax) {
-                addError(
-                  20006,
-                  `Provided default_selection calculated incorrectly for base_item "${base_item}". ` +
-                  `Calculated: min=${calcMin}, max=${calcMax}. ` +
-                  `Given: min=${actualMin}, max=${actualMax}`
-                );
-              } else {
-                console.info(`Base item "${base_item}" values match. No error.`);
+            default_selection.forEach(
+              ({
+                base_item,
+                default_selection_calculated,
+                default_selection_actual,
+              }: {
+                base_item: string;
+                default_selection_calculated: { min: number; max: number };
+                default_selection_actual: { min: number; max: number };
+              }) => {
+                const calcMin = default_selection_calculated?.min;
+                const calcMax = default_selection_calculated?.max;
+                const actualMin = default_selection_actual?.min;
+                const actualMax = default_selection_actual?.max;
+            
+                if (calcMin !== actualMin || calcMax !== actualMax) {
+                  addError(
+                    20006,
+                    `Provided default_selection calculated incorrectly for base_item "${base_item}". ` +
+                    `Calculated: min=${calcMin}, max=${calcMax}. ` +
+                    `Given: min=${actualMin}, max=${actualMax}`
+                  );
+                } else {
+                  console.info(`Base item "${base_item}" values match. No error.`);
+                }
               }
-            }
-          );
-        } catch (error: any) {
-          addError(
-            20006,
-            `Error while Calculating Default Selection in /${constants.ON_SEARCH}, ${error.message}`
-          );
+            );
+          } catch (error: any) {
+            addError(
+              20006,
+              `Error while Calculating Default Selection in /${constants.ON_SEARCH}, ${error.message}`
+            );
+            console.info(
+              `Error while Calculating Default Selection in /${constants.ON_SEARCH}, ${error.stack}`
+            );
+          }
+        } else {
           console.info(
-            `Error while Calculating Default Selection in /${constants.ON_SEARCH}, ${error.stack}`
+            "Skipping default_selection calculation — categories missing in /on_search"
           );
         }
 

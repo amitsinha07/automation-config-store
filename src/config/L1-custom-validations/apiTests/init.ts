@@ -338,6 +338,7 @@ const init = async (data: any) => {
       console.info(
         `Comparing item Ids and fulfillment ids in /${constants.ON_SELECT} and /${constants.INIT}`
       );
+
       const itemFlfllmntsRaw = await RedisService.getKey(
         `${transaction_id}_itemFlfllmnts`
       );
@@ -351,8 +352,8 @@ const init = async (data: any) => {
       let i = 0;
       const len = init.items.length;
       while (i < len) {
-        const itemId = init.items[i].id;
         const item = init.items[i];
+        const itemId = item.id;
 
         if (checkItemTag(item, select_customIdArray)) {
           result.push({
@@ -373,15 +374,32 @@ const init = async (data: any) => {
             description: `items[${i}].parent_item_id mismatches for Item ${itemId} in /${constants.ON_SEARCH} and /${constants.INIT}`,
           });
         }
+        if (itemFlfllmnts && Object.prototype.hasOwnProperty.call(itemFlfllmnts, itemId)) {
+          const stored = itemFlfllmnts[itemId];
+          const initFid = item.fulfillment_id;
 
-        if (itemId in itemFlfllmnts) {
-          if (init.items[i].fulfillment_id != itemFlfllmnts[itemId]) {
-            result.push({
-              valid: false,
-              code: 20000,
-              description: `items[${i}].fulfillment_id mismatches for Item ${itemId} in /${constants.ON_SELECT} and /${constants.INIT}`,
-            });
+          if (typeof stored === "string") {
+            if (initFid !== stored) {
+              result.push({
+                valid: false,
+                code: 20000,
+                description: `items[${i}].fulfillment_id mismatches for Item ${itemId} in /${constants.ON_SELECT} and /${constants.INIT}`,
+              });
+            }
+
+          } else if (Array.isArray(stored)) {
+            if (!stored.includes(initFid)) {
+              result.push({
+                valid: false,
+                code: 20000,
+                description: `items[${i}].fulfillment_id '${initFid}' for item ${itemId} does not belong to fulfillment_ids from /${constants.ON_SELECT}`,
+              });
+            }
+
+          } else {
+            console.warn(`Unexpected fulfillment format for ${itemId}`, stored);
           }
+
         } else {
           result.push({
             valid: false,
@@ -389,9 +407,8 @@ const init = async (data: any) => {
             description: `Item Id ${itemId} does not exist in /on_select`,
           });
         }
-
-        if (itemId in itemsIdList) {
-          if (init.items[i].quantity.count != itemsIdList[itemId]) {
+        if (itemsIdList && Object.prototype.hasOwnProperty.call(itemsIdList, itemId)) {
+          if (item.quantity.count != itemsIdList[itemId]) {
             result.push({
               valid: false,
               code: 20000,
@@ -404,7 +421,8 @@ const init = async (data: any) => {
       }
     } catch (error: any) {
       console.error(
-        `!!Error while comparing Item and Fulfillment Id in /${constants.ON_SELECT} and /${constants.INIT}`
+        `!!Error while comparing Item and Fulfillment Id in /${constants.ON_SELECT} and /${constants.INIT}`,
+        error.stack
       );
     }
 
@@ -413,53 +431,66 @@ const init = async (data: any) => {
       const itemFlfllmntsRaw = await RedisService.getKey(
         `${transaction_id}_itemFlfllmnts`
       );
-      const itemFlfllmnts = itemFlfllmntsRaw
-        ? JSON.parse(itemFlfllmntsRaw)
-        : null;
+      const itemFlfllmnts = itemFlfllmntsRaw ? JSON.parse(itemFlfllmntsRaw) : null;
+
+      console.info("Parsed itemFlfllmnts:", itemFlfllmnts);
+      const allFIds = itemFlfllmnts
+        ? Object.values(itemFlfllmnts).flatMap((v: any) =>
+            Array.isArray(v) ? v : [v]
+          )
+        : [];
+
+      console.info("Flattened fulfillment ids from on_select:", allFIds);
+
       let i = 0;
       const len = init.fulfillments.length;
       while (i < len) {
-        const id = init.fulfillments[i].id;
-        if (id) {
-          if (!Object.values(itemFlfllmnts).includes(id)) {
-            result.push({
-              valid: false,
-              code: 20000,
-              description: `fulfillment id ${id} does not exist in /${constants.ON_SELECT}`,
-            });
-          }
-          const buyerGpsRaw = await RedisService.getKey(
-            `${transaction_id}_buyerGps`
-          );
-          const buyerGps = buyerGpsRaw ? JSON.parse(buyerGpsRaw) : null;
-          if (!_.isEqual(init.fulfillments[i].end.location.gps, buyerGps)) {
-            result.push({
-              valid: false,
-              code: 20000,
-              description: `gps coordinates in fulfillments[${i}].end.location mismatch in /${constants.SELECT} & /${constants.INIT}`,
-            });
-          }
-          const buyerAddrRaw = await RedisService.getKey(
-            `${transaction_id}_buyerAddr`
-          );
-          const buyerAddr = buyerAddrRaw ? JSON.parse(buyerAddrRaw) : null;
-          if (
-            !_.isEqual(
-              init.fulfillments[i].end.location.address.area_code,
-              buyerAddr
-            )
-          ) {
-            result.push({
-              valid: false,
-              code: 20000,
-              description: `address.area_code in fulfillments[${i}].end.location mismatch in /${constants.SELECT} & /${constants.INIT}`,
-            });
-          }
-        } else {
+        const initF = init.fulfillments[i];
+        const id = initF.id;
+
+        if (!id) {
           result.push({
             valid: false,
             code: 20000,
             description: `fulfillments[${i}].id is missing in /${constants.INIT}`,
+          });
+          i++;
+          continue;
+        }
+        if (!allFIds.includes(id)) {
+          result.push({
+            valid: false,
+            code: 20000,
+            description: `fulfillment id '${id}' in INIT does not exist in fulfillment_ids from /${constants.ON_SELECT}`,
+          });
+        }
+
+        const buyerGpsRaw = await RedisService.getKey(`${transaction_id}_buyerGps`);
+        const buyerGps = buyerGpsRaw ? JSON.parse(buyerGpsRaw) : null;
+
+        if (!_.isEqual(initF.end.location.gps, buyerGps)) {
+          result.push({
+            valid: false,
+            code: 20000,
+            description: `gps coordinates mismatch in fulfillments[${i}].end.location between /${constants.SELECT} and /${constants.INIT}`,
+          });
+        }
+
+        const buyerAddrRaw = await RedisService.getKey(
+          `${transaction_id}_buyerAddr`
+        );
+        const buyerAddr = buyerAddrRaw ? JSON.parse(buyerAddrRaw) : null;
+
+        if (
+          !_.isEqual(
+            initF.end.location.address.area_code,
+            buyerAddr
+          )
+        ) {
+          result.push({
+            valid: false,
+            code: 20000,
+            description: `address.area_code mismatch in fulfillments[${i}].end.location between /${constants.SELECT} & /${constants.INIT}`,
           });
         }
 
