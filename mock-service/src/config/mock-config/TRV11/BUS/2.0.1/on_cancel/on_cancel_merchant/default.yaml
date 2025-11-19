@@ -481,7 +481,7 @@ message:
             id: "22"
             parent_stop_id: "21"
         vehicle:
-          category: METRO
+          category: BUS
     cancellation:
       cancelled_by: CONSUMER
       time: "2021-03-23T10:00:00.065Z"

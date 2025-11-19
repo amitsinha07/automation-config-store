@@ -1,5 +1,25 @@
 import { SessionData } from "../../../../session-types";
 import { createFullfillment } from "./fullfillment-generator";
+
+export function updateItemTimestamps(onSearchPayload: any) {
+  const updated = JSON.parse(JSON.stringify(onSearchPayload)); // deep clone to avoid mutation
+  const now = new Date().toISOString();
+
+  const providers = updated?.message?.catalog?.providers || [];
+
+  for (const provider of providers) {
+    if (!provider.items) continue;
+
+    for (const item of provider.items) {
+      if (item.time && item.time.timestamp) {
+        item.time.timestamp = now;
+      }
+    }
+  }
+  
+  return updated;
+}
+
 function updatePaymentDetails(
 	payload: any,
 	sessionData: SessionData
@@ -117,7 +137,9 @@ export async function onSearchGenerator(
       type: "TRIP"
     }));
     existingPayload.message.catalog.providers[0].fulfillments = updatedFulfillments;
-    return existingPayload;
+    const updatedPayload = updateItemTimestamps(existingPayload);
+
+    return updatedPayload;
   } catch (err) {
     console.error(err);
     delete existingPayload.message;

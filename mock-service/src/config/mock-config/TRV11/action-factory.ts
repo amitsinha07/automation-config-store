@@ -1,4 +1,5 @@
 // 201
+import status from "workbench-runner/mini-api-service/generated/L1-Validations/api-tests/status";
 import { MockCancelHardBus201Class } from "./BUS/2.0.1/cancel/cancel_hard/class";
 import { MockCancelSoftBus201Class } from "./BUS/2.0.1/cancel/cancel_soft/class";
 import { MockCancelTechBus201Class } from "./BUS/2.0.1/cancel/cancel_tech/class";
@@ -72,6 +73,9 @@ import { MockUpdateEndStop2MetroClass } from "./METRO/2.0.1/update/update_end_st
 import { MockUpdateEndStop3MetroClass } from "./METRO/2.0.1/update/update_end_stop_3/class";
 
 import { MockAction } from "./classes/mock-action";
+import { MockStatusPurchaseFlowBus201Class } from "./BUS/2.0.1/status/class";
+import { MockOnStatusCompleteBus201Class } from "./BUS/2.0.1/on_status/on_status_complete/class";
+import { MockOnCancelMerchantBus201Class } from "./BUS/2.0.1/on_cancel/on_cancel_merchant/class";
 
 // helpers
 type Ctor<T> = new () => T;
@@ -149,6 +153,9 @@ const registry = {
   on_update_end_stop_1: MockOnUpdateEndStop1MetroClass,
   on_update_end_stop_2: MockOnUpdateEndStop2MetroClass,
   on_update_end_stop_3: MockOnUpdateEndStop3MetroClass,
+  status_purchase_flow_BUS_201: MockStatusPurchaseFlowBus201Class,
+  on_status_complete_BUS_201: MockOnStatusCompleteBus201Class,
+  on_cancel_merchant_BUS_201: MockOnCancelMerchantBus201Class,
 } as const satisfies Record<string, Ctor<MockAction>>;
 
 type MockActionId = keyof typeof registry;
