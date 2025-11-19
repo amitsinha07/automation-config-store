@@ -447,16 +447,17 @@ const onInit = async (data: any) => {
       );
       const itemsIdList = itemsIdListRaw ? JSON.parse(itemsIdListRaw) : null;
       let i = 0;
-      const len: any = on_init.items.length;
-      while (i < len) {
-        const itemId: any = on_init.items[i].id;
-        const item = on_init.items[i];
+      const len = on_init.items.length;
 
+      while (i < len) {
+        const item = on_init.items[i];
+        const itemId = item.id;
+        const initFid = item.fulfillment_id;
         if (checkItemTag(item, select_customIdArray)) {
           result.push({
             valid: false,
             code: 20000,
-            description: `items[${i}].tags.parent_id mismatches for Item ${itemId} in /${constants.SELECT} and /${constants.INIT}`,
+            description: `items[${i}].tags.parent_id mismatches for Item ${itemId} in /${constants.SELECT} and /${constants.ON_INIT}`,
           });
         }
 
@@ -471,25 +472,41 @@ const onInit = async (data: any) => {
             description: `items[${i}].parent_item_id mismatches for Item ${itemId} in /${constants.ON_SEARCH} and /${constants.ON_INIT}`,
           });
         }
+        if (itemFlfllmnts && Object.prototype.hasOwnProperty.call(itemFlfllmnts, itemId)) {
+          const stored = itemFlfllmnts[itemId];
 
-        if (itemId in itemFlfllmnts) {
-          if (on_init.items[i].fulfillment_id != itemFlfllmnts[itemId]) {
-            result.push({
-              valid: false,
-              code: 20000,
-              description: `items[${i}].fulfillment_id mismatches for Item ${itemId} in /${constants.ON_SELECT} and /${constants.ON_INIT}`,
-            });
+          if (typeof stored === "string") {
+            if (initFid !== stored) {
+              result.push({
+                valid: false,
+                code: 20000,
+                description: `items[${i}].fulfillment_id mismatches for Item ${itemId} in /${constants.ON_SELECT} and /${constants.ON_INIT}`,
+              });
+            }
           }
-        } else {
+          else if (Array.isArray(stored)) {
+            if (!stored.includes(initFid)) {
+              result.push({
+                valid: false,
+                code: 20000,
+                description: `items[${i}].fulfillment_id '${initFid}' for Item ${itemId} does not belong to fulfillment_ids from /${constants.ON_SELECT}`,
+              });
+            }
+          }
+
+          else {
+            console.warn("Unexpected fulfillment format:", stored);
+          }
+        } 
+        else {
           result.push({
             valid: false,
             code: 20000,
             description: `Item Id ${itemId} does not exist in /on_select`,
           });
         }
-
-        if (itemId in itemsIdList) {
-          if (on_init.items[i].quantity.count != itemsIdList[itemId]) {
+        if (itemsIdList && Object.prototype.hasOwnProperty.call(itemsIdList, itemId)) {
+          if (item.quantity.count != itemsIdList[itemId]) {
             result.push({
               valid: false,
               code: 20000,
@@ -500,6 +517,7 @@ const onInit = async (data: any) => {
 
         i++;
       }
+
     } catch (error: any) {
       console.error(
         `!!Error while comparing Item and Fulfillment Id in /${constants.ON_SELECT} and /${constants.ON_INIT}, ${error.stack}`
@@ -612,38 +630,45 @@ const onInit = async (data: any) => {
       const itemFlfllmntsRaw = await RedisService.getKey(
         `${transaction_id}_itemFlfllmnts`
       );
-      const itemFlfllmnts = itemFlfllmntsRaw
-        ? JSON.parse(itemFlfllmntsRaw)
-        : null;
-      const buyerGpsRaw = await RedisService.getKey(
-        `${transaction_id}_buyerGps`
-      );
+      const itemFlfllmnts = itemFlfllmntsRaw ? JSON.parse(itemFlfllmntsRaw) : null;
+
+      const buyerGpsRaw = await RedisService.getKey(`${transaction_id}_buyerGps`);
       const buyerGps = buyerGpsRaw ? JSON.parse(buyerGpsRaw) : null;
-      const buyerAddrRaw = await RedisService.getKey(
-        `${transaction_id}_buyerAddr`
-      );
+
+      const buyerAddrRaw = await RedisService.getKey(`${transaction_id}_buyerAddr`);
       const buyerAddr = buyerAddrRaw ? JSON.parse(buyerAddrRaw) : null;
+      let allowedFIds = [];
+
+      if (itemFlfllmnts) {
+        for (const value of Object.values(itemFlfllmnts)) {
+          if (typeof value === "string") allowedFIds.push(value);
+          else if (Array.isArray(value)) allowedFIds.push(...value);
+        }
+      }
+
       let i = 0;
       const len = on_init.fulfillments.length;
+
       while (i < len) {
-        if (on_init.fulfillments[i].id) {
-          const id = on_init.fulfillments[i].id;
-          if (!Object.values(itemFlfllmnts).includes(id)) {
-            result.push({
-              valid: false,
-              code: 20000,
-              description: `fulfillment id ${id} does not exist in /${constants.ON_SELECT}`,
-            });
-          }
-        } else {
+        const f = on_init.fulfillments[i];
+        if (!f.id) {
           result.push({
             valid: false,
             code: 20000,
-            description: `fulfillments[].id is missing in /${constants.ON_INIT}`,
+            description: `fulfillments[${i}].id is missing in /${constants.ON_INIT}`,
           });
+        } else {
+          // Check existence in allowed IDs list
+          if (!allowedFIds.includes(f.id)) {
+            result.push({
+              valid: false,
+              code: 20000,
+              description: `fulfillment id '${f.id}' does not exist in /${constants.ON_SELECT}`,
+            });
+          }
         }
 
-        if (!_.isEqual(on_init.fulfillments[i].end.location.gps, buyerGps)) {
+        if (!_.isEqual(f.end.location.gps, buyerGps)) {
           result.push({
             valid: false,
             code: 20000,
@@ -651,12 +676,7 @@ const onInit = async (data: any) => {
           });
         }
 
-        if (
-          !_.isEqual(
-            on_init.fulfillments[i].end.location.address.area_code,
-            buyerAddr
-          )
-        ) {
+        if (!_.isEqual(f.end.location.address.area_code, buyerAddr)) {
           result.push({
             valid: false,
             code: 20000,
