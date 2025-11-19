@@ -1,3 +1,5 @@
+import { SessionData } from "config/mock-config/TRV11/session-types";
+
 type Price = {
     value: string;
     currency: string;
@@ -23,7 +25,36 @@ type Price = {
     price: Price;
     breakup: Breakup[];
   };
-
+    function updateSettlementAmount(order: any, sessionData: SessionData) {
+    if (!order?.payments || !order?.quote?.price?.value) return order;
+  
+    const quoteValue = parseFloat(order.quote.price.value);
+    const buyerFinderFee = parseFloat(sessionData.buyer_app_fee || "3");
+    const newSettlementAmount = ((quoteValue * buyerFinderFee) / 100).toFixed(2);
+    
+    order.payments = order.payments.map((payment: any) => {
+      if (!payment.tags) return payment;
+  
+      payment.tags = payment.tags.map((tag: any) => {
+        if (tag.descriptor?.code === "SETTLEMENT_TERMS" && Array.isArray(tag.list)) {
+          tag.list = tag.list.map((item: any) => {
+            if (item.descriptor?.code === "SETTLEMENT_AMOUNT") {
+              return {
+                ...item,
+                value: newSettlementAmount,
+              };
+            }
+            return item;
+          });
+        }
+        return tag;
+      });
+  
+      return payment;
+    });
+  
+    return order;
+  }
   function stripTicketAuthorizations(order:any) {
     if (!order.fulfillments) return order;
   
@@ -43,13 +74,10 @@ type Price = {
     return order;
   }
   
-  // Example usage:
 
 function applyCancellation(quote: Quote, cancellationCharges: number): Quote {
-    // Parse the current price
+
     const currentTotal = parseFloat(quote.price.value);
-  
-    // Calculate the total refund for items
     const refundAmount = quote.breakup
       .filter((b) => b.title === "BASE_FARE" && b.item)
       .reduce((sum, breakup) => {
@@ -57,7 +85,6 @@ function applyCancellation(quote: Quote, cancellationCharges: number): Quote {
         return sum + itemTotal;
       }, 0);
   
-    // Create a REFUND breakup for items
     const refundBreakups: Breakup[] = quote.breakup
       .filter((b) => b.title === "BASE_FARE" && b.item)
       .map((baseFare) => ({
@@ -66,12 +93,12 @@ function applyCancellation(quote: Quote, cancellationCharges: number): Quote {
           ...baseFare.item!,
           price: {
             ...baseFare.item!.price,
-            value: `-${baseFare.item!.price.value}`, // Negative for refund
+            value: `-${baseFare.item!.price.value}`,
           },
         },
         price: {
           ...baseFare.price,
-          value: `-${baseFare.price.value}`, // Negative for refund
+          value: `-${baseFare.price.value}`, 
         },
       }));
   
@@ -84,10 +111,8 @@ function applyCancellation(quote: Quote, cancellationCharges: number): Quote {
       },
     };
   
-    // Update the total price
     const newTotal = currentTotal - refundAmount + cancellationCharges;
   
-    // Return the updated quote
     return {
       price: {
         ...quote.price,
@@ -98,7 +123,7 @@ function applyCancellation(quote: Quote, cancellationCharges: number): Quote {
   }
 
 
-  export async function onCancelGenerator(existingPayload: any,sessionData: any){
+  export async function onCancelGenerator(existingPayload: any,sessionData: SessionData){
     if (sessionData.updated_payments.length > 0) {
       existingPayload.message.order.payments = sessionData.updated_payments;
       }
@@ -118,6 +143,7 @@ function applyCancellation(quote: Quote, cancellationCharges: number): Quote {
     if(sessionData.quote != null){
     existingPayload.message.order.quote = applyCancellation(sessionData.quote,15)
     }
+    existingPayload.message.order = updateSettlementAmount(existingPayload.message.order, sessionData);
     const now = new Date().toISOString();
     existingPayload.message.order.created_at = sessionData.created_at
     existingPayload.message.order.updated_at = now
