@@ -1,4 +1,5 @@
-import { SessionData } from "config/mock-config/TRV11/session-types";
+import { SessionData } from "../../../../session-types";
+
 
 type Price = {
     value: string;
