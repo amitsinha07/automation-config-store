@@ -710,221 +710,221 @@ export default async function onSearch(
           );
           let j = 0;
           const categories = onSearchCatalog["bpp/providers"][i]["categories"];
-          if (!categories || !categories.length) {
-            addError(
-              20006,
-              `Support for variants is mandatory, categories must be present in bpp/providers[${i}]`
-            );
-          }
-          const iLen = categories.length;
-          while (j < iLen) {
-            console.info(
-              `Validating uniqueness for categories id in bpp/providers[${i}].items[${j}]...`
-            );
-            const category = categories[j];
-
-            const fulfillments =
-              onSearchCatalog["bpp/providers"][i]["fulfillments"];
-            const phoneNumber = fulfillments[i]?.contact?.phone;
-
-            if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
-              addError(
-                20006,
-                `Please enter a valid phone number consisting of 10 or 11 digits without any spaces or special characters in bpp/providers[${i}]/fulfillments[${i}]`
+          if (categories && categories.length > 0) {
+            const iLen = categories.length;
+            while (j < iLen) {
+              console.info(
+                `Validating uniqueness for categories id in bpp/providers[${i}].items[${j}]...`
               );
-            }
+              const category = categories[j];
 
-            if (categoriesId.has(category.id)) {
-              addError(
-                20006,
-                `Duplicate category id: ${category.id} in bpp/providers[${i}]`
-              );
-            } else {
-              categoriesId.add(category.id);
-            }
+              const fulfillments =
+                onSearchCatalog["bpp/providers"][i]["fulfillments"];
+              const phoneNumber = fulfillments[i]?.contact?.phone;
 
-            try {
-              category.tags.map(
-                (tag: { code: any; list: any[] }, index: number) => {
-                  switch (tag.code) {
-                    case "type":
-                      const codeList = tag.list.find(
-                        (item) => item.code === "type"
-                      );
-                      if (
-                        !(
-                          codeList.value === "custom_menu" ||
-                          codeList.value === "custom_group" ||
-                          codeList.value === "variant_group"
-                        )
-                      ) {
-                        addError(
-                          20006,
-                          `list.code == type then value should be one of 'custom_menu','custom_group' and 'variant_group' in bpp/providers[${i}]`
+              if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
+                addError(
+                  20006,
+                  `Please enter a valid phone number consisting of 10 or 11 digits without any spaces or special characters in bpp/providers[${i}]/fulfillments[${i}]`
+                );
+              }
+
+              if (categoriesId.has(category.id)) {
+                addError(
+                  20006,
+                  `Duplicate category id: ${category.id} in bpp/providers[${i}]`
+                );
+              } else {
+                categoriesId.add(category.id);
+              }
+
+              try {
+                category.tags.map(
+                  (tag: { code: any; list: any[] }, index: number) => {
+                    switch (tag.code) {
+                      case "type":
+                        const codeList = tag.list.find(
+                          (item) => item.code === "type"
                         );
-                      }
-
-                      if (codeList.value === "custom_group") {
-                        customGrpId.add(category.id);
-                      }
-                      break;
-                    case "timing":
-                      for (const item of tag.list) {
-                        switch (item.code) {
-                          case "day_from":
-                          case "day_to":
-                            const dayValue = parseInt(item.value);
-                            if (
-                              isNaN(dayValue) ||
-                              dayValue < 1 ||
-                              dayValue > 7 ||
-                              !/^-?\d+(\.\d+)?$/.test(item.value)
-                            ) {
-                              addError(
-                                20006,
-                                `Invalid value for '${item.code}': ${item.value}`
-                              );
-                            }
-                            break;
-                          case "time_from":
-                          case "time_to":
-                            if (!/^([01]\d|2[0-3])[0-5]\d$/.test(item.value)) {
-                              addError(
-                                20006,
-                                `Invalid time format for '${item.code}': ${item.value}`
-                              );
-                            }
-                            break;
-                          default:
-                            addError(
-                              20006,
-                              `Invalid list.code for 'timing': ${item.code}`
-                            );
-                        }
-                      }
-
-                      const dayFromItem = tag.list.find(
-                        (item: any) => item.code === "day_from"
-                      );
-                      const dayToItem = tag.list.find(
-                        (item: any) => item.code === "day_to"
-                      );
-                      const timeFromItem = tag.list.find(
-                        (item: any) => item.code === "time_from"
-                      );
-                      const timeToItem = tag.list.find(
-                        (item: any) => item.code === "time_to"
-                      );
-
-                      if (
-                        dayFromItem &&
-                        dayToItem &&
-                        timeFromItem &&
-                        timeToItem
-                      ) {
-                        const dayFrom = parseInt(dayFromItem.value, 10);
-                        const dayTo = parseInt(dayToItem.value, 10);
-                        const timeFrom = parseInt(timeFromItem.value, 10);
-                        const timeTo = parseInt(timeToItem.value, 10);
-
-                        if (dayTo < dayFrom) {
-                          addError(
-                            20006,
-                            "'day_to' must be greater than or equal to 'day_from'"
-                          );
-                        }
-
-                        if (timeTo <= timeFrom) {
-                          addError(
-                            20006,
-                            "'time_to' must be greater than 'time_from'"
-                          );
-                        }
-                      }
-                      break;
-                    case "display":
-                      for (const item of tag.list) {
                         if (
-                          item.code !== "rank" ||
-                          !/^-?\d+(\.\d+)?$/.test(item.value)
+                          !(
+                            codeList.value === "custom_menu" ||
+                            codeList.value === "custom_group" ||
+                            codeList.value === "variant_group"
+                          )
                         ) {
                           addError(
                             20006,
-                            `Invalid value for 'display': ${item.value}`
+                            `list.code == type then value should be one of 'custom_menu','custom_group' and 'variant_group' in bpp/providers[${i}]`
                           );
-                        } else {
-                          if (categoryRankSet.has(category.id)) {
-                            addError(
-                              20006,
-                              `Duplicate rank in category id: ${category.id} in bpp/providers[${i}]`
-                            );
-                          } else {
-                            categoryRankSet.add(category.id);
+                        }
+
+                        if (codeList.value === "custom_group") {
+                          customGrpId.add(category.id);
+                        }
+                        break;
+                      case "timing":
+                        for (const item of tag.list) {
+                          switch (item.code) {
+                            case "day_from":
+                            case "day_to":
+                              const dayValue = parseInt(item.value);
+                              if (
+                                isNaN(dayValue) ||
+                                dayValue < 1 ||
+                                dayValue > 7 ||
+                                !/^-?\d+(\.\d+)?$/.test(item.value)
+                              ) {
+                                addError(
+                                  20006,
+                                  `Invalid value for '${item.code}': ${item.value}`
+                                );
+                              }
+                              break;
+                            case "time_from":
+                            case "time_to":
+                              if (!/^([01]\d|2[0-3])[0-5]\d$/.test(item.value)) {
+                                addError(
+                                  20006,
+                                  `Invalid time format for '${item.code}': ${item.value}`
+                                );
+                              }
+                              break;
+                            default:
+                              addError(
+                                20006,
+                                `Invalid list.code for 'timing': ${item.code}`
+                              );
                           }
                         }
-                      }
-                      break;
-                    case "config":
-                      const minItem: any = tag.list.find(
-                        (item: { code: string }) => item.code === "min"
-                      );
-                      const maxItem: any = tag.list.find(
-                        (item: { code: string }) => item.code === "max"
-                      );
-                      const inputItem: any = tag.list.find(
-                        (item: { code: string }) => item.code === "input"
-                      );
-                      const seqItem: any = tag.list.find(
-                        (item: { code: string }) => item.code === "seq"
-                      );
 
-                      if (!minItem || !maxItem) {
-                        addError(
-                          20006,
-                          `Both 'min' and 'max' values are required in 'config' at index: ${j}`
+                        const dayFromItem = tag.list.find(
+                          (item: any) => item.code === "day_from"
                         );
-                      }
+                        const dayToItem = tag.list.find(
+                          (item: any) => item.code === "day_to"
+                        );
+                        const timeFromItem = tag.list.find(
+                          (item: any) => item.code === "time_from"
+                        );
+                        const timeToItem = tag.list.find(
+                          (item: any) => item.code === "time_to"
+                        );
 
-                      if (!/^-?\d+(\.\d+)?$/.test(minItem?.value)) {
-                        addError(
-                          20006,
-                          `Invalid value for ${minItem.code}: ${minItem.value} at index: ${j}`
-                        );
-                      }
+                        if (
+                          dayFromItem &&
+                          dayToItem &&
+                          timeFromItem &&
+                          timeToItem
+                        ) {
+                          const dayFrom = parseInt(dayFromItem.value, 10);
+                          const dayTo = parseInt(dayToItem.value, 10);
+                          const timeFrom = parseInt(timeFromItem.value, 10);
+                          const timeTo = parseInt(timeToItem.value, 10);
 
-                      if (!/^-?\d+(\.\d+)?$/.test(maxItem?.value)) {
-                        addError(
-                          20006,
-                          `Invalid value for ${maxItem.code}: ${maxItem.value} at index: ${j}`
-                        );
-                      }
+                          if (dayTo < dayFrom) {
+                            addError(
+                              20006,
+                              "'day_to' must be greater than or equal to 'day_from'"
+                            );
+                          }
 
-                      if (!/^-?\d+(\.\d+)?$/.test(seqItem?.value)) {
-                        addError(
-                          20006,
-                          `Invalid value for ${seqItem.code}: ${seqItem.value} at index: ${j}`
+                          if (timeTo <= timeFrom) {
+                            addError(
+                              20006,
+                              "'time_to' must be greater than 'time_from'"
+                            );
+                          }
+                        }
+                        break;
+                      case "display":
+                        for (const item of tag.list) {
+                          if (
+                            item.code !== "rank" ||
+                            !/^-?\d+(\.\d+)?$/.test(item.value)
+                          ) {
+                            addError(
+                              20006,
+                              `Invalid value for 'display': ${item.value}`
+                            );
+                          } else {
+                            if (categoryRankSet.has(category.id)) {
+                              addError(
+                                20006,
+                                `Duplicate rank in category id: ${category.id} in bpp/providers[${i}]`
+                              );
+                            } else {
+                              categoryRankSet.add(category.id);
+                            }
+                          }
+                        }
+                        break;
+                      case "config":
+                        const minItem: any = tag.list.find(
+                          (item: { code: string }) => item.code === "min"
                         );
-                      }
+                        const maxItem: any = tag.list.find(
+                          (item: { code: string }) => item.code === "max"
+                        );
+                        const inputItem: any = tag.list.find(
+                          (item: { code: string }) => item.code === "input"
+                        );
+                        const seqItem: any = tag.list.find(
+                          (item: { code: string }) => item.code === "seq"
+                        );
 
-                      const inputEnum = ["select", "text"];
-                      if (!inputEnum.includes(inputItem?.value)) {
-                        addError(
-                          20006,
-                          `Invalid value for 'input': ${inputItem.value}, it should be one of ${inputEnum} at index: ${j}`
-                        );
-                      }
-                      break;
+                        if (!minItem || !maxItem) {
+                          addError(
+                            20006,
+                            `Both 'min' and 'max' values are required in 'config' at index: ${j}`
+                          );
+                        }
+
+                        if (!/^-?\d+(\.\d+)?$/.test(minItem?.value)) {
+                          addError(
+                            20006,
+                            `Invalid value for ${minItem.code}: ${minItem.value} at index: ${j}`
+                          );
+                        }
+
+                        if (!/^-?\d+(\.\d+)?$/.test(maxItem?.value)) {
+                          addError(
+                            20006,
+                            `Invalid value for ${maxItem.code}: ${maxItem.value} at index: ${j}`
+                          );
+                        }
+
+                        if (!/^-?\d+(\.\d+)?$/.test(seqItem?.value)) {
+                          addError(
+                            20006,
+                            `Invalid value for ${seqItem.code}: ${seqItem.value} at index: ${j}`
+                          );
+                        }
+
+                        const inputEnum = ["select", "text"];
+                        if (!inputEnum.includes(inputItem?.value)) {
+                          addError(
+                            20006,
+                            `Invalid value for 'input': ${inputItem.value}, it should be one of ${inputEnum} at index: ${j}`
+                          );
+                        }
+                        break;
+                    }
                   }
-                }
-              );
-              console.info(`Category '${category.descriptor.name}' is valid.`);
-            } catch (error: any) {
-              console.error(
-                `Validation error for category '${category.descriptor.name}': ${error.message}`
-              );
-            }
+                );
+                console.info(`Category '${category.descriptor.name}' is valid.`);
+              } catch (error: any) {
+                console.error(
+                  `Validation error for category '${category.descriptor.name}': ${error.message}`
+                );
+              }
 
-            j++;
+              j++;
+            }
+          }else {
+            console.info(
+              `Skipping category validations — categories missing for provider index ${i}`
+            );
           }
         } catch (error: any) {
           console.error(
@@ -1611,65 +1611,69 @@ export default async function onSearch(
           );
         }
 
-        try {
-          let customMenus = [];
-          customMenus = categories.filter((category: any) =>
-            category.tags.some(
-              (tag: any) =>
-                tag.code === "type" &&
-                tag.list.some((type: any) => type.value === "custom_menu")
-            )
-          );
-
-          if (customMenus.length > 0) {
-            customMenu = true;
-
-            const ranks = customMenus.map((cstmMenu: any) =>
-              parseInt(
-                cstmMenu.tags
-                  .find((tag: any) => tag.code === "display")
-                  .list.find((display: any) => display.code === "rank").value
+        if (categories && categories.length > 0) {
+          try {
+            let customMenus = [];
+            customMenus = categories.filter((category: any) =>
+              category.tags.some(
+                (tag: any) =>
+                  tag.code === "type" &&
+                  tag.list.some((type: any) => type.value === "custom_menu")
               )
             );
 
-            const hasDuplicates = ranks.length !== new Set(ranks).size;
-            const missingRanks = [...Array(Math.max(...ranks)).keys()]
-              .map((i) => i + 1)
-              .filter((rank) => !ranks.includes(rank));
+            if (customMenus.length > 0) {
+              customMenu = true;
 
-            if (hasDuplicates) {
-              addError(
-                20006,
-                `Duplicate ranks found, ${ranks} in providers${i}/categories`
-              );
-            } else if (missingRanks.length > 0) {
-              addError(
-                20006,
-                `Missing ranks: ${missingRanks} in providers${i}/categories`
-              );
-            } else {
-              const sortedCustomMenus = customMenus.sort((a: any, b: any) => {
-                const rankA = parseInt(
-                  a.tags
+              const ranks = customMenus.map((cstmMenu: any) =>
+                parseInt(
+                  cstmMenu.tags
                     .find((tag: any) => tag.code === "display")
                     .list.find((display: any) => display.code === "rank").value
-                );
-                const rankB = parseInt(
-                  b.tags
-                    .find((tag: any) => tag.code === "display")
-                    .list.find((display: any) => display.code === "rank").value
-                );
-                return rankA - rankB;
-              });
+                )
+              );
 
-              customMenuIds = sortedCustomMenus.map((item: any) => item.id);
+              const hasDuplicates = ranks.length !== new Set(ranks).size;
+              const missingRanks = [...Array(Math.max(...ranks)).keys()]
+                .map((i) => i + 1)
+                .filter((rank) => !ranks.includes(rank));
+
+              if (hasDuplicates) {
+                addError(
+                  20006,
+                  `Duplicate ranks found, ${ranks} in providers${i}/categories`
+                );
+              } else if (missingRanks.length > 0) {
+                addError(
+                  20006,
+                  `Missing ranks: ${missingRanks} in providers${i}/categories`
+                );
+              } else {
+                const sortedCustomMenus = customMenus.sort((a: any, b: any) => {
+                  const rankA = parseInt(
+                    a.tags
+                      .find((tag: any) => tag.code === "display")
+                      .list.find((display: any) => display.code === "rank").value
+                  );
+                  const rankB = parseInt(
+                    b.tags
+                      .find((tag: any) => tag.code === "display")
+                      .list.find((display: any) => display.code === "rank").value
+                  );
+                  return rankA - rankB;
+                });
+
+                customMenuIds = sortedCustomMenus.map((item: any) => item.id);
+              }
             }
+          } catch (error: any) {
+            console.error(
+              `!!Errors while checking rank in bpp/providers[${i}].category.tags, ${error.stack}`
+            );
           }
-        } catch (error: any) {
-          console.error(
-            `!!Errors while checking rank in bpp/providers[${i}].category.tags, ${error.stack}`
-          );
         }
+
+        
         if (customMenu) {
           try {
             const categoryMap: Record<string, number[]> = {};
@@ -1723,26 +1727,29 @@ export default async function onSearch(
           }
         }
 
-        try {
-          console.info(
-            `Checking image array for bpp/provider/categories/descriptor/images[]`
-          );
-          for (let i in onSearchCatalog["bpp/providers"]) {
-            const categories = onSearchCatalog["bpp/providers"][i].categories;
-            categories.forEach((item: any, index: number) => {
-              if (item.descriptor.images && item.descriptor.images.length < 1) {
-                addError(
-                  20006,
-                  `Images should not be provided as empty array for categories[${index}]/descriptor`
-                );
-              }
-            });
+        if(categories && categories.length >0) {
+          try {
+            console.info(
+              `Checking image array for bpp/provider/categories/descriptor/images[]`
+            );
+            for (let i in onSearchCatalog["bpp/providers"]) {
+              const categories = onSearchCatalog["bpp/providers"][i].categories;
+              categories.forEach((item: any, index: number) => {
+                if (item.descriptor.images && item.descriptor.images.length < 1) {
+                  addError(
+                    20006,
+                    `Images should not be provided as empty array for categories[${index}]/descriptor`
+                  );
+                }
+              });
+            }
+          } catch (error: any) {
+            console.error(
+              `!!Errors while checking image array for bpp/providers/[]/categories/[]/descriptor/images[], ${error.stack}`
+            );
           }
-        } catch (error: any) {
-          console.error(
-            `!!Errors while checking image array for bpp/providers/[]/categories/[]/descriptor/images[], ${error.stack}`
-          );
         }
+        
 
         try {
           console.info(
