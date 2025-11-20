@@ -86,6 +86,16 @@ import { MockOnIssueResolution1Class, MockOnIssueResolution2Class, MockOnIssueRe
 import { MockIssueResolutionAcceptClass, MockIssueResolutionAcceptIGM3Class, MockIssueResolutionRejectClass } from "./BUS/2.0.1/issue/issue_resolution_accept/class";
 import { MockOnIssueResolvedClass, MockOnIssueResolvedIGM3Class } from "./BUS/2.0.1/on_issue/on_issue_resolved/class";
 import { MockIssueCloseClass, MockIssueCloseIGM3Class } from "./BUS/2.0.1/issue/issue_close/class";
+import { MockIssueEscalateMetro_201_Class, MockIssueOpenMetro_201_Class } from "./METRO/2.0.1/issue/issue_open/class";
+import { MockIssueOpen2Metro_201_Class } from "./METRO/2.0.1/issue/issue_open_2/class";
+import { MockOnIssueProcessing1Metro_201_Class, MockOnIssueProcessing2Metro_201_Class, MockOnIssueProcessingMetro_201_Class } from "./METRO/2.0.1/on_issue/on_issue_processing/class";
+import { MockOnIssueNeedMoreInfoMetro_201_Class } from "./METRO/2.0.1/on_issue/on_issue_need_more_info/class";
+import { MockIssueInfoProvidedMetro_201_Class } from "./METRO/2.0.1/issue/issue_info_provided/class";
+import { MockOnIssueProvidedMetro_201_Class } from "./METRO/2.0.1/on_issue/on_issue_provided/class";
+import { MockOnIssueResolution1Metro_201_Class, MockOnIssueResolution2Metro_201_Class, MockOnIssueResolutionIGM3Metro_201_Class, MockOnIssueResolutionMetro_201_Class } from "./METRO/2.0.1/on_issue/on_issue_resolution/class";
+import { MockIssueResolutionAcceptIGM3Metro_201_Class, MockIssueResolutionAcceptMetro_201_Class, MockIssueResolutionRejectMetro_201_Class } from "./METRO/2.0.1/issue/issue_resolution_accept/class";
+import { MockOnIssueResolvedIGM3Metro_201_Class, MockOnIssueResolvedMetro_201_Class } from "./METRO/2.0.1/on_issue/on_issue_resolved/class";
+import { MockIssueCloseIGM3Metro_201_Class, MockIssueCloseMetro_201_Class } from "./METRO/2.0.1/issue/issue_close/class";
 
 // helpers
 type Ctor<T> = new () => T;
@@ -167,7 +177,7 @@ const registry = {
   on_status_complete_BUS_201: MockOnStatusCompleteBus201Class,
   on_cancel_merchant_BUS_201: MockOnCancelMerchantBus201Class,
 
-  // _____________________IGM____________________________
+  // _____________________IGM BUS (2.0.1)____________________________
   issue_open: MockIssueOpenClass,
   issue_escalate: MockIssueEscalateClass,
   issue_open_2: MockIssueOpen2Class,
@@ -197,6 +207,38 @@ const registry = {
 
   issue_close: MockIssueCloseClass,
   issue_close_igm_3: MockIssueCloseIGM3Class,
+
+
+  // _____________________IGM METRO (2.0.1)____________________________
+  issue_open_metro_201: MockIssueOpenMetro_201_Class,
+  issue_escalate_metro_201: MockIssueEscalateMetro_201_Class,
+  issue_open_2_metro_201: MockIssueOpen2Metro_201_Class,
+
+  on_issue_processing_metro_201: MockOnIssueProcessingMetro_201_Class,
+  on_issue_processing_1_metro_201: MockOnIssueProcessing1Metro_201_Class,
+  on_issue_processing_2_metro_201: MockOnIssueProcessing2Metro_201_Class,
+
+  on_issue_need_more_info_metro_201: MockOnIssueNeedMoreInfoMetro_201_Class,
+
+  issue_info_provided_metro_201: MockIssueInfoProvidedMetro_201_Class,
+
+  on_issue_provided_metro_201: MockOnIssueProvidedMetro_201_Class,
+
+  on_issue_resolution_metro_201: MockOnIssueResolutionMetro_201_Class,
+  on_issue_resolution_1_metro_201: MockOnIssueResolution1Metro_201_Class,
+  on_issue_resolution_2_metro_201: MockOnIssueResolution2Metro_201_Class,
+  on_issue_resolution_igm_3_metro_201: MockOnIssueResolutionIGM3Metro_201_Class,
+
+  issue_resolution_accept_metro_201: MockIssueResolutionAcceptMetro_201_Class,
+  issue_resolution_accept_igm_3_metro_201: MockIssueResolutionAcceptIGM3Metro_201_Class,
+
+  issue_resolution_reject_metro_201: MockIssueResolutionRejectMetro_201_Class,
+
+  on_issue_resolved_metro_201: MockOnIssueResolvedMetro_201_Class,
+  on_issue_resolved_igm_3_metro_201: MockOnIssueResolvedIGM3Metro_201_Class,
+
+  issue_close_metro_201: MockIssueCloseMetro_201_Class,
+  issue_close_igm_3_metro_201: MockIssueCloseIGM3Metro_201_Class,
 } as const satisfies Record<string, Ctor<MockAction>>;
 
 type MockActionId = keyof typeof registry;

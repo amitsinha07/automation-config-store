@@ -9,7 +9,7 @@ import {
 import { SessionData } from "../../../../session-types";
 import { issueStatusGenerator } from "../generator";
 
-export class MockIssueResolutionAcceptClass extends MockAction {
+export class MockIssueResolutionAcceptMetro_201_Class extends MockAction {
   get saveData(): saveType {
     return yaml.load(
       readFileSync(path.resolve(__dirname, "../save-data.yaml"), "utf8")
@@ -55,7 +55,7 @@ export class MockIssueResolutionAcceptClass extends MockAction {
   }
 }
 
-export class MockIssueResolutionAcceptIGM3Class extends MockAction {
+export class MockIssueResolutionAcceptIGM3Metro_201_Class extends MockAction {
   get saveData(): saveType {
     return yaml.load(
       readFileSync(path.resolve(__dirname, "../save-data.yaml"), "utf8")
@@ -102,7 +102,7 @@ export class MockIssueResolutionAcceptIGM3Class extends MockAction {
 }
 
 
-export class MockIssueResolutionRejectClass extends MockAction {
+export class MockIssueResolutionRejectMetro_201_Class extends MockAction {
   get saveData(): saveType {
     return yaml.load(
       readFileSync(path.resolve(__dirname, "../save-data.yaml"), "utf8")

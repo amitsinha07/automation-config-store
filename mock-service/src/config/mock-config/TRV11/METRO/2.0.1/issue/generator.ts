@@ -22,7 +22,7 @@ export const issueStatusGenerator = async (
   const provider = sessionData.provider_id;
   const item = sessionData?.selected_items[0]?.id;
   const order = sessionData?.order_id;
-  const fulfillment = sessionData?.buyer_side_fulfillment_ids[0]?.id;
+  const fulfillment = sessionData?.fulfillments[0]?.id;
   const refs = [
     {
       ref_id: order ?? "O1",
