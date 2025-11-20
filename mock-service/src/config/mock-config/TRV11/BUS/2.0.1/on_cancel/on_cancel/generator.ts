@@ -168,7 +168,7 @@ export async function onCancelGenerator(
   if (sessionData.quote != null) {
     existingPayload.message.order.quote = applyCancellation(
       sessionData.quote,
-      15
+      0
     );
   }
   existingPayload.message.order = updateSettlementAmount(
