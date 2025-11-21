@@ -41,10 +41,10 @@ export class MockOnStatusCompleteMetro201Class extends MockAction {
     };
   }
 
-  if (order?.state !== "COMPLETE") {
+  if (order?.status !== "COMPLETE") {
     return {
       valid: false,
-      message: `Invalid order state. Expected "ACTIVE", got ${order?.state}`,
+      message: `Invalid order state. Expected "COMPLETE", got ${order?.status}`,
     };
   }
 
