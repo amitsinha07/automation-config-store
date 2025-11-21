@@ -1,7 +1,6 @@
 import { SessionData } from "../../../../session-types";
 import { createFullfillment } from "./fullfillment-generator";
 
-
 function updatePaymentDetails(payload: any, sessionData: SessionData) {
   const providers = payload?.message?.catalog?.providers || [];
 
@@ -133,7 +132,7 @@ export async function onSearchGenerator(
     }));
     existingPayload.message.catalog.providers[0].fulfillments =
       updatedFulfillments;
-    
+
     return existingPayload;
   } catch (err) {
     console.error(err);

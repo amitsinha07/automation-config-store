@@ -570,12 +570,12 @@ codes:
     default: BUS/2.0.1/on_update/on_update_vehicle_qr/default.yaml
     message_id: false
   - code: 211
-    action_id: select_unlimited_pass
+    action_id: select_unlimited_pass_BUS_201
     action: select
     default: BUS/2.0.1/select/select_unlimited_pass/default.yaml
     message_id: true
   - code: 212
-    action_id: on_select_unlimited_pass
+    action_id: on_select_unlimited_pass_BUS_201
     action: on_select
     default: BUS/2.0.1/on_select/on_select_unlimited_pass/default.yaml
     message_id: false
@@ -624,6 +624,26 @@ codes:
     action: on_cancel
     default: BUS/2.0.1/on_cancel/on_cancel_merchant/default.yaml
     message_id: true
+  - code: 222
+    action_id: on_search_monthly_pass_BUS_201
+    action: on_search
+    default: BUS/2.0.1/on_search/on_search_monthly_pass/default.yaml
+    message_id: false
+  - code: 223
+    action_id: search_monthly_pass_BUS_201
+    action: search
+    default: BUS/2.0.1/search/search_monthly_pass/default.yaml
+    message_id: true
+  - code: 224
+    action_id: on_search_monthly_pass1_BUS_201
+    action: on_search
+    default: BUS/2.0.1/on_search/on_search_monthly_pass1/default.yaml
+    message_id: false
+  - code: 225
+    action_id: on_confirm_monthly_pass_BUS_201
+    action: on_confirm
+    default: BUS/2.0.1/on_confirm/on_confirm_monthly_passes/default.yaml
+    message_id: false
 
     # ___________________IMG FLOW BUS 201_____________________
 

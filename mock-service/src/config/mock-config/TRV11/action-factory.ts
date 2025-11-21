@@ -1,4 +1,4 @@
-
+// 201
 import { MockCancelHardBus201Class } from "./BUS/2.0.1/cancel/cancel_hard/class";
 import { MockCancelSoftBus201Class } from "./BUS/2.0.1/cancel/cancel_soft/class";
 import { MockCancelTechBus201Class } from "./BUS/2.0.1/cancel/cancel_tech/class";
@@ -75,6 +75,10 @@ import { MockAction } from "./classes/mock-action";
 import { MockStatusPurchaseFlowBus201Class } from "./BUS/2.0.1/status/class";
 import { MockOnStatusCompleteBus201Class } from "./BUS/2.0.1/on_status/on_status_complete/class";
 import { MockOnCancelMerchantBus201Class } from "./BUS/2.0.1/on_cancel/on_cancel_merchant/class";
+import { MockOnSearchMonthlyPassBus201Class } from "./BUS/2.0.1/on_search/on_search_monthly_pass/class";
+import { MockSearchMonthlyPassBus201Class } from "./BUS/2.0.1/search/search_monthly_pass/class";
+import { MockOnSearchMonthlyPass1Bus201Class } from "./BUS/2.0.1/on_search/on_search_monthly_pass1/class";
+import { MockOnConfirmMonthlyPassesBus201Class } from "./BUS/2.0.1/on_confirm/on_confirm_monthly_passes/class";
 
 import { MockIssueEscalateClass, MockIssueOpenClass } from "./BUS/2.0.1/issue/issue_open/class";
 import { MockIssueOpen2Class } from "./BUS/2.0.1/issue/issue_open_2/class";
@@ -127,7 +131,7 @@ const registry = {
   on_search_catalog4_BUS_201: MockOnSearchCatalog4Bus201Class,
   on_search_catalog5_BUS_201: MockOnSearchCatalog5Bus201Class,
   on_select_BUS_201: MockOnSelectBus201Class,
-  on_select_unlimited_pass: MockOnSelectBusUnlimitedPass201Class,
+  on_select_unlimited_pass_BUS_201: MockOnSelectBusUnlimitedPass201Class,
   on_status_active_BUS_201: MockOnStatusActiveBus201Class,
   on_status_cancellation_BUS_201: MockOnStatusCancellationBus201Class,
   on_update_accepted_BUS_201: MockOnUpdateAcceptedBus201Class,
@@ -136,7 +140,7 @@ const registry = {
   search0_BUS_201: MockSearch0Bus201Class,
   search_BUS_201: MockSearch1Bus201Class,
   select_BUS_201: MockSelectBus201Class,
-  select_unlimited_pass: MockSelectUnlimitedPassBus201Class,
+  select_unlimited_pass_BUS_201: MockSelectUnlimitedPassBus201Class,
   status_BUS_201: MockStatusBus201Class,
   update_BUS_201: MockUpdateBus201Class,
   update_BUS_QR_201: MockUpdateQrBus201Class,
@@ -239,6 +243,10 @@ const registry = {
 
   issue_close_metro_201: MockIssueCloseMetro_201_Class,
   issue_close_igm_3_metro_201: MockIssueCloseIGM3Metro_201_Class,
+  on_search_monthly_pass_BUS_201: MockOnSearchMonthlyPassBus201Class,
+  search_monthly_pass_BUS_201: MockSearchMonthlyPassBus201Class,
+  on_search_monthly_pass1_BUS_201: MockOnSearchMonthlyPass1Bus201Class,
+  on_confirm_monthly_pass_BUS_201: MockOnConfirmMonthlyPassesBus201Class,
 } as const satisfies Record<string, Ctor<MockAction>>;
 
 type MockActionId = keyof typeof registry;

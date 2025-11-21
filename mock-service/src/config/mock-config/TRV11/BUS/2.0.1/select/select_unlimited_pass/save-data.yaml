@@ -3,4 +3,3 @@ save-data:
   selected_item_ids: "$.message.order.items[*].id"
   selected_items: "$.message.order.items[*]"
   fulfillments: "$.message.order.fulfillments[*]"
-  items: "message.order.items[*]"

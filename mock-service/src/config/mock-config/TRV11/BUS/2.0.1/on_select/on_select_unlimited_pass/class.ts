@@ -20,7 +20,7 @@ export class MockOnSelectBusUnlimitedPass201Class extends MockAction {
     return {};
   }
   name(): string {
-    return "on_select_BUS_201";
+    return "on_select_unlimited_pass_BUS_201";
   }
   get description(): string {
     return "Mock for on_select_BUS_201";
