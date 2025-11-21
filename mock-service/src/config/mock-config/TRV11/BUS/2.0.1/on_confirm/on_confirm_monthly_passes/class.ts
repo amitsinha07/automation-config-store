@@ -2,10 +2,10 @@ import { readFileSync } from "fs";
 import yaml from "js-yaml";
 import path from "path";
 import { MockAction, MockOutput, saveType } from "../../../../classes/mock-action";
+import { onConfirmGenerator } from "./generator";
 import { SessionData } from "../../../../session-types";
-import { onStatusCompleteGenerator } from "./generator";
 
-export class MockOnStatusCompleteMetro201Class extends MockAction {
+export class MockOnConfirmMonthlyPassesBus201Class extends MockAction {
   get saveData(): saveType {
     return yaml.load(
       readFileSync(path.resolve(__dirname, "../save-data.yaml"), "utf8")
@@ -20,36 +20,20 @@ export class MockOnStatusCompleteMetro201Class extends MockAction {
     return {};
   }
   name(): string {
-    return "on_status_complete_METRO_201";
+    return "on_confirm_monthly_pass_BUS_201";
   }
   get description(): string {
-    return "Mock for on_status_complete_METRO_201";
+    return "Mock for on_confirm_BUS_201";
   }
   generator(existingPayload: any, sessionData: SessionData): Promise<any> {
-    return onStatusCompleteGenerator(existingPayload, sessionData);
+    return onConfirmGenerator(existingPayload, sessionData);
   }
   async validate(
   targetPayload: any,
   sessionData: SessionData
 ): Promise<MockOutput> {
-  const order = targetPayload?.message?.order;
-
-  if (order?.id !== sessionData.order_id) {
-    return {
-      valid: false,
-      message: `Order ID mismatch. Expected ${sessionData.order_id}, got ${order?.id}`,
-    };
-  }
-
-  if (order?.status !== "COMPLETE") {
-    return {
-      valid: false,
-      message: `Invalid order state. Expected "COMPLETE", got ${order?.status}`,
-    };
-  }
-
-  const items = order?.items || [];
-  const fulfillments = order?.fulfillments || [];
+  const items = targetPayload?.message?.order?.items || [];
+  const fulfillments = targetPayload?.message?.order?.fulfillments || [];
 
   // Extract all fulfillment ids from payload
   const payloadFulfillmentIds = fulfillments.map((f: any) => f.id);
@@ -99,7 +83,7 @@ export class MockOnStatusCompleteMetro201Class extends MockAction {
   }
 
   // 4. check quote value & currency matches sessionData.quote
-  const payloadQuote = order?.quote?.price;
+  const payloadQuote = targetPayload?.message?.order?.quote?.price;
   const sessionQuote = sessionData?.quote?.price;
 
   if (!payloadQuote || !sessionQuote) {
@@ -121,7 +105,6 @@ export class MockOnStatusCompleteMetro201Class extends MockAction {
 
   return { valid: true };
 }
-
   async meetRequirements(sessionData: SessionData): Promise<MockOutput> {
   // Check for updated_payments
   if (!sessionData.updated_payments || sessionData.updated_payments.length === 0) {
@@ -129,15 +112,6 @@ export class MockOnStatusCompleteMetro201Class extends MockAction {
       valid: false,
       message: "No updated_payments available in session data",
       code: "MISSING_UPDATED_PAYMENTS",
-    };
-  }
-
-  // Check for price
-  if (!sessionData.price) {
-    return {
-      valid: false,
-      message: "No price available in session data",
-      code: "MISSING_PRICE",
     };
   }
 
@@ -159,30 +133,12 @@ export class MockOnStatusCompleteMetro201Class extends MockAction {
     };
   }
 
-  // Check for order_id
-  if (!sessionData.order_id) {
-    return {
-      valid: false,
-      message: "No order_id available in session data",
-      code: "MISSING_ORDER_ID",
-    };
-  }
-
   // Check for quote
   if (!sessionData.quote) {
     return {
       valid: false,
       message: "No quote available in session data",
       code: "MISSING_QUOTE",
-    };
-  }
-
-  // Check for created_at
-  if (!sessionData.created_at) {
-    return {
-      valid: false,
-      message: "No created_at available in session data",
-      code: "MISSING_CREATED_AT",
     };
   }
 

@@ -20,7 +20,7 @@ export class MockSelectUnlimitedPassBus201Class extends MockAction {
     return {};
   }
   name(): string {
-    return "select_BUS_201";
+    return "select_unlimited_pass_BUS_201";
   }
   get description(): string {
     return "Mock for select_BUS_200";
@@ -39,13 +39,6 @@ export class MockSelectUnlimitedPassBus201Class extends MockAction {
     const payloadFulfillmentIds = fulfillments.map((f: any) => f.id);
 
     for (const item of items) {
-      // 1. check item id in sessionData.selected_item_ids
-      if (!sessionData.selected_item_ids.includes(item.id)) {
-        return {
-          valid: false,
-          message: `Item id ${item.id} not found in sessionData.selected_item_ids: ${sessionData.selected_item_ids}`,
-        };
-      }
 
       // 2. check item.fulfillment_ids are present in payload.fulfillments
       const itemFulfillmentIds = item.fulfillment_ids || [];

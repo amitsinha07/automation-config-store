@@ -6,7 +6,7 @@ message:
           selected:
             count: 1
     fulfillments:
-      - id: "F9"
+      - id: "F1"
         type: "PASS"
         customer:
           person:
