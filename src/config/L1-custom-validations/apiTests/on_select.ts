@@ -444,6 +444,38 @@ async function validateError(
   }
 }
 
+async function storeQuoteInRedis(onSelect: any, transaction_id: string) {
+  try {
+    const quoteObj = { ...onSelect.quote };
+
+    quoteObj.breakup.forEach((element: any) => {
+      if (element["@ondc/org/title_type"] === "item" && element.item?.quantity) {
+        delete element.item.quantity;
+      }
+    });
+
+    const quotedPrice = parseFloat(onSelect.quote.price.value);
+    const itemPrices = new Map<string, number>();
+
+    onSelect.quote.breakup.forEach((element: any) => {
+      const itemId = element["@ondc/org/item_id"];
+      if (element["@ondc/org/title_type"] === "item") {
+        itemPrices.set(itemId, Math.abs(parseFloat(element.price.value)));
+      }
+    });
+
+    await Promise.all([
+      setRedisValue(`${transaction_id}_quoteObj`, quoteObj),
+      setRedisValue(`${transaction_id}_onSelectPrice`, quotedPrice),
+      setRedisValue(`${transaction_id}_selectPriceMap`, Array.from(itemPrices.entries())),
+    ]);
+
+    console.info("Quote details stored in Redis");
+  } catch (err) {
+    console.error("Error while storing quote in Redis:", err);
+  }
+}
+
 export async function onSelect(data: any) {
   const { context, message } = data;
   const result: ValidationError[] = [];
@@ -459,6 +491,7 @@ export async function onSelect(data: any) {
 
   try {
     const onSelect = message.order;
+    await storeQuoteInRedis(onSelect, txnId);
     await setRedisValue(`${txnId}_${ApiSequence.ON_SELECT}`, data, TTL_IN_SECONDS);
 
     await validateProvider(onSelect, txnId, result);
