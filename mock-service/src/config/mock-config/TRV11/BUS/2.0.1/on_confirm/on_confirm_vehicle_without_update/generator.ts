@@ -52,13 +52,12 @@ function updateFulfillmentsWithParentInfo(fulfillments: any[], sessionData: Sess
 
     // Check if this fulfillment exists in buyer-side list and has a vehicle
     const buyerEntry = buyerFulfillmentMap.get(fulfillment.id);
-    const authStatus = buyerEntry?.vehicle ? "CLAIMED" : "UNCLAIMED";
-    fulfillment.vehicle= buyerEntry.vehicle
+    // fulfillment.vehicle= buyerEntry?.vehicle
     // If a stop exists, modify the first stop; otherwise, create a new one
     if (fulfillment.stops.length > 0) {
       fulfillment.stops[0].authorization = {
         type: "VEHICLE_NUMBER",
-        status: authStatus,
+        status: "CLAIMED",
         token:"bPOPw0KGgoAAAANSUhEUgAAAH0AAAB9AQAAAACn",
         valid_to: new Date(Date.now()+3*60*60*30).toISOString()
       };
@@ -67,7 +66,7 @@ function updateFulfillmentsWithParentInfo(fulfillments: any[], sessionData: Sess
         type: "START",
         authorization: {
           type: "VEHICLE_NUMBER",
-          status: authStatus,
+          status: "CLAIMED",
           token:"bPOPw0KGgoAAAANSUhEUgAAAH0AAAB9AQAAAACn",
           valid_to: new Date(Date.now()+3*60*60*30).toISOString()
         },

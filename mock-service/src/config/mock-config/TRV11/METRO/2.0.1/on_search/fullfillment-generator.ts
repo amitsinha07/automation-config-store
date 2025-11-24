@@ -1,4 +1,4 @@
-const exampleFullfillment = {
+export const exampleFullfillment = {
 	fulfillments: [
 		{
 			id: "F1",

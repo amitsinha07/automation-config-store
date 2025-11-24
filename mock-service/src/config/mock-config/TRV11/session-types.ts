@@ -51,6 +51,9 @@ export interface SessionData {
   issue_resolution: any;
   issue_action: any;
   latest_issue_payload: any;
+  oldQuote: any
+	newQuote: any
+	updated_price: string
 }
 
 export type BecknContext = {

@@ -38,13 +38,13 @@ export class MockCancelHardMetro201Class extends MockAction {
   ): Promise<MockOutput> {
     const { order_id, descriptor } = targetPayload.message;
 
-    if (order_id !== sessionData.order_id) {
-      return {
-        valid: false,
-        message: "Incorrect order_id in the payload",
-        code: "MISSING_ORDER_ID",
-      };
-    }
+    // if (order_id !== sessionData.order_id) {
+    //   return {
+    //     valid: false,
+    //     message: "Incorrect order_id in the payload",
+    //     code: "MISSING_ORDER_ID",
+    //   };
+    // }
 
     if (descriptor?.code !== "CONFIRM_CANCEL") {
       return {

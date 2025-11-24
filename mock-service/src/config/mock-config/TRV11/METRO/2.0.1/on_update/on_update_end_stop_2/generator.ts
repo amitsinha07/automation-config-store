@@ -18,6 +18,10 @@ export async function onUpdateStopEndGenerator(
     existingPayload.message.order.items = sessionData.items;
   }
 
+  if (sessionData.payments.length > 0) {
+    existingPayload.message.order.payments = sessionData.payments;
+  }
+
   if (sessionData.fulfillments.length > 0) {
     existingPayload.message.order.fulfillments = sessionData.fulfillments;
   }

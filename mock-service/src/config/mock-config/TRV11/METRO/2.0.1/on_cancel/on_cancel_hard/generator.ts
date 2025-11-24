@@ -124,10 +124,11 @@ export async function onCancelHardGenerator(
     existingPayload.message.order.id = sessionData.order_id;
   }
   if (sessionData.quote != null) {
-    existingPayload.message.order.quote = applyCancellation(
-      sessionData.quote,
-      15
-    );
+    // existingPayload.message.order.quote = applyCancellation(
+    //   sessionData.quote,
+    //   15
+    // );
+    existingPayload.message.order.quote = sessionData.quote;
   }
   existingPayload.message.order.cancellation = {
     cancelled_by: "CONSUMER",

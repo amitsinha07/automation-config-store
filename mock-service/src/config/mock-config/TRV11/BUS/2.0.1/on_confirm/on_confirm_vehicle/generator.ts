@@ -26,9 +26,10 @@ function updateOrderTimestamps(payload: any) {
   return payload;
 }
 
-function updateFulfillmentsWithParentInfo(fulfillments: any[], sessionData: SessionData): void {
-  const validTo = "2024-07-23T23:59:59.999Z";
-
+function updateFulfillmentsWithParentInfo(
+  fulfillments: any[],
+  sessionData: SessionData
+): void {
   // Build a Map from fulfillment ID → buyer side fulfillment object
   const buyerFulfillmentMap = new Map(
     (sessionData.buyer_side_fulfillment_ids || []).map((f: any) => [f.id, f])
@@ -53,11 +54,22 @@ function updateFulfillmentsWithParentInfo(fulfillments: any[], sessionData: Sess
     const buyerEntry = buyerFulfillmentMap.get(fulfillment.id);
     const authStatus = buyerEntry?.vehicle ? "CLAIMED" : "UNCLAIMED";
 
+    const now = new Date();
+    const istOffset = 5.5 * 60 * 60 * 1000;
+    const istNow = new Date(now.getTime() + istOffset);
+    const y = istNow.getFullYear();
+    const m = istNow.getMonth();
+    const d = istNow.getDate();
+    const endIST = new Date(Date.UTC(y, m, d + 1, 4 - 5, 30 - 30, 0));
+    const validTo = endIST.toISOString();
+
     // If a stop exists, modify the first stop; otherwise, create a new one
     if (fulfillment.stops.length > 0) {
       fulfillment.stops[0].authorization = {
         type: "VEHICLE_NUMBER",
         status: authStatus,
+        token: qrToken,
+        valid_to: validTo,
       };
     } else {
       fulfillment.stops.push({
@@ -65,12 +77,13 @@ function updateFulfillmentsWithParentInfo(fulfillments: any[], sessionData: Sess
         authorization: {
           type: "VEHICLE_NUMBER",
           status: authStatus,
+          token: qrToken,
+          valid_to: validTo,
         },
       });
     }
   });
 }
-
 
 export async function onConfirmVehConfGenerator(
   existingPayload: any,

@@ -25,6 +25,7 @@ function transformFulfillments(fulfillments: any[], sessionData: any): any[] {
     if (fulfillment.type === "TICKET") {
       const matchedBuyerSide = buyerFulfillmentMap.get(fulfillment.id) as any;
       const authStatus = matchedBuyerSide?.vehicle  ? "CLAIMED" : "UNCLAIMED";
+      const buyerSideFulfillment = sessionData?.update_fulfillment.find((f: any) => f.id === fulfillment.id);
 
       const updatedStops = Array.isArray(fulfillment.stops)
         ? fulfillment.stops.map((stop: any) => {
@@ -33,7 +34,7 @@ function transformFulfillments(fulfillments: any[], sessionData: any): any[] {
                 ...stop,
                 authorization: {
                   ...stop.authorization,
-                  status: authStatus
+                  status: 'CLAIMED'
                 }
               };
             }
@@ -53,7 +54,7 @@ function transformFulfillments(fulfillments: any[], sessionData: any): any[] {
         descriptor: {
           code: "NUMBER"
         },
-        value: ticketNumber
+        value: buyerSideFulfillment.vehicle.registration || ticketNumber
       };
 
       if (ticketInfoTagIndex !== -1) {

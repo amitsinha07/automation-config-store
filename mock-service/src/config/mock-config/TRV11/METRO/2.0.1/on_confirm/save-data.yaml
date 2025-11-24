@@ -4,3 +4,4 @@ save-data:
   updated_payments: "$.message.order.payments[*]"
   fulfillments: "$.message.order.fulfillments[*]"
   created_at: "$.message.order.created_at"
+  oldQuote: "$.message.order.quote.price.value"

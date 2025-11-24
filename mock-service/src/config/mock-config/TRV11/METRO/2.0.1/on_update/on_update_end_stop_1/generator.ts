@@ -1,4 +1,5 @@
 import { createFullfillment } from "../../on_search/fullfillment-generator";
+import { SessionData } from "../../../../session-types";
 
 const createQuoteFromItems = (items: any): any => {
   let totalPrice = 0; // Initialize total price
@@ -37,6 +38,42 @@ const createQuoteFromItems = (items: any): any => {
     breakup,
   };
 };
+
+function updateSettlementAmount(payload: any, sessionData: SessionData) {
+  const payments = payload?.message?.order?.payments || [];
+  const quotePrice = payload?.message?.order?.quote?.price?.value || sessionData.price;
+
+  payments.forEach((payment: any) => {
+    const collectedBy = sessionData.collected_by;
+    const settlementTerms = payment.tags?.find(
+      (tag: any) => tag.descriptor?.code === "SETTLEMENT_TERMS"
+    );
+
+    if (settlementTerms && settlementTerms.list) {
+      const settlementAmountEntry = settlementTerms.list.find(
+        (entry: any) => entry.descriptor?.code === "SETTLEMENT_AMOUNT"
+      );
+
+      const price: any = quotePrice
+      const feePercentage: any = sessionData.buyer_app_fee;
+      const feeAmount = (price * feePercentage) / 100;
+
+      const finalAmount = collectedBy === "BAP" ? price - feeAmount : feeAmount;
+
+      if (settlementAmountEntry) {
+        settlementAmountEntry.value = finalAmount.toString();
+      } else {
+        // Add it if not already present
+        settlementTerms.list.push({
+          descriptor: { code: "SETTLEMENT_AMOUNT" },
+          value: finalAmount.toString(),
+        });
+      }
+    }
+  });
+
+  return payload;
+}
 
 const createCustomRoute = (
   routeData: any[],
@@ -191,6 +228,7 @@ export async function onUpdateStopEndGenerator(
     existingPayload.message.order.provider = sessionData.provider;
   }
   existingPayload.message.order.provider = sessionData.provider;
+  existingPayload = updateSettlementAmount(existingPayload, sessionData);
   const now = new Date().toISOString();
   existingPayload.message.order.created_at = sessionData.created_at;
   existingPayload.message.order.updated_at = now;

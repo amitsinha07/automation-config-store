@@ -124,3 +124,50 @@ export async function onSelectGenerator(
   existingPayload.message.order.quote = quote;
   return existingPayload;
 }
+
+const filterItemsBySelectedIds = (
+  items: any[],
+  selectedIds: string | string[]
+): any[] => {
+  // Convert selectedIds to an array if it's a string
+  const idsToFilter = Array.isArray(selectedIds) ? selectedIds : [selectedIds];
+
+  // Filter the items array based on the presence of ids in selectedIds
+  return items.filter((item) => idsToFilter.includes(item.id));
+};
+
+export async function onSelectGenerator(
+  existingPayload: any,
+  sessionData: SessionData
+) {
+  let items = filterItemsBySelectedIds(
+	sessionData.items,
+	sessionData.selected_item_ids
+  );
+  let fulfillments = getUniqueFulfillmentIdsAndFilterFulfillments(
+	sessionData.items,
+	sessionData.fulfillments
+  );
+  existingPayload.message.order.fulfillments = fulfillments;
+  const ids_with_quantities = {
+	items: sessionData.selected_items.reduce((acc: any, item: any) => {
+	  acc[item.id] = item.quantity.selected.count;
+	  return acc;
+	}, {}),
+  };
+  const updatedItems = sessionData.items
+	.map((item: any) => ({
+	  ...item,
+	  quantity: {
+		selected: {
+		  count: ids_with_quantities["items"][item.id] ?? 0, // Default to 0 if not in the mapping
+		},
+	  },
+	}))
+	.filter((item) => item.quantity.selected.count > 0);
+  items = updatedItems;
+  const quote = createQuoteFromItems(updatedItems);
+  existingPayload.message.order.items = items;
+  existingPayload.message.order.quote = quote;
+  return existingPayload;
+}

@@ -2,11 +2,11 @@ import { SessionData } from "../../../session-types";
 
 const createQuoteFromItems = (items: any): any => {
   let totalPrice = 0;
-  const currency = items[0]?.price.currency || "INR";
+  const currency = items[0]?.price?.currency || "INR";
 
   const breakup = items.map((item: any) => {
     const itemTotalPrice =
-      Number(item.price.value) * item.quantity.selected.count;
+      Number(item.price?.value || 35) * item.quantity.selected.count;
     totalPrice += itemTotalPrice;
 
     return {
@@ -15,7 +15,7 @@ const createQuoteFromItems = (items: any): any => {
         id: item.id,
         price: {
           currency,
-          value: item.price.value,
+          value: item.price?.value || 35,
         },
         quantity: {
           selected: {
@@ -59,52 +59,37 @@ const createQuoteFromItems = (items: any): any => {
 
 function createAndAppendFulfillments(items: any[], fulfillments: any[]): void {
   items.forEach((item) => {
-    // item.fulfillment_ids =
-    item.fulfillment_ids.forEach((parentFulfillmentId: string) => {
-      // Get the parent fulfillment object from the fulfillments array
-      const parentFulfillment = fulfillments.find(
-        (f) => f.id === parentFulfillmentId
-      );
-      if (parentFulfillment) {
-        // Get the quantity based on the selected count
-        const quantity = item.quantity.selected.count;
-        for (let i = 0; i < quantity; i++) {
-          // Create new fulfillment object
-          const newFulfillment = {
-            id: `F${Math.random().toString(36).substring(2, 9)}`, // Unique ID for new fulfillment
-            type: "TICKET",
-            stops: [
+    // Ensure item.fulfillment_ids exists
+    if (!item.fulfillment_ids) {
+      item.fulfillment_ids = [];
+    }
+
+    const quantity = item.quantity?.selected?.count || 0;
+
+    for (let i = 0; i < quantity; i++) {
+      // Create new fulfillment object
+      const newFulfillment = {
+        id: `F${Math.random().toString(36).substring(2, 9)}`,
+        type: "TICKET",
+        tags: [
+          {
+            descriptor: { code: "INFO" },
+            list: [
               {
-                authorization: {
-                  type: "QR",
-                },
+                descriptor: { code: "PARENT_ID" },
+                value: "NONE", // since no parent logic needed
               },
             ],
-            tags: [
-              {
-                descriptor: {
-                  code: "INFO",
-                },
-                list: [
-                  {
-                    descriptor: {
-                      code: "PARENT_ID",
-                    },
-                    value: parentFulfillment.id, // Set parent ID
-                  },
-                ],
-              },
-            ],
-          };
+          },
+        ],
+      };
 
-          // Append the new fulfillment to the fulfillments array
-          fulfillments.push(newFulfillment);
+      // Push to fulfillments array
+      fulfillments.push(newFulfillment);
 
-          // Append the new fulfillment's id to the item's fulfillment_ids
-          item.fulfillment_ids.push(newFulfillment.id);
-        }
-      }
-    });
+      // Push new ID to item.fulfillment_ids
+      item.fulfillment_ids.push(newFulfillment.id);
+    }
   });
 }
 
@@ -157,9 +142,16 @@ export async function onSelectGenerator(
       return acc;
     }, {}),
   };
+  console.log(
+    "existingPayload.message.order.items[index]",
+    JSON.stringify(existingPayload.message.order.items)
+  );
   const updatedItems = sessionData.items
-    .map((item: any) => ({
+    .map((item: any, index: number) => ({
       ...item,
+      price:
+        existingPayload.message.order.items[index]?.price ||
+        existingPayload.message.order.items[0]?.price,
       quantity: {
         selected: {
           count: ids_with_quantities["items"][item.id] ?? 0, // Default to 0 if not in the mapping
@@ -168,6 +160,8 @@ export async function onSelectGenerator(
     }))
     .filter((item) => item.quantity.selected.count > 0);
   items = updatedItems;
+  console.log("updatedItems", JSON.stringify(updatedItems));
+  console.log("fulfillments", JSON.stringify(fulfillments));
   createAndAppendFulfillments(updatedItems, fulfillments);
   const quote = createQuoteFromItems(updatedItems);
   existingPayload.message.order.items = items;
