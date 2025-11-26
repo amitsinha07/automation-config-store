@@ -12,6 +12,13 @@ export async function selectGenerator(
       stops: f.stops,
     })
   );
+  // selected_item
+  if(sessionData?.user_inputs?.selected_item) {
+    existingPayload.message.order.items = existingPayload.message.order.items.map((item: any) => {
+      item.id = sessionData?.user_inputs?.selected_item || item?.id;
+      return item;
+    });
+  }
 
   existingPayload.message.order.items = [
     {

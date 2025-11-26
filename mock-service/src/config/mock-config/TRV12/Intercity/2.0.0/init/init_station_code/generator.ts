@@ -20,6 +20,12 @@ export async function initGenerator(
     tax_id: "GSTIN:22AAAAA0000A1Z5",
   };
 
+  const price: any = sessionData.quote.price.value;
+  const feePercentage: any = "1";
+  const feeAmount = (price * feePercentage) / 100;
+  const collectedBy: any = "BAP";
+  const finalAmount = collectedBy === "BAP" ? price - feeAmount : feeAmount;
+
   existingPayload.message.order.payments = [
     {
       id: "PA1",
@@ -51,7 +57,7 @@ export async function initGenerator(
               descriptor: { code: "STATIC_TERMS" },
               value: "https://www.abc.com/settlement-terms/",
             },
-            { descriptor: { code: "SETTLEMENT_AMOUNT" }, value: "1766" },
+            { descriptor: { code: "SETTLEMENT_AMOUNT" }, value: finalAmount.toString() },
           ],
         },
       ],

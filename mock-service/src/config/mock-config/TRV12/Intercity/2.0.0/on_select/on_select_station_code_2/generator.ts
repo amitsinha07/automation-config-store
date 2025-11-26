@@ -14,12 +14,12 @@ export async function onSelectGenerator(
     sessionData?.select_2_fulfillments,
 
   );
-  existingPayload.message.order.quote = calculateQuote(sessionData);
+  existingPayload.message.order.quote = calculateQuote(sessionData, existingPayload);
 
   return existingPayload;
 }
 
-function calculateQuote(sessionData: SessionData) {
+function calculateQuote(sessionData: SessionData, existingPayload: any) {
   const baseFarePerSeat = Number(sessionData.price.value);
   const seatFare = 50;
   const convenienceFee = 19;
@@ -30,6 +30,18 @@ function calculateQuote(sessionData: SessionData) {
 
   const totalSeatFare = seatFare * seatCount;
   const total = baseFare + tax + convenienceFee + totalSeatFare;
+  const ticketIds =
+  existingPayload.message.order.fulfillments?.filter((f: any) => f.type === "TICKET")
+    .map((f: any, index: number) => f.id || `FT${index + 1}`) ?? [];
+
+  const seatFareBreakups = ticketIds.map((fid: string) => ({
+    title: "SEAT_FARE",
+    price: { currency: "INR", value: seatFare.toString() },
+    item: {
+      id: sessionData?.on_select_items[0]?.id || "I1",
+      fulfillment_ids: [fid],
+    },
+  }));
 
   return {
     price: {
@@ -66,6 +78,7 @@ function calculateQuote(sessionData: SessionData) {
         title: "CONVENIENCE_FEE",
         price: { currency: "INR", value: convenienceFee.toString() },
       },
+       ...seatFareBreakups,
       ...(sessionData.on_select_fulfillments || [])
         .filter((f: { type: string }) => f.type === "TICKET")
         .map((f: { id: any }, idx: number) => ({

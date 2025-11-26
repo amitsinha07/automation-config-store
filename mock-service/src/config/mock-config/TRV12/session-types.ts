@@ -127,4 +127,5 @@ export interface Input {
 	default_feature?: string[];
 	seat_count?: string;
 	items?: any
+	selected_item?: string;
 }
