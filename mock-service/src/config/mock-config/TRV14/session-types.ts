@@ -63,6 +63,7 @@ export interface SessionData {
 	igm_action: any
 	issue_resolution: any
 	issue_action: any
+	issue_level: any
 }
 
 export type BecknContext = {
