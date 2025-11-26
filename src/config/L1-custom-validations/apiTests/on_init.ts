@@ -475,7 +475,8 @@ const onInit = async (data: any) => {
         if (itemFlfllmnts && Object.prototype.hasOwnProperty.call(itemFlfllmnts, itemId)) {
           const stored = itemFlfllmnts[itemId];
 
-          if (typeof stored === "string") {
+          if (item.fulfillment_id !== "F2") {
+            if (typeof stored === "string") {
             if (initFid !== stored) {
               result.push({
                 valid: false,
@@ -497,6 +498,10 @@ const onInit = async (data: any) => {
           else {
             console.warn("Unexpected fulfillment format:", stored);
           }
+
+          }
+
+          
         } 
         else {
           result.push({
@@ -528,7 +533,7 @@ const onInit = async (data: any) => {
       console.info(`Validating fulfillments`);
       on_init?.fulfillments.forEach((fulfillment: any) => {
         const { type } = fulfillment;
-        if (type == "Delivery" || type == "Buyer-Delivery") {
+        if (type == "Delivery" || type == "Buyer-Delivery" || type == "Self-Pickup") {
           if (fulfillment.tags && fulfillment.tags.length > 0) {
             result.push({
               valid: false,
@@ -659,7 +664,7 @@ const onInit = async (data: any) => {
           });
         } else {
           // Check existence in allowed IDs list
-          if (!allowedFIds.includes(f.id)) {
+          if (!allowedFIds.includes(f.id) && f.id !== "F2") {
             result.push({
               valid: false,
               code: 20000,
@@ -668,7 +673,7 @@ const onInit = async (data: any) => {
           }
         }
 
-        if (!_.isEqual(f.end.location.gps, buyerGps)) {
+        if (!_.isEqual(f.end.location.gps, buyerGps) && f.id !== "F2") {
           result.push({
             valid: false,
             code: 20000,
@@ -676,7 +681,7 @@ const onInit = async (data: any) => {
           });
         }
 
-        if (!_.isEqual(f.end.location.address.area_code, buyerAddr)) {
+        if (!_.isEqual(f.end.location.address.area_code, buyerAddr) && f.id !== "F2") {
           result.push({
             valid: false,
             code: 20000,

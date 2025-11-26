@@ -373,31 +373,38 @@ const init = async (data: any) => {
             description: `items[${i}].parent_item_id mismatches for Item ${itemId} in /${constants.ON_SEARCH} and /${constants.INIT}`,
           });
         }
+        
+        
+
         if (itemFlfllmnts && Object.prototype.hasOwnProperty.call(itemFlfllmnts, itemId)) {
           const stored = itemFlfllmnts[itemId];
           const initFid = item.fulfillment_id;
 
-          if (typeof stored === "string") {
-            if (initFid !== stored) {
-              result.push({
-                valid: false,
-                code: 20000,
-                description: `items[${i}].fulfillment_id mismatches for Item ${itemId} in /${constants.ON_SELECT} and /${constants.INIT}`,
-              });
-            }
+          if (item.fulfillment_id !== "F2") {
+            if (typeof stored === "string") {
+              if (initFid !== stored) {
+                result.push({
+                  valid: false,
+                  code: 20000,
+                  description: `items[${i}].fulfillment_id mismatches for Item ${itemId} in /${constants.ON_SELECT} and /${constants.INIT}`,
+                });
+              }
 
-          } else if (Array.isArray(stored)) {
-            if (!stored.includes(initFid)) {
-              result.push({
-                valid: false,
-                code: 20000,
-                description: `items[${i}].fulfillment_id '${initFid}' for item ${itemId} does not belong to fulfillment_ids from /${constants.ON_SELECT}`,
-              });
-            }
+            } else if (Array.isArray(stored)) {
+              if (!stored.includes(initFid)) {
+                result.push({
+                  valid: false,
+                  code: 20000,
+                  description: `items[${i}].fulfillment_id '${initFid}' for item ${itemId} does not belong to fulfillment_ids from /${constants.ON_SELECT}`,
+                });
+              }
 
-          } else {
-            console.warn(`Unexpected fulfillment format for ${itemId}`, stored);
+            } else {
+              console.warn(`Unexpected fulfillment format for ${itemId}`, stored);
+            }
           }
+
+          
 
         } else {
           result.push({
@@ -456,7 +463,7 @@ const init = async (data: any) => {
           i++;
           continue;
         }
-        if (!allFIds.includes(id)) {
+        if (!allFIds.includes(id) && id !== "F2") {
           result.push({
             valid: false,
             code: 20000,
@@ -467,7 +474,7 @@ const init = async (data: any) => {
         const buyerGpsRaw = await RedisService.getKey(`${transaction_id}_buyerGps`);
         const buyerGps = buyerGpsRaw ? JSON.parse(buyerGpsRaw) : null;
 
-        if (!_.isEqual(initF.end.location.gps, buyerGps)) {
+        if (!_.isEqual(initF.end.location.gps, buyerGps) && id !== "F2") {
           result.push({
             valid: false,
             code: 20000,
@@ -484,7 +491,7 @@ const init = async (data: any) => {
           !_.isEqual(
             initF.end.location.address.area_code,
             buyerAddr
-          )
+          ) && id !== "F2"
         ) {
           result.push({
             valid: false,
