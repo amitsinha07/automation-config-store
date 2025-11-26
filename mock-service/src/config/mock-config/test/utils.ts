@@ -59,7 +59,7 @@ export function loadMockSessionDataUnit(action: string, flowId: string) {
 }
 
 export function customConsoleLog(message: string, ...meta: any[]) {
-	console.log(`${message}`, ...meta, `\n`);
+	// console.log(`${message}`, ...meta, `\n`);
 }
 
 export async function testWithApiService(payload: any, action: string) {
@@ -67,6 +67,6 @@ export async function testWithApiService(payload: any, action: string) {
 		payload.context.domain
 	}/${payload.context.version ?? payload.context.core_version}/test/${action}`;
 	const response = await axios.post(apiLayerUrl, payload);
-	console.log(response.data);
+	// console.log(response.data);
 	return response.data;
 }
