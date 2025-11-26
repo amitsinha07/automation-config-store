@@ -63,7 +63,6 @@ export function getSaveDataContent(version: string, action: string) {
 	const saveDataFilePath = path.join(actionFolderPath, "save-data.yaml");
 	const fileContent = readFileSync(saveDataFilePath, "utf8");
 	const cont = yaml.load(fileContent) as any;
-	console.log(cont);
 	return cont;
 }
 
