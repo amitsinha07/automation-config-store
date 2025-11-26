@@ -53,6 +53,16 @@ import { MockOnUpdateSoftPartialCancellationClass } from "./2.0.0/on_update/on_u
 import { MockOnUpdateConfirmPartialCancellationClass } from "./2.0.0/on_update/on_update_confirm_partial_cancellation/class";
 import { MockFirstFormTestingClass } from "./2.0.0/form/first_form_testing";
 import { MockAction } from "./classes/mock-action";
+import { MockIssueEscalateClass, MockIssueOpenClass } from "./2.0.0/issue/issue_open/class";
+import { MockIssueOpen2Class } from "./2.0.0/issue/issue_open_2/class";
+import { MockOnIssueProcessing1Class, MockOnIssueProcessing2Class, MockOnIssueProcessingClass } from "./2.0.0/on_issue/on_issue_processing/class";
+import { MockOnIssueNeedMoreInfoClass } from "./2.0.0/on_issue/on_issue_need_more_info/class";
+import { MockIssueInfoProvidedClass } from "./2.0.0/issue/issue_info_provided/class";
+import { MockOnIssueProvidedClass } from "./2.0.0/on_issue/on_issue_provided/class";
+import { MockOnIssueResolution1Class, MockOnIssueResolution2Class, MockOnIssueResolutionClass, MockOnIssueResolutionIGM3Class } from "./2.0.0/on_issue/on_issue_resolution/class";
+import { MockIssueResolutionAcceptClass, MockIssueResolutionAcceptIGM3Class, MockIssueResolutionRejectClass } from "./2.0.0/issue/issue_resolution_accept/class";
+import { MockOnIssueResolvedClass, MockOnIssueResolvedIGM3Class } from "./2.0.0/on_issue/on_issue_resolved/class";
+import { MockIssueCloseClass, MockIssueCloseIGM3Class } from "./2.0.0/issue/issue_close/class";
 // types/helpers
 type Ctor<T> = new () => T;
 
@@ -130,6 +140,37 @@ const registry = {
 
 	// forms
 	first_form_testing: MockFirstFormTestingClass,
+
+	// _____________________IGM BUS (2.0.1)____________________________
+  issue_open: MockIssueOpenClass,
+  issue_escalate: MockIssueEscalateClass,
+  issue_open_2: MockIssueOpen2Class,
+
+  on_issue_processing: MockOnIssueProcessingClass,
+  on_issue_processing_1: MockOnIssueProcessing1Class,
+  on_issue_processing_2: MockOnIssueProcessing2Class,
+
+  on_issue_need_more_info: MockOnIssueNeedMoreInfoClass,
+
+  issue_info_provided: MockIssueInfoProvidedClass,
+
+  on_issue_provided: MockOnIssueProvidedClass,
+
+  on_issue_resolution: MockOnIssueResolutionClass,
+  on_issue_resolution_1: MockOnIssueResolution1Class,
+  on_issue_resolution_2: MockOnIssueResolution2Class,
+  on_issue_resolution_igm_3: MockOnIssueResolutionIGM3Class,
+
+  issue_resolution_accept: MockIssueResolutionAcceptClass,
+  issue_resolution_accept_igm_3: MockIssueResolutionAcceptIGM3Class,
+
+  issue_resolution_reject: MockIssueResolutionRejectClass,
+
+  on_issue_resolved: MockOnIssueResolvedClass,
+  on_issue_resolved_igm_3: MockOnIssueResolvedIGM3Class,
+
+  issue_close: MockIssueCloseClass,
+  issue_close_igm_3: MockIssueCloseIGM3Class,
 } as const satisfies Record<string, Ctor<MockAction>>;
 
 type MockActionId = keyof typeof registry;

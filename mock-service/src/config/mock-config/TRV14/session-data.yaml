@@ -44,3 +44,8 @@ session_data:
   cancellation_reason_id: null
   cancellation_quote: []
   selected_fulfillment_id: null
+  latest_issue_payload: null
+  igm_action: null
+  issue_action: []
+  issue_resolution: []
+  issue_id: null
