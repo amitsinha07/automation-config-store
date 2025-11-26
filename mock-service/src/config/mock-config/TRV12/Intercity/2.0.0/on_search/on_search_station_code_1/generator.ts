@@ -16,9 +16,9 @@ export async function onSearchGenerator(
         if (stop.type === "START" && sessionData?.start_location) {
           stop.location.descriptor.code = sessionData.start_location;
         }
-        if (stop.type === "END" && sessionData?.user_inputs?.end_code) {
-          stop.location.descriptor.code = sessionData.user_inputs?.end_code;
-        }
+        // if (stop.type === "END" && sessionData?.user_inputs?.end_code) {
+        //   stop.location.descriptor.code = sessionData.user_inputs?.end_code;
+        // }
         const [, pincode] = stop.location.descriptor.code.split("-pincode:");
         if (stop.type === "PICKUP") {
           stop.location.descriptor.code = `${sessionData.start_location}-pincode:${pincode}`;

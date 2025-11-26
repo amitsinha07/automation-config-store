@@ -6,4 +6,4 @@ save-data:
   payment: "$.message.intent.payment" 
   city_code: "$.context.location.city.code"
   start_location: "$.message.intent.fulfillment.stops[*].location.descriptor.code"
-  end_code: "$.message.intent.fulfillment.stops[*].location.descriptor.code"
+  end_code: "$.message.intent.fulfillment.stops[?(@.type=='END')].location.descriptor.code"

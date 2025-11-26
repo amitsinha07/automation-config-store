@@ -49,7 +49,7 @@ export async function select_1_DefaultGenerator(
   existingPayload.message.order.items = itemPayloads;
 
   // Set provider ID from user_inputs
-  existingPayload.message.order.provider.id = userInputs.provider;
+  // existingPayload.message.order.provider.id = userInputs.provider;
 
   // Create fulfillment object with the selected fulfillment ID
   // const contextTimestamp =
