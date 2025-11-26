@@ -4,7 +4,7 @@ export async function onCancelGenerator(
 ) {
   existingPayload.context.location.city.code = sessionData.city_code;
 
-  existingPayload.message.order.id = sessionData.order_id;
+  // existingPayload.message.order.id = sessionData.order_id;
   existingPayload.message.order.cancellation = sessionData.cancellation;
   existingPayload.message.order.status = "CANCELLED";
   existingPayload.message.order.cancellation_terms =
