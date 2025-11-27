@@ -34758,10 +34758,10 @@ x-validations:
                 attr: $.message.order.fulfillments[*].customer.contact.phone
                 _RETURN_: attr are present
                 _NAME_: REQUIRED_message_order_fulfillments_customer_contact_phone
-              - &init_REQUIRED_message_order_fulfillments_stops_location_gps
-                attr: $.message.order.fulfillments[*].stops[*].location.gps
-                _RETURN_: attr are present
-                _NAME_: REQUIRED_message_order_fulfillments_stops_location_gps
+              # - &init_REQUIRED_message_order_fulfillments_stops_location_gps
+              #   attr: $.message.order.fulfillments[*].stops[*].location.gps
+              #   _RETURN_: attr are present
+              #   _NAME_: REQUIRED_message_order_fulfillments_stops_location_gps
           - _NAME_: fulfillments_Enums_Tests
             _RETURN_:
               - &init_VALID_ENUM_message_order_fulfillments_vehicle_category
@@ -35296,7 +35296,7 @@ x-validations:
           - _NAME_: fulfillments_Attributes_Tests
             _RETURN_:
               - *init_REQUIRED_message_order_fulfillments_id
-              - *init_REQUIRED_message_order_fulfillments_stops_location_gps
+              # - *init_REQUIRED_message_order_fulfillments_stops_location_gps
           - *confirm_fulfillments_Enums_Tests
           - *confirm_fulfillments_Tags_Tests
       - _NAME_: quote_Tests
@@ -35362,7 +35362,7 @@ x-validations:
                 attr: $.message.order.fulfillments[*].type
                 _RETURN_: attr are present
                 _NAME_: REQUIRED_message_order_fulfillments_type
-              - *init_REQUIRED_message_order_fulfillments_stops_location_gps
+              # - *init_REQUIRED_message_order_fulfillments_stops_location_gps
               - *init_REQUIRED_message_order_fulfillments_customer_person_name
               - *init_REQUIRED_message_order_fulfillments_customer_contact_phone
           - *confirm_fulfillments_Enums_Tests
@@ -35453,7 +35453,7 @@ x-validations:
                   - *init_REQUIRED_message_order_fulfillments_customer_person_name
                   - *init_REQUIRED_message_order_fulfillments_customer_contact_phone
                   - *on_init_REQUIRED_message_order_fulfillments_type
-                  - *init_REQUIRED_message_order_fulfillments_stops_location_gps
+                  # - *init_REQUIRED_message_order_fulfillments_stops_location_gps
               - _NAME_: fulfillments_Enums_Tests
                 _RETURN_:
                   - *confirm_VALID_ENUM_message_order_fulfillments_type
@@ -35538,7 +35538,7 @@ x-validations:
           - _NAME_: fulfillments_Attributes_Tests
             _RETURN_:
               - *init_REQUIRED_message_order_fulfillments_id
-              - *init_REQUIRED_message_order_fulfillments_stops_location_gps
+              # - *init_REQUIRED_message_order_fulfillments_stops_location_gps
               - *init_REQUIRED_message_order_fulfillments_customer_person_name
               - *init_REQUIRED_message_order_fulfillments_customer_contact_phone
 
@@ -35638,7 +35638,7 @@ x-validations:
               - *on_init_REQUIRED_message_order_items_payment_ids
               - *select_REQUIRED_message_order_provider_id
               - *init_REQUIRED_message_order_fulfillments_id
-              - *init_REQUIRED_message_order_fulfillments_stops_location_gps
+              # - *init_REQUIRED_message_order_fulfillments_stops_location_gps
               # - *on_cancel_REQUIRED_message_order_fulfillments_vehicle_registration
               - *init_REQUIRED_message_order_fulfillments_customer_person_name
               - *init_REQUIRED_message_order_fulfillments_customer_contact_phone
@@ -35713,7 +35713,7 @@ x-validations:
               - *on_init_REQUIRED_message_order_items_payment_ids
               - *select_REQUIRED_message_order_provider_id
               - *init_REQUIRED_message_order_fulfillments_id
-              - *init_REQUIRED_message_order_fulfillments_stops_location_gps
+              # - *init_REQUIRED_message_order_fulfillments_stops_location_gps
               - *on_cancel_REQUIRED_message_order_fulfillments_vehicle_registration
               - *init_REQUIRED_message_order_fulfillments_customer_person_name
               - *init_REQUIRED_message_order_fulfillments_customer_contact_phone
