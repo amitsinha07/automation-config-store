@@ -5,8 +5,8 @@ export async function onConfirmGenerator(
   sessionData: SessionData
 ) {
   existingPayload.context.location.city.code = sessionData.city_code;
-
-  existingPayload.message.order.id = sessionData.order_id;
+	const randomId = Math.random().toString(36).substring(2, 15);
+  existingPayload.message.order.id = randomId;
   existingPayload.message.order.status = "ACTIVE";
   existingPayload.message.order.items = [sessionData.on_select_items];
   existingPayload.message.order.provider = sessionData.on_init_provider;

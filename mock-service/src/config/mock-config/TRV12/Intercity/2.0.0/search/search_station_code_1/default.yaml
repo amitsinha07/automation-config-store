@@ -5,12 +5,13 @@ intent:
         location:
           descriptor:
             code: std:080
-    vehicle:
-      category: BUS
-      variant: AC
-      capacity: 47
-      wheels_count: "6"
-      energy_type: DIESEL
+    # Note: Vehicle details will be left out from new contract
+    # vehicle:
+    #   category: BUS
+    #   variant: AC
+    #   capacity: 47
+    #   wheels_count: "6"
+    #   energy_type: DIESEL
   payment:
     tags:
       - descriptor:

@@ -7,3 +7,4 @@ save-data:
   created_at: "$.message.order.created_at"
   updated_at: "$.message.order.updated_at"
   items: "$.message.order.items[*]"
+  order_id: "$.message.order.id"

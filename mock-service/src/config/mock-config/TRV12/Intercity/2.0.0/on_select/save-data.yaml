@@ -4,6 +4,10 @@ save-data:
   on_select_items: "$.message.order.items[*]"
   price: "$.message.order.items[*].price"
   on_select_fulfillments: "$.message.order.fulfillments"
+  on_select_item: "$.message.order.items[0]"
   on_select_fulfillments_tags: "$.message.order.fulfillments[*].tags[*]"
   quote: "$.message.order.quote"
   provider: "$.message.order.provider"
+  # seats_available: "$.message.order.fulfillments[*].tags[?(@.descriptor.code=='SEAT_GRID')].list[?(@.descriptor.code=='NUMBER')].value"
+  seats_available: "$.message.order.fulfillments[*].tags[*].list[?(@.descriptor.code=='NUMBER')].value"
+

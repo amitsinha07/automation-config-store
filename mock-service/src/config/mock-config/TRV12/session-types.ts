@@ -88,6 +88,8 @@ export interface SessionData {
 	end_code: any;
 	select_fulfillments: any;
 	on_select_2_quote: any
+	seats_available: string[];
+	on_select_item: any;
 }
 
 export type BecknContext = {
@@ -128,4 +130,5 @@ export interface Input {
 	seat_count?: string;
 	items?: any
 	selected_item?: string;
+	seat_selection_count?: string;
 }
