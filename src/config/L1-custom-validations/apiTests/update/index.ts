@@ -44,6 +44,9 @@ export const updateRouter = async (data: any) => {
 
   const updateTarget = data?.message?.update_target;
   if (updateTarget) {
+    if (updateTarget === "fulfillment") {
+      return [];
+    }
     if (updateTarget === "payment") {
       result = await checkUpdate(data, settlementDetailSet, apiSeq, "payment");
     } else if (updateTarget === "item") {
