@@ -220,12 +220,13 @@ order:
             - descriptor: { code: SETTLEMENT_AMOUNT }
               value: "10421"
 
-  status: SOFT_CANCEL
+  status: CANCELLED
   cancellation:
-    cancelled_by: CONSUMER
+    cancelled_by: PROVIDER
     reason:
       descriptor:
-        code: "001"
+        code: "008"
+    time: "2023-03-23T04:42:16Z"
   cancellation_terms:
     - cancel_by:
         duration: PT60M

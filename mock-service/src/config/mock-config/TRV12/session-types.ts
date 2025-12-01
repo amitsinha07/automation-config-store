@@ -131,4 +131,7 @@ export interface Input {
 	items?: any
 	selected_item?: string;
 	seat_selection_count?: string;
+	adult_ticket_count?: string;
+	child_ticket_count?: string;
+	journey_date?: string;
 }

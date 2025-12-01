@@ -1,4 +1,4 @@
-export async function onCancelDefaultGenerator(
+export async function onCancelConfirmSellerCancellationGenerator(
   existingPayload: any,
   sessionData: any
 ) {
@@ -6,18 +6,10 @@ export async function onCancelDefaultGenerator(
   delete existingPayload.context.bpp_id;
 
   existingPayload.message.order.id = sessionData?.confirm_order_id ?? "O1";
-  existingPayload.message.order.status = "CANCELLED";
-  existingPayload.message.order.cancellation = {
-    cancelled_by: "CONSUMER",
-    reason: {
-      descriptor: {
-        code: "001",
-      },
-    },
-    time: existingPayload?.context?.timestamp ?? "2023-10-03T02:00:08.143Z",
-  };
-  existingPayload.message.order.provider =
-    sessionData?.on_confirm_provider ?? {};
+  (existingPayload.message.order.cancellation.time =
+    existingPayload?.context?.timestamp ?? "2023-10-03T02:00:08.143Z"),
+    (existingPayload.message.order.provider =
+      sessionData?.on_confirm_provider ?? {});
   existingPayload.message.order.items = sessionData?.on_confirm_items ?? [];
   existingPayload.message.order.fulfillments =
     sessionData?.on_init_fulfillments ?? [];

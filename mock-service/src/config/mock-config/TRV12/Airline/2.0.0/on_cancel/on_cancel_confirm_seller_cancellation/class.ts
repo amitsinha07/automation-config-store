@@ -3,9 +3,9 @@ import yaml from "js-yaml";
 import path from "path";
 import { MockAction, MockOutput, saveType } from "../../../../classes/mock-action";
 import { SessionData } from "../../../../session-types";
-import { onCancelConfirmTechnicalCancellationGenerator } from "./generator";
+import { onCancelConfirmSellerCancellationGenerator } from "./generator";
 
-export class MockOnCancelConfirmTechnicalCancellationClass extends MockAction {
+export class MockSellerOnCancelAirline extends MockAction {
     get saveData(): saveType {
         return yaml.load(
             readFileSync(path.resolve(__dirname, "../save-data.yaml"), "utf8")
@@ -20,13 +20,13 @@ export class MockOnCancelConfirmTechnicalCancellationClass extends MockAction {
         return {};
     }
     name(): string {
-        return "on_cancel_confirm_technical_cancellation";
+        return "on_cancel_confirm_seller_cancellation";
     }
     get description(): string {
-        return "Mock for on_cancel_confirm_technical_cancellation";
+        return "Mock for on_cancel_confirm_seller_cancellation";
     }
     generator(existingPayload: any, sessionData: SessionData): Promise<any> {
-        return onCancelConfirmTechnicalCancellationGenerator(existingPayload, sessionData);
+        return onCancelConfirmSellerCancellationGenerator(existingPayload, sessionData);
     }
     async validate(targetPayload: any): Promise<MockOutput> {
         return { valid: true };

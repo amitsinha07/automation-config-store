@@ -74,6 +74,20 @@ codes:
     action: on_cancel
     default: Airline/2.0.0/on_cancel/default.yaml
     message_id: false
+  - code: 201
+    action_id: cancel_Airline_201
+    action: cancel
+    default: Airline/2.0.0/cancel/cancel_soft_user_cancellation/default.yaml
+    message_id: true
+  - code: 202
+    action_id: on_cancel_Airline_201
+    action: on_cancel
+    default: Airline/2.0.0/on_cancel/on_cancel_soft_user_cancellation/default.yaml
+    message_id: false
+  - code: 203
+    action_id: on_cancel_Airline_203
+    action: on_cancel
+    default: Airline/2.0.0/on_cancel/on_cancel_confirm_seller_cancellation/default.yaml
 
   # ---------------------------------INTERCITY---------------------------------
   

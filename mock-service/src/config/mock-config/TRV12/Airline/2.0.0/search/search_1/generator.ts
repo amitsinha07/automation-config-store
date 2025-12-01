@@ -8,7 +8,15 @@ export async function search_1_generator(
   delete existingPayload.context.bpp_id;
 
   const date = new Date(existingPayload?.context?.timestamp);
-  date.setMonth(date.getMonth() + 2);
+  const adultTicketCount = Number(
+    sessionData?.user_inputs?.adult_ticket_count || 3
+  );
+  const childTicketCount = Number(
+    sessionData?.user_inputs?.child_ticket_count || 2
+  );
+  // const journeyDate =
+  //   sessionData?.user_inputs?.journey_date ?? new Date().toISOString();
+  // date.setMonth(date.getMonth() + 2);
   const fulfillmentTimestamp = date.toISOString();
 
   existingPayload.message.intent.fulfillment.stops = [
@@ -30,6 +38,31 @@ export async function search_1_generator(
         descriptor: {
           code: "BLR",
         },
+      },
+    },
+  ];
+
+  existingPayload.message.intent.provider.items = [
+    {
+      descriptor: {
+        code: "ADULT_TICKET",
+        name: "Adult Ticket",
+      },
+      quantity: {
+        selected:{
+        count: adultTicketCount,
+        }
+      },
+    },
+    {
+      descriptor: {
+        code: "CHILD_TICKET",
+        name: "Child Ticket",
+      },
+      quantity: {
+        selected:{
+        count: childTicketCount,
+        }
       },
     },
   ];

@@ -5,7 +5,7 @@ import { MockAction, MockOutput, saveType } from "../../../../classes/mock-actio
 import { SessionData } from "../../../../session-types";
 import { onCancelSoftUserCancellationGenerator } from "./generator";
 
-export class MockOnCancelSoftUserCancellationClass extends MockAction {
+export class MockSoftOnCancelAirline extends MockAction {
     get saveData(): saveType {
         return yaml.load(
             readFileSync(path.resolve(__dirname, "../save-data.yaml"), "utf8")
