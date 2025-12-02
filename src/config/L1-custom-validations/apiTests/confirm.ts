@@ -827,11 +827,28 @@ const validateTags = async (
         const hasStaticTerms = bapTermsTag.list?.some(
           (item: any) => item.code === "static_terms"
         );
-        if (hasStaticTerms) {
+        const acceptBppTerms = bapTermsTag.list?.find(
+          (item: any) => item.code === "accept_bpp_terms"
+        );
+        if (!hasStaticTerms) {
           addError(
             result,
             20006,
-            `Invalid response: static_terms is not required in /${constants.CONFIRM}`
+            `Invalid response: static_terms is required in /${constants.CONFIRM}`
+          );
+        }
+        
+        if (!acceptBppTerms) {
+          addError(
+            result,
+            20006,
+            `Invalid response: accept_bpp_terms is required in /${constants.CONFIRM}`
+          );
+        } else if (acceptBppTerms.value !== "Y") {
+          addError(
+            result,
+            50006,
+            `Invalid response: BNP must accept BPP terms. accept_bpp_terms must be "Y" in /${constants.CONFIRM}`
           );
         }
 
