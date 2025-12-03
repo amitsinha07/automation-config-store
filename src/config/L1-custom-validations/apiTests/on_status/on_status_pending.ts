@@ -688,10 +688,10 @@ async function validateFulfillments(
           )
         );
       }
-      if (ff?.end?.instructions && typeof ff.end.instructions !== "string") {
+      if (ff?.end?.instructions && typeof ff.end.instructions !== "object") {
         result.push(
           addError(
-            `fulfillments[${ffId}].end.instructions must be a string`,
+            `fulfillments[${ffId}].end.instructions must be an object`,
             ERROR_CODES.INVALID_RESPONSE
           )
         );
