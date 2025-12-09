@@ -80,6 +80,7 @@ export async function performL1CustomValidations(
       break;
     case "issue":
     case "on_issue":
+    case "on_issue_status": 
       return result;
     default:
       result = [
