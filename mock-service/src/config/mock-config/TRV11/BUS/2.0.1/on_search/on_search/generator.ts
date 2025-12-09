@@ -96,7 +96,6 @@ const createCustomRoute = (
     };
   });
 };
-
 export async function onSearchGenerator(
   existingPayload: any,
   sessionData: SessionData

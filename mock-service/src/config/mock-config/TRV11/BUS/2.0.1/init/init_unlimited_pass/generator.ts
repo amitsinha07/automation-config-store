@@ -70,37 +70,48 @@ function updateSettlementAmount(payload: any, sessionData: SessionData) {
   return payload;
 }
 
-export async function initUnlimitedPassGenerator(existingPayload: any,sessionData: SessionData){
+export async function initUnlimitedPassGenerator(existingPayload: any, sessionData: SessionData) {
+  try {
     if (sessionData.billing && Object.keys(sessionData.billing).length > 0) {
-        existingPayload.message.order.billing = sessionData.billing;
-      }
+      existingPayload.message.order.billing = sessionData.billing;
+    }
+
     if (sessionData.selected_items && sessionData.selected_items.length > 0) {
-    existingPayload.message.order.items = sessionData.selected_items;
+      existingPayload.message.order.items = sessionData.selected_items;
     }
-    if(sessionData.provider_id){
-      existingPayload.message.order.provider.id = sessionData.provider_id
+
+    if (sessionData.provider_id) {
+      existingPayload.message.order.provider.id = sessionData.provider_id;
     }
-    const chosenItemsIds = sessionData.items.map((item:any) => item.id);
-	  const filteredItems = sessionData.items.filter((item:any) => 
-		chosenItemsIds.includes(item.id)
-	  );
-	  const uniqueFulfillmentIds = [
-      ...new Set(
-        filteredItems.flatMap((item:any) => item.fulfillment_ids || [])
-      )
-      ];
-      const formattedFulfillmentIds = uniqueFulfillmentIds.map(id => ({ id }));
 
-	   const fulfillmentType= sessionData.fulfillments.find((fulfillment:any)=> fulfillment.type ==="PASS").type
-     existingPayload.message.order.fulfillments = formattedFulfillmentIds
-     
-     if(fulfillmentType === "PASS"){
-     existingPayload.message.order.fulfillments = sessionData.fulfillments 
+    const chosenItemsIds = sessionData.items.map((item: any) => item.id);
 
-   }
-    existingPayload = updateSettlementAmount(existingPayload,sessionData)
-    existingPayload = updateCollectedByAndBuyerFees(existingPayload,sessionData)
+    const filteredItems = sessionData.items.filter((item: any) =>
+      chosenItemsIds.includes(item.id)
+    );
+
+    const uniqueFulfillmentIds = [
+      ...new Set(filteredItems.flatMap((item: any) => item.fulfillment_ids || [])),
+    ];
+    const formattedFulfillmentIds = uniqueFulfillmentIds.map((id) => ({ id }));
+
+    const fulfillmentType = sessionData.fulfillments.find(
+      (fulfillment: any) => fulfillment.type === "PASS"
+    )?.type;
+
+    existingPayload.message.order.fulfillments = formattedFulfillmentIds;
+
+    // If needed later
+    // if (fulfillmentType === "PASS") {
+    //   existingPayload.message.order.fulfillments = sessionData.fulfillments;
+    // }
+
+    existingPayload = updateSettlementAmount(existingPayload, sessionData);
+    existingPayload = updateCollectedByAndBuyerFees(existingPayload, sessionData);
+    console.log("I AM HERE")
     return existingPayload;
+  } catch (err) {
+    console.error("Error in initUnlimitedPassGenerator:", err);
+    throw err; // or return existingPayload if you don't want failures
+  }
 }
-
-

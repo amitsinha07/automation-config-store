@@ -1,4 +1,14 @@
 import { SessionData } from "../../../../session-types";
+const filterItemsBySelectedIds = (
+  items: any[],
+  selectedIds: string | string[]
+): any[] => {
+  // Convert selectedIds to an array if it's a string
+  const idsToFilter = Array.isArray(selectedIds) ? selectedIds : [selectedIds];
+
+  // Filter the items array based on the presence of ids in selectedIds
+  return items.filter((item) => idsToFilter.includes(item.id));
+};
 
 const createQuoteFromItems = (items: any): any => {
   let totalPrice = 0;
@@ -15,7 +25,7 @@ const createQuoteFromItems = (items: any): any => {
         id: item.id,
         price: {
           currency,
-          value: item.price?.value || 35,
+          value: String(item.price?.value || 35),
         },
         quantity: {
           selected: {
@@ -57,17 +67,34 @@ const createQuoteFromItems = (items: any): any => {
   };
 };
 
-export async function onSelectGenerator(
+export async function onSelectUnlimitedPassesGenerator(
   existingPayload: any,
   sessionData: SessionData
 ) {
-  existingPayload.message.order.items.forEach((item: any, index: number) => {
-    item.time.timestamp = new Date(Date.now()).toISOString();
-    item.time.range.start = new Date(Date.now()).toISOString();
-    item.time.range.end = new Date(Date.now() + 3 * 60 * 60 * 60).toISOString();
-    item.quantity.selected.count =
-      sessionData?.items[index]?.quantity?.selected?.count || 1;
-  });
+  let items = filterItemsBySelectedIds(
+    sessionData.items,
+    sessionData.selected_item_ids
+  );
+  const ids_with_quantities = {
+    items: sessionData.selected_items.reduce((acc: any, item: any) => {
+      acc[item.id] = item.quantity.selected.count;
+      return acc;
+    }, {}),
+  };
+  const updatedItems = items
+    .map((item: any, index: number) => ({
+      ...item,
+      price:
+        existingPayload.message.order.items[index]?.price ||
+        existingPayload.message.order.items[0]?.price,
+      quantity: {
+        selected: {
+          count: ids_with_quantities["items"][item.id] ?? 0, // Default to 0 if not in the mapping
+        },
+      },
+    }))
+    .filter((item) => item.quantity.selected.count > 0);
+  existingPayload.message.order.items = updatedItems
   existingPayload.message.order.fulfillments = sessionData.fulfillments.map(
     (fulfillment) => ({
       ...fulfillment,
