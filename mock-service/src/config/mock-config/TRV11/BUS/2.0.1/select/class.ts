@@ -53,6 +53,23 @@ export class MockSelectBus201Class extends MockAction {
       };
     }
 
+    if (
+      sessionData.user_inputs?.items &&
+      sessionData.user_inputs.items.length > 0
+    ) {
+      const validItemIds = new Set(sessionData.items.map((item) => item.id));
+
+      for (const userItem of sessionData.user_inputs.items) {
+        if (!validItemIds.has(userItem.itemId)) {
+          return {
+            valid: false,
+            message: `Invalid itemId provided: ${userItem.itemId}. Valid itemIds are: ${Array.from(validItemIds).join(", ")}`,
+            code: "INVALID_ITEM_ID",
+          };
+        }
+      }
+    }
+
     // All requirements satisfied
     return { valid: true };
   }

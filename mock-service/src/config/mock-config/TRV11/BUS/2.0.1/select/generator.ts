@@ -24,17 +24,14 @@ const getRandomItemsWithQuantities = (items: any): any => {
 	});
 };
 
-const transformToItemFormat = (items: any[]): any => {
+const transformToItemFormat = (userInputItems: any[]): any => {
 	try {
-		return items.map((item) => ({
-			id: item.id,
+		return userInputItems.map((item) => ({
+			id: item.itemId,
 			quantity: {
-				maximum: {
-					count: item.quantity.maximum.count,
-				},
-				minimum: {
-					count: item.quantity.minimum.count,
-				},
+				selected: {
+					count: item.count,
+				}
 			},
 		}));
 	} catch (e: any) {
@@ -43,20 +40,16 @@ const transformToItemFormat = (items: any[]): any => {
 };
 export async function selectGenerator(existingPayload: any, sessionData: any) {
 // Note: commits should be uncommits
-	const items = sessionData?.items;
-	const items_min_max = transformToItemFormat(items);
-	const chosen_items = getRandomItemsWithQuantities(items_min_max);
-	sessionData.selected_ids = Array.isArray(sessionData.selected_ids)
-		? sessionData.selected_ids
-		: [sessionData.selected_ids];
-	const items_chosen = chosen_items;
+	const userInputItems = sessionData?.user_inputs?.items;
+	const items_min_max = transformToItemFormat(userInputItems);
+	const items_chosen = items_min_max;
 	if(items_chosen){
 		existingPayload.message.order.items = items_chosen;
 	}
 	if(sessionData.provider_id){
 		existingPayload.message.order.provider.id = sessionData.provider_id
 	  }
-	  const chosenItemsIds = chosen_items.map((item:any) => item.id);
+	  const chosenItemsIds = items_min_max.map((item:any) => item.id);
 	  const filteredItems = sessionData.items.filter((item:any) => 
 		chosenItemsIds.includes(item.id)
 	  );
