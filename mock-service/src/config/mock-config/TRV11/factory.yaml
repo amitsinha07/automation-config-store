@@ -891,3 +891,8 @@ codes:
     action: on_status
     default: METRO/2.0.1/on_status/on_status_order_delivered/default.yaml
     message_id: true
+  - code: 338 
+    action_id: init_unlimited_pass_BUS_201
+    action: init
+    default: BUS/2.0.1/init/init_unlimited_pass/default.yaml
+    message_id: true

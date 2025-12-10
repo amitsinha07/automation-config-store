@@ -2,7 +2,7 @@ import { readFileSync } from "fs";
 import yaml from "js-yaml";
 import path from "path";
 import { MockAction, MockOutput, saveType } from "../../../../classes/mock-action";
-import { onSelectGenerator } from "./generator";
+import { onSelectUnlimitedPassesGenerator } from "./generator";
 import { SessionData } from "../../../../session-types";
 
 export class MockOnSelectBusUnlimitedPass201Class extends MockAction {
@@ -23,10 +23,10 @@ export class MockOnSelectBusUnlimitedPass201Class extends MockAction {
     return "on_select_unlimited_pass_BUS_201";
   }
   get description(): string {
-    return "Mock for on_select_BUS_201";
+    return "Mock for on_select_unlimited_pass_BUS_201";
   }
   generator(existingPayload: any, sessionData: SessionData): Promise<any> {
-    return onSelectGenerator(existingPayload, sessionData);
+    return onSelectUnlimitedPassesGenerator(existingPayload, sessionData);
   }
   async validate(
     targetPayload: any,

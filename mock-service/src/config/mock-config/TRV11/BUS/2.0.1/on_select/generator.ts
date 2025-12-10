@@ -57,7 +57,7 @@ const createQuoteFromItems = (items: any): any => {
   };
 };
 
-function createAndAppendFulfillments(items: any[], fulfillments: any[]): void {
+function createAndAppendFulfillments(items: any[], fulfillments: any[]): any {
   items.forEach((item) => {
     // Ensure item.fulfillment_ids exists
     if (!item.fulfillment_ids) {
@@ -91,6 +91,7 @@ function createAndAppendFulfillments(items: any[], fulfillments: any[]): void {
       item.fulfillment_ids.push(newFulfillment.id);
     }
   });
+  return {items,fulfillments}
 }
 
 function getUniqueFulfillmentIdsAndFilterFulfillments(
@@ -123,7 +124,6 @@ const filterItemsBySelectedIds = (
   // Filter the items array based on the presence of ids in selectedIds
   return items.filter((item) => idsToFilter.includes(item.id));
 };
-
 export async function onSelectGenerator(
   existingPayload: any,
   sessionData: SessionData
@@ -133,7 +133,7 @@ export async function onSelectGenerator(
     sessionData.selected_item_ids
   );
   let fulfillments = getUniqueFulfillmentIdsAndFilterFulfillments(
-    sessionData.items,
+    items,
     sessionData.fulfillments
   );
   const ids_with_quantities = {
@@ -142,11 +142,7 @@ export async function onSelectGenerator(
       return acc;
     }, {}),
   };
-  console.log(
-    "existingPayload.message.order.items[index]",
-    JSON.stringify(existingPayload.message.order.items)
-  );
-  const updatedItems = sessionData.items
+  const updatedItems = items
     .map((item: any, index: number) => ({
       ...item,
       price:
@@ -159,11 +155,8 @@ export async function onSelectGenerator(
       },
     }))
     .filter((item) => item.quantity.selected.count > 0);
-  items = updatedItems;
-  console.log("updatedItems", JSON.stringify(updatedItems));
-  console.log("fulfillments", JSON.stringify(fulfillments));
-  createAndAppendFulfillments(updatedItems, fulfillments);
-  const quote = createQuoteFromItems(updatedItems);
+  ({ items, fulfillments } = createAndAppendFulfillments(updatedItems, fulfillments));
+  const quote = createQuoteFromItems(items);
   existingPayload.message.order.items = items;
   existingPayload.message.order.fulfillments = fulfillments;
   existingPayload.message.order.fulfillments.forEach((fulfillment: any) => {
