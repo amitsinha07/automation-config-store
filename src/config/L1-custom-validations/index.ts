@@ -5,6 +5,7 @@ import select from "./apiTests/select";
 import onSelect from "./apiTests/on_select";
 import init from "./apiTests/init";
 import onInit from "./apiTests/on_init";
+import { catalogRejectionValidator } from "./apiTests/catalog_rejection";
 // import { confirm } from "./apiTests/confirm";
 // import { cancel } from "./apiTests/cancel";
 
@@ -30,6 +31,8 @@ export function performL1CustomValidations(
       return init(payload);
     case "on_init":
       return onInit(payload);
+    case "catalog_rejection":
+      return catalogRejectionValidator(payload)
     // case "confirm":
     //   return confirm(payload);
     // case "on_confirm":
