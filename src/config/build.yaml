@@ -29068,7 +29068,7 @@ x-validations:
       - _NAME_: end_address_validations
         _DESCRIPTION_: Valid address should be sent in fulfillments/end/location
         endLocation: >-
-          $.message.order.fulfillments[?(@.type=='Delivery')].end.location.address.city
+          $.message.order.fulfillments[?(@.type=='Delivery' || @.type=='Return')].end.location.address.city
         fulfillmentType: $.message.order.fulfillments[*].type
         fulfillmentState: $.message.order.fulfillments[*].state.descriptor.code
         fulType: ["Batch"]
