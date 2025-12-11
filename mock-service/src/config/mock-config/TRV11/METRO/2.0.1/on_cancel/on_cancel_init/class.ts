@@ -37,7 +37,7 @@ export class OnCancelInitMetro201Class extends MockAction {
   sessionData: SessionData
 ): Promise<MockOutput> {
   const order = targetPayload?.message?.order;
-  const { order_id, descriptor } = targetPayload?.message || {};
+  const order_id = targetPayload?.message?.order?.id;
 
   // -1. check message.order_id
   if (order_id !== sessionData.order_id) {
@@ -45,15 +45,6 @@ export class OnCancelInitMetro201Class extends MockAction {
       valid: false,
       message: "Incorrect order_id in the payload",
       code: "MISSING_ORDER_ID",
-    };
-  }
-
-  // -0. check descriptor code
-  if (descriptor?.code !== "CANCELLATION_INITIATED") {
-    return {
-      valid: false,
-      message: "Incorrect descriptor code in the payload",
-      code: "INVALID_DESCRIPTOR_CODE",
     };
   }
 

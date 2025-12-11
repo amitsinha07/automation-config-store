@@ -35,7 +35,7 @@ export class MockStatusTechCancelMetro201Class extends MockAction {
   const payloadRefId = targetPayload?.message?.ref_id;
   const sessionTxnId = sessionData?.transaction_id;
 
-  if (payloadRefId !== sessionTxnId) {
+  if (payloadRefId && payloadRefId !== sessionTxnId) {
     return {
       valid: false,
       message: `Order ID mismatch. Expected ${sessionTxnId}, got ${payloadRefId}`,
