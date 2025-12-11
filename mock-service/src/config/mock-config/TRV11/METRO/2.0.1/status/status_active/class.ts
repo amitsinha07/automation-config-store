@@ -12,7 +12,7 @@ export class MockStatusMetro201Class extends MockAction {
     ) as saveType;
   }
   get defaultData(): any {
-    return yaml.load(
+    return yaml.load( 
       readFileSync(path.resolve(__dirname, "./default.yaml"), "utf8")
     );
   }
@@ -35,7 +35,7 @@ export class MockStatusMetro201Class extends MockAction {
   const payloadOrderId = targetPayload?.message?.order_id;
   const sessionOrderId = sessionData?.order_id;
 
-  if (payloadOrderId !== sessionOrderId) {
+  if (payloadOrderId && payloadOrderId !== sessionOrderId) {
     return {
       valid: false,
       message: `Order ID mismatch. Expected ${sessionOrderId}, got ${payloadOrderId}`,
