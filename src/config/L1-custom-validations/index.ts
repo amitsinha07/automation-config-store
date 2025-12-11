@@ -7,6 +7,7 @@ import init from "./apiTests/init";
 import onInit from "./apiTests/on_init";
 // import { confirm } from "./apiTests/confirm";
 // import { cancel } from "./apiTests/cancel";
+import { catalogRejectionValidator } from "./apiTests/catalog_rejection";
 
 export function performL1CustomValidations(
   payload: any,
@@ -36,6 +37,9 @@ export function performL1CustomValidations(
     //   return confirm(payload);
     // case "cancel":
     //   return cancel(payload);
+    case "catalog_rejection":
+      return catalogRejectionValidator(payload);
+      break
     default:
       return Promise.resolve([
         {
