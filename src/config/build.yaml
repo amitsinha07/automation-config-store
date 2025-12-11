@@ -26538,6 +26538,7 @@ x-validations:
           - rto_verification
           - shipping_label
           - weather_check
+          - reverseqc_input
         tagPath: $.message.order.fulfillments[*].tags[*].code
         _CONTINUE_: "!(tagPath are present)"
         _RETURN_: tagPath all in validTags
@@ -28712,6 +28713,7 @@ x-validations:
           - fulfill_response
           - rider_details
           - rto_event
+          - reverseqc_input
           - reverseqc_output
           - ebn
           - linked_order_diff

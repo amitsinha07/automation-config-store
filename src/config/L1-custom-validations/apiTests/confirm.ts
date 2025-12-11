@@ -46,6 +46,18 @@ export async function confirm(
   const acceptLSPterms = await validateLSPterms(payload, subUrl);
   console.log("LSP terms acceptance validation result:", acceptLSPterms);
 
+  const returnFulfillment = fulfillments.find((fulfillment: any) => fulfillment.type === "Return")
+  if (returnFulfillment) {
+    const itemMatched: boolean = await validateReverseQCItem(returnFulfillment)
+    if (!itemMatched) {
+      results.push({
+        valid: false,
+        code: 66002,
+        description: `Item Mismatch between : linked_order_item and reverseqc_input`
+      });
+    }
+  }
+
   // const validTAT = await validateTAT(payload);
   // console.log("TAT validation result:", validTAT);
 
@@ -102,6 +114,38 @@ export async function confirm(
   }
 
   return results;
+}
+
+async function validateReverseQCItem(fulfillment: any): Promise<boolean> {
+  if (!fulfillment?.tags) return false;
+
+  // Extract all linked_order_item entries
+  const linkedItems = fulfillment.tags.filter(
+    (tag: any) => tag.code === "linked_order_item"
+  );
+
+  if (!linkedItems.length) return false;
+
+  // Extract reverseqc_input
+  const reverseQcTag = fulfillment.tags.find(
+    (tag: any) => tag.code === "reverseqc_input"
+  );
+
+  if (!reverseQcTag?.list?.length) return false;
+
+  // The value to match (first item or based on business logic)
+  const reverseValue = reverseQcTag.list[0].value; // "Atta"
+
+  // Extract all item names from linked_order_item
+  const linkedNames = linkedItems
+    .map((tag: any) => {
+      const nameEntry = tag.list.find((x: any) => x.code === "name");
+      return nameEntry?.value;
+    })
+    .filter(Boolean);
+
+  // Compare
+  return linkedNames.includes(reverseValue);
 }
 
 async function validateQuote(
