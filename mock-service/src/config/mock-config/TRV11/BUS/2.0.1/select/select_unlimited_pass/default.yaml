@@ -1,0 +1,17 @@
+message:
+  order:
+    items:
+      - id: "I8"
+        quantity:
+          selected:
+            count: 1
+    fulfillments:
+      - id: "F1"
+        type: "PASS"
+        customer:
+          person:
+            creds:
+              - type: "PAN"
+                id: "YKPYS1412V"
+    provider:
+      id: "P1"

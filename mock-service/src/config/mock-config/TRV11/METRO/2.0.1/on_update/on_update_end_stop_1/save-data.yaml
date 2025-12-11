@@ -1,0 +1,7 @@
+save-data:
+  status: "$.message.order.status"
+  fulfillments: "$.message.order.fulfillments[*]"
+  quote: "$.message.order.quote"
+  items: "$.message.order.items[*]"
+  payments: "$.message.order.payments[*]"
+  newQuote: "$.message.order.quote.price.value"
