@@ -25617,6 +25617,7 @@ x-validations:
       - _NAME_: REQUIRED_MESSAGE_ID_16
         attr: $.message.order.fulfillments[*].start.location.id
         _RETURN_: attr are present
+        _CONTINUE_: "!(attr are present)"
       - _NAME_: REQUIRED_MESSAGE_GPS
         attr: $.message.order.fulfillments[*].start.location.gps
         _RETURN_: attr are present
