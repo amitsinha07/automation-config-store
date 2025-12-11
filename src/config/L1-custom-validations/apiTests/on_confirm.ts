@@ -960,11 +960,11 @@ const validateTags = async (
         const hasStaticTerms = bapTermsTag.list?.some(
           (item: any) => item.code === "static_terms"
         );
-        if (hasStaticTerms) {
+        if (!hasStaticTerms) {
           addError(
             result,
             20006,
-            `Invalid response: static_terms is not required in /${constants.ON_CONFIRM}`
+            `Invalid response: static_terms is required in /${constants.ON_CONFIRM}`
           );
         }
 
