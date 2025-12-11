@@ -5,14 +5,14 @@ import { MockAction, MockOutput, saveType } from "../../../../classes/mock-actio
 import { SessionData } from "../../../../session-types";
 import { statusActiveGenerator } from "./generator";
 
-export class MockStatusMetro201Class extends MockAction {
+export class MockStatusMetro201CancelClass extends MockAction {
   get saveData(): saveType {
     return yaml.load(
       readFileSync(path.resolve(__dirname, "../save-data.yaml"), "utf8")
     ) as saveType;
   }
   get defaultData(): any {
-    return yaml.load(
+    return yaml.load( 
       readFileSync(path.resolve(__dirname, "./default.yaml"), "utf8")
     );
   }
@@ -20,10 +20,10 @@ export class MockStatusMetro201Class extends MockAction {
     return {};
   }
   name(): string {
-    return "status_METRO_201";
+    return "status_METRO_201_CANCEL";
   }
   get description(): string {
-    return "Mock for status_METRO_201";
+    return "Mock for status_METRO_201_CANCEL";
   }
   generator(existingPayload: any, sessionData: SessionData): Promise<any> {
     return statusActiveGenerator(existingPayload, sessionData);
@@ -35,7 +35,7 @@ export class MockStatusMetro201Class extends MockAction {
   const payloadOrderId = targetPayload?.message?.order_id;
   const sessionOrderId = sessionData?.order_id;
 
-  if (payloadOrderId !== sessionOrderId) {
+  if (payloadOrderId && payloadOrderId !== sessionOrderId) {
     return {
       valid: false,
       message: `Order ID mismatch. Expected ${sessionOrderId}, got ${payloadOrderId}`,

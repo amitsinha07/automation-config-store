@@ -65,7 +65,7 @@ import { MockOnUpdateEndStop3MetroClass } from "./METRO/2.0.1/on_update/on_updat
 import { MockSearch1Metro201Class } from "./METRO/2.0.1/search/search1/class";
 import { MockSearch2Metro201Class } from "./METRO/2.0.1/search/search2/class";
 import { MockSelectMetro201Class } from "./METRO/2.0.1/select/class";
-import { MockStatusMetro201CancelClass, MockStatusMetro201Class } from "./METRO/2.0.1/status/status_active/class";
+import {  MockStatusMetro201Class } from "./METRO/2.0.1/status/status_active/class";
 import { MockStatusTechCancelMetro201Class } from "./METRO/2.0.1/status/status_tech_cancel/class";
 import { MockUpdateEndStop1MetroClass } from "./METRO/2.0.1/update/update_end_stop_1/class";
 import { MockUpdateEndStop2MetroClass } from "./METRO/2.0.1/update/update_end_stop_2/class";
@@ -100,6 +100,7 @@ import { MockOnIssueResolution1Metro_201_Class, MockOnIssueResolution2Metro_201_
 import { MockIssueResolutionAcceptIGM3Metro_201_Class, MockIssueResolutionAcceptMetro_201_Class, MockIssueResolutionRejectMetro_201_Class } from "./METRO/2.0.1/issue/issue_resolution_accept/class";
 import { MockOnIssueResolvedIGM3Metro_201_Class, MockOnIssueResolvedMetro_201_Class } from "./METRO/2.0.1/on_issue/on_issue_resolved/class";
 import { MockIssueCloseIGM3Metro_201_Class, MockIssueCloseMetro_201_Class } from "./METRO/2.0.1/issue/issue_close/class";
+import { MockStatusMetro201CancelClass } from "./METRO/2.0.1/status/status_cancel/class";
 
 // helpers
 type Ctor<T> = new () => T;

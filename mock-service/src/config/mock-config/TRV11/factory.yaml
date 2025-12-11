@@ -357,7 +357,7 @@ codes:
   - code: 881
     action_id: status_METRO_201_CANCEL
     action: status
-    default: METRO/2.0.1/status/status_active/default.yaml
+    default: METRO/2.0.1/status/status_cancel/default.yaml
     message_id: true  
   - code: 171
     action_id: on_update_accepted_METRO_201
