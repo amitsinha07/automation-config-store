@@ -65,7 +65,7 @@ import { MockOnUpdateEndStop3MetroClass } from "./METRO/2.0.1/on_update/on_updat
 import { MockSearch1Metro201Class } from "./METRO/2.0.1/search/search1/class";
 import { MockSearch2Metro201Class } from "./METRO/2.0.1/search/search2/class";
 import { MockSelectMetro201Class } from "./METRO/2.0.1/select/class";
-import { MockStatusMetro201Class } from "./METRO/2.0.1/status/status_active/class";
+import { MockStatusMetro201CancelClass, MockStatusMetro201Class } from "./METRO/2.0.1/status/status_active/class";
 import { MockStatusTechCancelMetro201Class } from "./METRO/2.0.1/status/status_tech_cancel/class";
 import { MockUpdateEndStop1MetroClass } from "./METRO/2.0.1/update/update_end_stop_1/class";
 import { MockUpdateEndStop2MetroClass } from "./METRO/2.0.1/update/update_end_stop_2/class";
@@ -170,6 +170,7 @@ const registry = {
   search2_METRO_201: MockSearch2Metro201Class,
   select_METRO_201: MockSelectMetro201Class,
   status_METRO_201: MockStatusMetro201Class,
+  status_METRO_201_CANCEL: MockStatusMetro201CancelClass,
   status_tech_cancel_METRO_201: MockStatusTechCancelMetro201Class,
   update_end_stop_1: MockUpdateEndStop1MetroClass,
   update_end_stop_2: MockUpdateEndStop2MetroClass,

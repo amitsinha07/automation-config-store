@@ -26,7 +26,52 @@ export class MockStatusMetro201Class extends MockAction {
     return "Mock for status_METRO_201";
   }
   generator(existingPayload: any, sessionData: SessionData): Promise<any> {
-    return statusActiveGenerator(existingPayload, sessionData);
+    return statusActiveGenerator(existingPayload, sessionData, false);
+  }
+  async validate(
+  targetPayload: any,
+  sessionData: SessionData
+): Promise<MockOutput> {
+  const payloadOrderId = targetPayload?.message?.order_id;
+  const sessionOrderId = sessionData?.order_id;
+
+  if (payloadOrderId && payloadOrderId !== sessionOrderId) {
+    return {
+      valid: false,
+      message: `Order ID mismatch. Expected ${sessionOrderId}, got ${payloadOrderId}`,
+    };
+  }
+  return { valid: true };
+}
+  async meetRequirements(sessionData: SessionData): Promise<MockOutput> {
+    // Validate required session data for confirm generator
+    return { valid: true };
+  }
+}
+
+
+export class MockStatusMetro201CancelClass extends MockAction {
+  get saveData(): saveType {
+    return yaml.load(
+      readFileSync(path.resolve(__dirname, "../save-data.yaml"), "utf8")
+    ) as saveType;
+  }
+  get defaultData(): any {
+    return yaml.load( 
+      readFileSync(path.resolve(__dirname, "./default.yaml"), "utf8")
+    );
+  }
+  get inputs(): any {
+    return {};
+  }
+  name(): string {
+    return "status_METRO_201_CANCEL";
+  }
+  get description(): string {
+    return "Mock for status_METRO_201_CANCEL";
+  }
+  generator(existingPayload: any, sessionData: SessionData): Promise<any> {
+    return statusActiveGenerator(existingPayload, sessionData, true);
   }
   async validate(
   targetPayload: any,
