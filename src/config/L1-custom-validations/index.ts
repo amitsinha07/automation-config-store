@@ -16,6 +16,7 @@ import {
   updateRouter,
   onUpdateRouter,
 } from "./apiTests";
+import { catalogRejectionValidator } from "./apiTests/catalog_rejection";
 
 import { validationOutput } from "./types";
 
@@ -82,6 +83,9 @@ export async function performL1CustomValidations(
     case "on_issue":
     case "on_issue_status":  
       return result;
+    case "catalog_rejection":
+      result = await catalogRejectionValidator(payload)
+      break
     default:
       result = [
         {
