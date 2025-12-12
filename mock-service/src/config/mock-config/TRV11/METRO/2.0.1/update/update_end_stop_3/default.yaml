@@ -1,0 +1,13 @@
+message:
+  update_target: payments
+  order:
+    id: 077b248f
+    payments:
+      - id: PA2
+        collected_by: BAP
+        status: PAID
+        type: POST-FULFILLMENT
+        params:
+          transaction_id: a442bd1f-0373-4562-845e-e5a9262a76fd
+          amount: "140"
+          currency: INR
