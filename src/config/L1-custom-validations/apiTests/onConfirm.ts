@@ -43,6 +43,7 @@ const ERROR_CODES = {
   OFFER_FULFILLMENT_ERROR: 30007, // Offer cannot be fulfilled
   ORDER_CONFIRM_FAILURE: 30020, // No response from BNP
   INTERNAL_ERROR_SNP: 31001, // Internal error on SNP side (retryable)
+  BAP_TERMS_NOT_ACCEPTED: 27502,
 };
 const TTL_IN_SECONDS: number = Number(process.env.TTL_IN_SECONDS) || 3600;
 // Utility function to create error objects
@@ -782,6 +783,21 @@ async function validateTags(
   const accept_bap_terms = list.filter(
     (item: any) => item.code === "accept_bap_terms"
   );
+  if (!accept_bap_terms.length) {
+  result.push(
+    createError(
+      `Invalid response: accept_bap_terms is required in /${constants.ON_CONFIRM}`,
+      ERROR_CODES.INVALID_RESPONSE
+    )
+  );
+  } else if (accept_bap_terms[0].value !== "Y") {
+    result.push(
+      createError(
+        `Invalid response: SNP must accept proposed bap terms & conditions. accept_bap_terms must be "Y" in /${constants.ON_CONFIRM}`,
+        ERROR_CODES.BAP_TERMS_NOT_ACCEPTED
+      )
+    );
+  }
   const np_type_on_search = await RedisService.getKey(
     `${transaction_id}_${ApiSequence.ON_SEARCH}np_type`
   );
