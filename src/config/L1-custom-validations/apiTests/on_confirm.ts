@@ -994,11 +994,18 @@ const validateTags = async (
         const acceptBapTerms = tagsList.filter(
           (item: any) => item.code === "accept_bap_terms"
         );
-        if (acceptBapTerms.length > 0) {
+
+        if (!acceptBapTerms.length) {
           addError(
             result,
             20006,
-            `Invalid response: accept_bap_terms is not required in /${constants.ON_CONFIRM}`
+            `Invalid response: accept_bap_terms is required in /${constants.ON_CONFIRM}`
+          );
+        } else if(acceptBapTerms[0].value !== "Y") {
+          addError(
+            result,
+            27502,
+            `Invalid response: SNP must accept proposed bap terms & conditions. accept_bap_terms must be "Y" in /${constants.ON_CONFIRM}`
           );
         }
 
