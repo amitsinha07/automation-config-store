@@ -73,18 +73,22 @@ function transformFulfillments(fulfillments: any) {
     },
   ];
 
-  return fulfillments.map((f: any, index: number) => {
-    if (f.id === "F1") {
+  console.log("fulfillments---", JSON.stringify(fulfillments));
+  const transformedFulfillments = fulfillments.map((f: any, index: number) => {
+    if (f.id === "F1" || f?.stops?.length > 0 || f.type == "TRIP") {
       return f;
     }
 
     return {
       id: f.id,
       customer: customers[index - 1],
-      tags: f.tags.map((tag: any) => ({
+      tags: f?.tags.map((tag: any) => ({
         descriptor: tag.descriptor,
         list: tag.list.filter((item: any) => item.descriptor.code === "NUMBER"),
       })),
     };
   });
+
+  console.log("transformedFulfillments---", JSON.stringify(transformedFulfillments));
+  return transformedFulfillments;
 }
