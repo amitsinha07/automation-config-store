@@ -38,7 +38,7 @@ export async function generateMockResponse(
 	}
 }
 
-export function getMockActionObject(actionId: string) {
+export function getMockActionObject(actionId: string, sessionId?: string) {
 	return getMockAction(actionId);
 }
 
