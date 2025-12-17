@@ -113,7 +113,7 @@ export async function onUpdateAcceptedGenerator(existingPayload: any,sessionData
 	existingPayload.message.order.id = sessionData.order_id;
 	}
 	if(sessionData.quote != null){
-	existingPayload.message.order.quote = applyCancellation(sessionData.quote,15)
+	existingPayload.message.order.quote = applyCancellation(sessionData.quote,0)
 	}
   if(sessionData.provider){
 		existingPayload.message.order.provider=sessionData.provider

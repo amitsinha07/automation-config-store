@@ -54,6 +54,7 @@ export interface SessionData {
   oldQuote: any
 	newQuote: any
 	updated_price: string
+  flow_id: any
 }
 
 export type BecknContext = {
