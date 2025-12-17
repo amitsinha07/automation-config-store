@@ -26,15 +26,16 @@ export async function onStatusCancelGenerator(
     existingPayload.message.order.provider = sessionData.provider;
   }
 
-  if (sessionData.flow_id === "DELAYED_CANCELLATION_FLOW_REJECTED") {
-    existingPayload.message.order.cancellation = {
-      ...existingPayload.message.order.cancellation,
-      additional_description: {
-        short_desc:
-          "Cancellation was rejected by the provider due to some reason.",
-      },
-    };
-  }
+  if(sessionData.flow_id==="DELAYED_CANCELLATION_FLOW_REJECTED"){
+  existingPayload.message.order.cancellation = {
+    ...existingPayload.message.order.cancellation,
+    additional_description: {
+      short_desc:
+        "Cancellation was rejected by the provider due to some reason.",
+    },
+  };
+ }
+
   const now = new Date().toISOString();
   existingPayload.message.order.created_at = sessionData.created_at;
   existingPayload.message.order.updated_at = now;
