@@ -19494,6 +19494,7 @@ x-validations:
             validTags:
               - BPP_TERMS
               - PAGINATION
+              - BAP_TERMS
             tagPath: $.message.catalog.tags[*].descriptor.code
             _RETURN_: tagPath all in validTags
           - _NAME_: REQUIRED_PAYMENT_TAG_BPP_TERMS
@@ -20189,6 +20190,7 @@ x-validations:
           - _NAME_: PAYMENT_TAG_GROUP
             validTags:
               - BPP_TERMS
+              - BAP_TERMS
             tagPath: $.message.order.tags[*].descriptor.code
             _RETURN_: tagPath all in validTags
           - _NAME_: REQUIRED_PAYMENT_TAG_BPP_TERMS
