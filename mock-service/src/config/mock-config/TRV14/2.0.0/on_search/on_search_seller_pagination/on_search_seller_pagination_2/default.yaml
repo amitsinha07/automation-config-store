@@ -1,4 +1,3 @@
-
 catalog:
   descriptor:
     name: India tourism
@@ -62,7 +61,6 @@ catalog:
       rating: '4'
     items:
     - id: I0
-      parent_item_id: I0
       descriptor:
         name: Parent Item for Culture & Heritage
         code: ABSTRACT
@@ -301,7 +299,7 @@ catalog:
         - value: out side food
         - value: photography
     - id: I4
-      
+      parent_item_id: I0
       descriptor:
         name: Child-Ticket Culture & Heritage Item
         code: ENTRY_PASS
@@ -467,3 +465,4 @@ catalog:
     - descriptor:
         code: MAX_PAGE_NUMBER
       value: '2'
+
