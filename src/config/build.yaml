@@ -35746,6 +35746,7 @@ x-validations:
                   - CONFIRM_CANCEL
                   - ACTIVE
                   - COMPLETE
+                  - COMPLETED
                   - CANCELLED
                   - CONFIRM_UPDATE
                   - UPDATED
