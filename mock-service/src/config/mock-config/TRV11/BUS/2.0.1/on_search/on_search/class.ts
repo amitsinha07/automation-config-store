@@ -39,21 +39,6 @@ export class MockOnSearch1Bus201Class extends MockAction {
       message: `City code mismatch: expected ${sessionData.city_code}, got ${targetCityCode}`
     };
   }
-
-  const fulfillments = targetPayload?.message?.catalog?.providers?.[0]?.fulfillments || [];
-  for (const fulfillment of fulfillments) {
-    const stops = fulfillment?.stops || [];
-    const startCode = stops.find((s: any) => s.type === "START")?.location?.descriptor?.code;
-    const endCode = stops.find((s: any) => s.type === "END")?.location?.descriptor?.code;
-
-    if (startCode !== sessionData.start_code || endCode !== sessionData.end_code) {
-      return {
-        valid: false,
-        message: `Fulfillment ${fulfillment.id} start/end mismatch. Expected start=${sessionData.start_code}, end=${sessionData.end_code}, but got start=${startCode}, end=${endCode}`
-      };
-    }
-  }
-
   return { valid: true };
 }
 
