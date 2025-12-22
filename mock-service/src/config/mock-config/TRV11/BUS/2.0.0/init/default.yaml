@@ -32,7 +32,7 @@ message:
             list:
               - descriptor:
                   code: SETTLEMENT_TYPE
-                value: neft
+                value: NEFT
               - descriptor:
                   code: SETTLEMENT_WINDOW
                 value: PT60M

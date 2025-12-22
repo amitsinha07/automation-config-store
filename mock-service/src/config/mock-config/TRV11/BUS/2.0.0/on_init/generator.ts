@@ -59,7 +59,7 @@ export async function onInitGenerator(
               descriptor: {
                 code: "SETTLEMENT_TYPE",
               },
-              value: "neft",
+              value: "NEFT",
             },
             {
               descriptor: {

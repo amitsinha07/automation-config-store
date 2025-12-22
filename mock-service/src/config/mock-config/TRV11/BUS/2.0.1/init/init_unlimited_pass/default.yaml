@@ -26,14 +26,14 @@ message:
             list:
               - descriptor:
                   code: BUYER_FINDER_FEES_PERCENTAGE
-                value: '1'
+                value: "1"
           - descriptor:
               code: SETTLEMENT_TERMS
             display: false
             list:
               - descriptor:
                   code: SETTLEMENT_TYPE
-                value: neft
+                value: NEFT
               - descriptor:
                   code: SETTLEMENT_WINDOW
                 value: PT60M
@@ -42,16 +42,16 @@ message:
                 value: Delivery
               - descriptor:
                   code: MANDATORY_ARBITRATION
-                value: 'true'
+                value: "true"
               - descriptor:
                   code: COURT_JURISDICTION
                 value: New Delhi
               - descriptor:
                   code: DELAY_INTEREST
-                value: '2.5'
+                value: "2.5"
               - descriptor:
                   code: STATIC_TERMS
-                value: 'https://www.abc.com/settlement-terms/'
+                value: "https://www.abc.com/settlement-terms/"
               - descriptor:
                   code: SETTLEMENT_AMOUNT
-                value: '12505'
+                value: "12505"
