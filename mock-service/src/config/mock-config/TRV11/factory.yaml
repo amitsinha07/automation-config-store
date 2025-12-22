@@ -901,3 +901,8 @@ codes:
     action: init
     default: BUS/2.0.1/init/init_unlimited_pass/default.yaml
     message_id: true
+  - code: 339
+    action_id: on_search0_BUS_201
+    action: on_search
+    default: BUS/2.0.1/on_search/on_search0/default.yaml
+    message_id: false

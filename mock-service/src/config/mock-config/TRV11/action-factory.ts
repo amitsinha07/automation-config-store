@@ -100,6 +100,7 @@ import { MockOnIssueResolution1Metro_201_Class, MockOnIssueResolution2Metro_201_
 import { MockIssueResolutionAcceptIGM3Metro_201_Class, MockIssueResolutionAcceptMetro_201_Class, MockIssueResolutionRejectMetro_201_Class } from "./METRO/2.0.1/issue/issue_resolution_accept/class";
 import { MockOnIssueResolvedIGM3Metro_201_Class, MockOnIssueResolvedMetro_201_Class } from "./METRO/2.0.1/on_issue/on_issue_resolved/class";
 import { MockIssueCloseIGM3Metro_201_Class, MockIssueCloseMetro_201_Class } from "./METRO/2.0.1/issue/issue_close/class";
+import { MockOnSearch0Bus201Class } from "./BUS/2.0.1/on_search/on_search0/class";
 
 // helpers
 type Ctor<T> = new () => T;
@@ -144,6 +145,7 @@ const registry = {
   status_BUS_201: MockStatusBus201Class,
   update_BUS_201: MockUpdateBus201Class,
   update_BUS_QR_201: MockUpdateQrBus201Class,
+  on_search0_BUS_201: MockOnSearch0Bus201Class,
   
   // METRO 2.0.1
   cancel_METRO_201: MockCancelMetro201Class,
