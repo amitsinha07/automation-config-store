@@ -54,6 +54,7 @@ export interface SessionData {
   oldQuote: any
 	newQuote: any
 	updated_price: string
+  issue_level: any
   flow_id: any
 }
 
