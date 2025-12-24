@@ -255,7 +255,7 @@ export const exampleFullfillment = {
 						descriptor: {
 							code: "CENTRAL_SECRETARIAT",
 						},
-						gps: "28.732076, 77.1301932",
+						gps: "28.732076, 77.130192",
 					},
 					id: "18",
 					parent_stop_id: "17",
