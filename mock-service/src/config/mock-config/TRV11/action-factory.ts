@@ -267,7 +267,7 @@ const registry = {
    // _____________IGM_1.0.0 METRO______________
   issue_open_metro_100:  MockIssueOpenMetro_100_Class,
   issue_close_metro_100: MockIssueCloseMetro_100_Class,
-  on_issue_processing_metro__100: MockOnIssueProcessingMetro_100_Class,
+  on_issue_processing_metro_100: MockOnIssueProcessingMetro_100_Class,
   on_issue_resolved_metro_100: MockOnIssueResolvedMetro_100_Class
     
 } as const satisfies Record<string, Ctor<MockAction>>;
