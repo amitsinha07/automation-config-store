@@ -1871,8 +1871,9 @@ components:
         quantity:
           description: The selling quantity of the item
           anyOf:
-            - $ref: "#/components/schemas/ItemQuantity"
-            - type: string
+            - allOf:
+                - $ref: "#/components/schemas/ItemQuantity"
+            - type: integer
         category_ids:
           description: Categories this item can be listed under
           type: array
