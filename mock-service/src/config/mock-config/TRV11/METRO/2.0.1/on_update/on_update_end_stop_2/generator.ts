@@ -27,7 +27,7 @@ export async function onUpdateStopEndGenerator(
     const newPayment = {
       ...existingPayload.message.order.payments[1],
       id: generateRandomId(),
-      status: "PAID",
+      status: "NOT-PAID",
       collected_by: existingPayload.message.order.payments[0].collected_by,
       type: 'POST-FULFILLMENT',
     };
