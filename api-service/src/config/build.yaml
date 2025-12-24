@@ -1864,14 +1864,15 @@ components:
           description: The price of this item, if it has intrinsic value
           allOf:
             - $ref: "#/components/schemas/Price"
+        # quantity:
+        #   description: The selling quantity of the item
+        #   allOf:
+        #     - $ref: "#/components/schemas/ItemQuantity"  
         quantity:
           description: The selling quantity of the item
-          # allOf:
-          #   - $ref: "#/components/schemas/ItemQuantity"
           anyOf:
-            - allOf:
-                - $ref: "#/components/schemas/ItemQuantity"
-            - type: string  
+            - $ref: "#/components/schemas/ItemQuantity"
+            - type: string
         category_ids:
           description: Categories this item can be listed under
           type: array
