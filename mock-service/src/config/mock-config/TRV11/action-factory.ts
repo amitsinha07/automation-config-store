@@ -101,6 +101,14 @@ import { MockIssueResolutionAcceptIGM3Metro_201_Class, MockIssueResolutionAccept
 import { MockOnIssueResolvedIGM3Metro_201_Class, MockOnIssueResolvedMetro_201_Class } from "./METRO/2.0.1/on_issue/on_issue_resolved/class";
 import { MockIssueCloseIGM3Metro_201_Class, MockIssueCloseMetro_201_Class } from "./METRO/2.0.1/issue/issue_close/class";
 import { MockOnSearch0Bus201Class } from "./BUS/2.0.1/on_search/on_search0/class";
+import { MockIssueOpenBus_100_Class } from "./BUS/2.0.1/issue/issue_100/issue_open/class";
+import { MockIssueCloseBus_100_Class } from "./BUS/2.0.1/issue/issue_100/issue_close/class";
+import { MockOnIssueProcessingBus_100_Class } from "./BUS/2.0.1/on_issue/on_issue_100/on_issue_processing/class";
+import { MockOnIssueResolvedBus_100_Class } from "./BUS/2.0.1/on_issue/on_issue_100/on_issue_resolved/class";
+import { MockIssueOpenMetro_100_Class } from "./METRO/2.0.1/issue/issue_100/issue_open/class";
+import { MockIssueCloseMetro_100_Class } from "./METRO/2.0.1/issue/issue_100/issue_close/class";
+import { MockOnIssueProcessingMetro_100_Class } from "./METRO/2.0.1/on_issue/on_issue_100/on_issue_processing/class";
+import { MockOnIssueResolvedMetro_100_Class } from "./METRO/2.0.1/on_issue/on_issue_100/on_issue_resolved/class";
 
 // helpers
 type Ctor<T> = new () => T;
@@ -249,6 +257,19 @@ const registry = {
   search_monthly_pass_BUS_201: MockSearchMonthlyPassBus201Class,
   on_search_monthly_pass1_BUS_201: MockOnSearchMonthlyPass1Bus201Class,
   on_confirm_monthly_pass_BUS_201: MockOnConfirmMonthlyPassesBus201Class,
+
+        // _____________IGM_1.0.0 BUS______________
+  issue_open_100:  MockIssueOpenBus_100_Class,
+  issue_close_100: MockIssueCloseBus_100_Class,
+  on_issue_processing_100: MockOnIssueProcessingBus_100_Class,
+  on_issue_resolved_100: MockOnIssueResolvedBus_100_Class,
+
+   // _____________IGM_1.0.0 METRO______________
+  issue_open_metro_100:  MockIssueOpenMetro_100_Class,
+  issue_close_metro_100: MockIssueCloseMetro_100_Class,
+  on_issue_processing_metro__100: MockOnIssueProcessingMetro_100_Class,
+  on_issue_resolved_metro_100: MockOnIssueResolvedMetro_100_Class
+    
 } as const satisfies Record<string, Ctor<MockAction>>;
 
 type MockActionId = keyof typeof registry;
