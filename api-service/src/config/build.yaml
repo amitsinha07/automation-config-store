@@ -24081,14 +24081,14 @@ x-validations:
           - VOTER_ID
         _RETURN_: subTags all in validValues
 
-      - _NAME_: VALID_STATE_DESCRIPTOR_CODE
-        _SCOPE_: "$.message.intent.fulfillment.state"
-        subTags: "$.descriptor.code"
-        validValues:
-          - ACTIVE
-          - INACTIVE
-        _CONTINUE_: "!(subTags are present)"
-        _RETURN_: subTags all in validValues
+      # - _NAME_: VALID_STATE_DESCRIPTOR_CODE
+      #   _SCOPE_: "$.message.intent.fulfillment.state"
+      #   subTags: "$.descriptor.code"
+      #   validValues:
+      #     - ACTIVE
+      #     - INACTIVE
+      #   _CONTINUE_: "!(subTags are present)"
+      #   _RETURN_: subTags all in validValues
 
       - _NAME_: VALID_VEHICLE_VARIANT
         _SCOPE_: "$.message.intent.fulfillment.vehicle"
