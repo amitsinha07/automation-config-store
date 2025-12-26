@@ -10,6 +10,8 @@ export interface SessionData {
 	bpp_id: string | undefined;
 	bpp_uri: string | undefined;
 	start_location: string | undefined;
+	seat_grid: string | undefined;
+	seat_count: string | undefined;
 	buyer_app_fee: string | undefined;
 	vehicle_type: string | undefined;
 	fulfillments: any | undefined;
@@ -18,6 +20,7 @@ export interface SessionData {
 	fullfillment_ids: string[]; // Assuming these are strings; adjust if needed
 	item_ids: string[]; // Assuming these are strings; adjust if needed
 	items: any[] | undefined;
+	seat_selection_count: any | undefined;
 	selected_items: any[] | undefined;
 	billing: any | undefined;
 	payments: any[] | undefined;
@@ -85,6 +88,8 @@ export interface SessionData {
 	end_code: any;
 	select_fulfillments: any;
 	on_select_2_quote: any
+	seats_available: string[];
+	on_select_item: any;
 }
 
 export type BecknContext = {
@@ -122,4 +127,11 @@ export interface Input {
 	retailCategory?: string;
 	returnToOrigin?: string;
 	default_feature?: string[];
+	seat_count?: string;
+	items?: any
+	selected_item?: string;
+	seat_selection_count?: string;
+	adult_ticket_count?: string;
+	child_ticket_count?: string;
+	journey_date?: string;
 }

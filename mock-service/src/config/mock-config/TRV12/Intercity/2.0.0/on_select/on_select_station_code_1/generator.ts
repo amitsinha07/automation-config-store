@@ -32,9 +32,22 @@ export async function onSelectGenerator(
 ) {
   existingPayload.context.location.city.code = sessionData.city_code;
   const count = (sessionData?.selected_item_counts as number) ?? 0;
-  existingPayload.message.order.items = sessionData.items?.filter(
-    (item: any) => item.id === sessionData.select_items?.id
-  );
+  const sessionItems = sessionData.items || [];
+  const selectedId = sessionData.select_items?.id;
+  const idExists = sessionItems.some((item: any) => item.id === selectedId);
+
+  if (idExists) {
+    existingPayload.message.order.items = sessionItems.filter(
+      (item: any) => item.id === selectedId
+    );
+  } else {
+    existingPayload.message.order.items =
+      sessionItems.length > 0 ? [sessionItems[0]] : [];
+  }
+
+  // if(existingPayload.message.order.items.length === 0) {
+  // existingPayload.message.order.items = sessionItems[0]
+  // }
 
   existingPayload.message.order.items.forEach((item: any) => {
     item.quantity = sessionData.selected_quantity;
@@ -55,12 +68,19 @@ export async function onSelectGenerator(
   const filteredStops = detailedFulfillment.stops.filter((stop: any) =>
     simplifiedStops.some((ss: any) => ss.id === stop.id)
   );
-  const tags = [
-    generateSeatGridTag("0", "0", "0", "A1", "FEMALE", "I1"),
-    generateSeatGridTag("1", "0", "1", "F1", "MALE", "I1"),
-    generateSeatGridTag("1", "1", "1", "F2", "MALE", "I1"),
-    generateSeatGridTag("0", "1", "1", "A3", "MALE", "I1"),
-  ];
+
+  const seatCount =
+    Number(sessionData?.selected_quantity?.selected?.count) || 2;
+  const tags = Array.from({ length: seatCount+3 }, (_, index) => {
+    const seatNumber = `S${index + 1}`;
+    const gender = "MALE";
+    const x = String(index % 2);
+    const y = String(Math.floor(index / 2));
+    const z = "0";
+
+    return generateSeatGridTag(x, y, z, seatNumber, gender, idExists ? selectedId : 'I1');
+  });
+
   const updatedFulfillments = [
     {
       id: detailedFulfillment.id,

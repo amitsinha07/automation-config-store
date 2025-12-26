@@ -4,7 +4,10 @@ import { MockOnInitAirline200 } from "./Airline/2.0.0/on_init/class";
 import { MockConfirmAirline200 } from "./Airline/2.0.0/confirm/class";
 import { MockOnConfirmAirline200 } from "./Airline/2.0.0/on_confirm/class";
 import { MockCancelAirline200 } from "./Airline/2.0.0/cancel/class";
+import { MockSoftCancelAirline } from "./Airline/2.0.0/cancel/cancel_soft_user_cancellation/class";
 import { MockOnCancelAirline200 } from "./Airline/2.0.0/on_cancel/class";
+import { MockSoftOnCancelAirline } from "./Airline/2.0.0/on_cancel/on_cancel_soft_user_cancellation/class";
+import { MockSellerOnCancelAirline } from "./Airline/2.0.0/on_cancel/on_cancel_confirm_seller_cancellation/class";
 import { search1Airline200 } from "./Airline/2.0.0/search/search_1/class";
 import { MockOnSearch1Airline200 } from "./Airline/2.0.0/on_search/on_search_1/class";
 import { MockOnSearch2Airline200 } from "./Airline/2.0.0/on_search/on_search_2/class";
@@ -17,7 +20,6 @@ import { MockOnSelect1Airline200 } from "./Airline/2.0.0/on_select/on_select_1/c
 import { MockOnSelect2Airline200 } from "./Airline/2.0.0/on_select/on_select_2/class";
 
 //  -----------------------------Intercity-----------------------------
-
 import { MockCancelCancelFlow1Class } from "./Intercity/2.0.0/cancel/cancel_cancel_flow_1/class";
 import { MockCancelCancelFlow2Class } from "./Intercity/2.0.0/cancel/cancel_cancel_flow_2/class";
 import { MockConfirmStationCodeClass } from "./Intercity/2.0.0/confirm/confirm_station_code/class";
@@ -79,9 +81,13 @@ const registry = {
 
   confirm_Airline_200: MockConfirmAirline200,
   on_confirm_Airline_200: MockOnConfirmAirline200,
+  
+  cancel_Airline_201: MockSoftCancelAirline,
+  on_cancel_Airline_201: MockSoftOnCancelAirline,
 
   cancel_Airline_200: MockCancelAirline200,
   on_cancel_Airline_200: MockOnCancelAirline200,
+  on_cancel_Airline_203: MockSellerOnCancelAirline,
 
   //--------------------Intercity (BUS)--------------------
   

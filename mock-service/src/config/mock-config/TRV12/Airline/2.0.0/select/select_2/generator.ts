@@ -55,13 +55,21 @@ export async function select_2_DefaultGenerator(
   if (isSeatSelected.length > 0) {
     items = isSeatSelected.map((item: any) => {
       const { id, parent_item_id, quantity, add_ons } = item;
-      const addOns =
-        add_ons?.map((i: any) => ({
-          id: i.id,
-          quantity: i.quantity,
-        })) || [];
 
-      return { id, parent_item_id, quantity, add_ons: addOns };
+      const addOns =
+        Array.isArray(add_ons) && add_ons.length > 0
+          ? add_ons.map((i: any) => ({
+              id: i.id,
+              quantity: i.quantity,
+            }))
+          : undefined;
+
+      return {
+        id,
+        parent_item_id,
+        quantity,
+        ...(addOns && { add_ons: addOns }),
+      };
     });
   } else {
     isSeat = false;

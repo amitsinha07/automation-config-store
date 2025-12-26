@@ -9,7 +9,7 @@ export async function initGenerator(
   existingPayload.message.order.items = [sessionData.select_items];
 
   existingPayload.message.order.fulfillments = transformFulfillments(
-    sessionData.select_1_fulfillments
+    sessionData.select_2_fulfillments
   );
 
   existingPayload.message.order.provider = { id: sessionData.provider_id };
@@ -19,6 +19,12 @@ export async function initGenerator(
     phone: "+91-9988776655",
     tax_id: "GSTIN:22AAAAA0000A1Z5",
   };
+
+  const price: any = sessionData.quote.price.value;
+  const feePercentage: any = "1";
+  const feeAmount = (price * feePercentage) / 100;
+  const collectedBy: any = "BAP";
+  const finalAmount = collectedBy === "BAP" ? price - feeAmount : feeAmount;
 
   existingPayload.message.order.payments = [
     {
@@ -51,7 +57,7 @@ export async function initGenerator(
               descriptor: { code: "STATIC_TERMS" },
               value: "https://www.abc.com/settlement-terms/",
             },
-            { descriptor: { code: "SETTLEMENT_AMOUNT" }, value: "1766" },
+            { descriptor: { code: "SETTLEMENT_AMOUNT" }, value: finalAmount.toString() },
           ],
         },
       ],
@@ -73,22 +79,18 @@ function transformFulfillments(fulfillments: any) {
     },
   ];
 
-  console.log("fulfillments---", JSON.stringify(fulfillments));
-  const transformedFulfillments = fulfillments.map((f: any, index: number) => {
-    if (f.id === "F1" || f?.stops?.length > 0 || f.type == "TRIP") {
+  return fulfillments.map((f: any, index: number) => {
+    if (f.id === "F1") {
       return f;
     }
 
     return {
       id: f.id,
       customer: customers[index - 1],
-      tags: f?.tags.map((tag: any) => ({
+      tags: f.tags.map((tag: any) => ({
         descriptor: tag.descriptor,
         list: tag.list.filter((item: any) => item.descriptor.code === "NUMBER"),
       })),
     };
   });
-
-  console.log("transformedFulfillments---", JSON.stringify(transformedFulfillments));
-  return transformedFulfillments;
 }

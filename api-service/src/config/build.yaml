@@ -31133,7 +31133,7 @@ x-validations:
                   - _NAME_: REGEX_FULFILMENT_LOCATION_CODE
                     attr4: $.message.catalog.providers[*].fulfillments[*].stops[*].location.descriptor.code
                     reg: &REG_STD_CODE 
-                      - '^std:\d{3,5}(-pincode:\d{6})?$'
+                      - '^[A-Za-z0-9_]+(-pincode:\d{6})?$'
                     _CONTINUE_: '!(attr4 are present)'
                     _RETURN_: attr4 follow regex reg
                   - _NAME_: REGEX_FULFILMENT_STOPS_TIMESTAMP
@@ -31412,7 +31412,7 @@ x-validations:
               - _NAME_: REGEX_STOP_LOCATION_CODE
                 attr3: $.message.order.fulfillments[*].stops[*].location.descriptor.code
                 reg: &REG_STD_CODE
-                  - '^std:\d{3,5}(-pincode:\d{6})?$'
+                  - '^[A-Za-z0-9_]+(-pincode:\d{6})?$'
                 _CONTINUE_: '!(attr3 are present)'  
                 _RETURN_: attr3 follow regex reg
               - _NAME_: REGEX_FULFILMENT_STOPS_TIMESTAMP
@@ -31737,7 +31737,7 @@ x-validations:
                   - _NAME_: REGEX_FULFILMENT_LOCATION_CODE
                     attr4: $.message.order.fulfillments[*].stops[*].location.descriptor.code
                     reg:
-                      - '^std:\d{3,5}(-pincode:\d{6})?$'
+                      - '^[A-Za-z0-9_]+(-pincode:\d{6})?$'
                     _CONTINUE_: '!(attr4 are present)'  
                     _RETURN_: attr4 follow regex reg
 
@@ -33053,7 +33053,10 @@ x-validations:
       - *SELECTED_PROVIDER
       - *ON_CONFIRM_FULFILLMENTS
       - *ENUM_FULFILLMENTS
-      # - *REGEX_FULFILLMENT_STOPS
+      - _NAME_: BUS_VALIDATION
+        _SCOPE_: $.message.order.fulfillments[*].vehicle.category[?(@=='BUS')]
+        _RETURN_:
+          - *REGEX_FULFILLMENT_STOPS
    
 
       - *ON_INIT_CANCELLATION_TERMS

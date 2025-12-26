@@ -12,17 +12,25 @@ export async function selectGenerator(
       stops: f.stops,
     })
   );
+  // selected_item
+  if(sessionData?.user_inputs?.selected_item) {
+    existingPayload.message.order.items = existingPayload.message.order.items.map((item: any) => {
+      item.id = sessionData?.user_inputs?.selected_item || item?.id;
+      return item;
+    });
+  }
 
   existingPayload.message.order.items = [
     {
       id: sessionData.item_ids[0],
       quantity: {
         selected: {
-          count: 2,
+          count: Number(sessionData?.user_inputs?.seat_count) || 1,
         },
       },
     },
   ];
+
   existingPayload.message.order.provider = { id: sessionData.provider_id };
 
   return existingPayload;

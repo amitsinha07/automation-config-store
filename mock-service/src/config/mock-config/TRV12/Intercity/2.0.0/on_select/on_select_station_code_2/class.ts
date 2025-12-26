@@ -1,7 +1,11 @@
 import { readFileSync } from "fs";
 import yaml from "js-yaml";
 import path from "path";
-import { MockAction, MockOutput, saveType } from "../../../../classes/mock-action";
+import {
+  MockAction,
+  MockOutput,
+  saveType,
+} from "../../../../classes/mock-action";
 import { SessionData } from "../../../../session-types";
 import { onSelectGenerator } from "./generator";
 

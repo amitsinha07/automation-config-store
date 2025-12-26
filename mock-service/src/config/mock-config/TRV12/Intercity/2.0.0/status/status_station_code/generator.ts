@@ -6,6 +6,7 @@ export async function statusGenerator(
 ) {
   existingPayload.context.location.city.code = sessionData.city_code;
 
-  existingPayload.message.order_id = sessionData.order_id;
+  if (sessionData?.order_id)
+    existingPayload.message.order_id = sessionData.order_id;
   return existingPayload;
 }

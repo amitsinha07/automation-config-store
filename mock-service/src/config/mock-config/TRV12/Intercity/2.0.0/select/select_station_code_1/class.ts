@@ -1,7 +1,11 @@
 import { readFileSync } from "fs";
 import yaml from "js-yaml";
 import path from "path";
-import { MockAction, MockOutput, saveType } from "../../../../classes/mock-action";
+import {
+  MockAction,
+  MockOutput,
+  saveType,
+} from "../../../../classes/mock-action";
 import { SessionData } from "../../../../session-types";
 import { selectGenerator } from "./generator";
 
@@ -32,6 +36,17 @@ export class MockSelectStationCode1Class extends MockAction {
     return { valid: true };
   }
   async meetRequirements(sessionData: SessionData): Promise<MockOutput> {
+    const userSelectedItem = sessionData?.user_inputs?.selected_item;
+    if (userSelectedItem) {
+      if (!sessionData.item_ids.includes(userSelectedItem)) {
+        return {
+          valid: false,
+          message: `Selected item id ${userSelectedItem} is not present in available item ids ${sessionData.item_ids.join(
+            ", "
+          )}`,
+        };
+      }
+    }
     return { valid: true };
   }
 }

@@ -6,7 +6,8 @@ export async function onStatusGenerator(
 ) {
   existingPayload.context.location.city.code = sessionData.city_code;
 
-  existingPayload.message.order.id = sessionData.order_id;
+  if (sessionData.order_id)
+    existingPayload.message.order.id = sessionData.order_id;
   existingPayload.message.order.status = "ACTIVE";
   existingPayload.message.order.items = [sessionData.on_select_items];
   existingPayload.message.order.provider = sessionData.on_init_provider;

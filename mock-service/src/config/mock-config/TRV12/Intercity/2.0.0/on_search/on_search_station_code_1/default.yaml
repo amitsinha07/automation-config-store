@@ -79,9 +79,9 @@ catalog:
             - type: END
               location:
                 descriptor:
-                  name: CHENNAI
+                  name: SECUNDERABAD
                   code: std:040
-                gps: "17.399832, 78.505532"
+                gps: "17.399833, 78.505533"
             - type: DROP
               location:
                 descriptor:

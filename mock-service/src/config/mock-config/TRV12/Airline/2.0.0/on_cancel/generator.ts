@@ -9,6 +9,11 @@ export async function onCancelDefaultGenerator(
   existingPayload.message.order.status = "CANCELLED";
   existingPayload.message.order.cancellation = {
     cancelled_by: "CONSUMER",
+    reason: {
+      descriptor: {
+        code: "001",
+      },
+    },
     time: existingPayload?.context?.timestamp ?? "2023-10-03T02:00:08.143Z",
   };
   existingPayload.message.order.provider =

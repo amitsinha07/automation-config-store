@@ -44,19 +44,24 @@ export async function onSearchGenerator(
 
       for (const stop of fulfillment.stops ?? []) {
         stop.id = `S${count}`;
-        if (stop.type === "PICKUP") {
-          stop.time = {
-            label: "DATE_TIME",
-            timestamp: new Date().toISOString(),
-          };
-        }
-        if (stop.type === "DROP") {
-          stop.time = {
-            label: "DATE_TIME",
-            timestamp: new Date().toISOString(),
-          };
-        }
+        const timeOffset = new Date(
+          Date.now() + count * 60 * 60 * 1000
+        ).toISOString();
+
+        stop.time = {
+          label: "DATE_TIME",
+          timestamp: timeOffset,
+        };
         count++;
+
+        if (stop.type === "END" && sessionData?.end_code) {
+          stop.location.descriptor.code = sessionData?.end_code;
+        }
+
+        const [, pincode] = stop.location.descriptor.code.split("-pincode:");
+        if (stop.type === "DROP") {
+          stop.location.descriptor.code = `${sessionData.end_code}-pincode:${pincode}`;
+        }
       }
       fulfillment.tags = tags;
     }

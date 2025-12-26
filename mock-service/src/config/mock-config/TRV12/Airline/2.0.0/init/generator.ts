@@ -23,6 +23,13 @@ export async function initDefaultGenerator(
     phone: "+91-9988776655",
     tax_id: "GSTIN:22AAAAA0000A1Z5",
   };
+
+    const price: any = sessionData.on_select_2_quote.price.value;
+  const feePercentage: any = "1";
+  const feeAmount = (price * feePercentage) / 100;
+  const collectedBy: any = "BAP";
+  const finalAmount = collectedBy === "BAP" ? price - feeAmount : feeAmount;
+
   existingPayload.message.order.payments = [
     {
       collected_by: "BAP",
@@ -53,7 +60,7 @@ export async function initDefaultGenerator(
               descriptor: {
                 code: "SETTLEMENT_AMOUNT",
               },
-              value: String(sessionData?.on_select_2_quote?.price?.value ?? 0),
+              value: String(finalAmount),
             },
             {
               descriptor: {
