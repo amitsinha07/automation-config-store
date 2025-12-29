@@ -1595,11 +1595,6 @@ components:
             unsolicited `on_status` call.
           allOf:
             - $ref: "#/components/schemas/FulfillmentState"
-          # anyOf:
-          #   - type: string
-          #     description: Fulfillment state of an order
-          #   - allOf:
-          #       - $ref: "#/components/schemas/FulfillmentState"
         tracking:
           type: boolean
           description: Indicates whether the fulfillment allows tracking
@@ -3342,10 +3337,27 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Item"
+        # fulfillments:
+        #   type: array
+        #   items:
+        #     $ref: "#/components/schemas/Fulfillment"
         fulfillments:
           type: array
           items:
-            $ref: "#/components/schemas/Fulfillment"
+            type: object
+            additionalProperties: false
+            required:
+              - id
+              - state
+            properties:
+              id:
+                description: >-
+                  the value of this field will be the combination of
+                  context.transaction_id and order.id.
+                type: string
+              state:
+                type: string
+                description: Fulfillment state of the order    
         provider_id:
           type: string
         merchant_order_id:
