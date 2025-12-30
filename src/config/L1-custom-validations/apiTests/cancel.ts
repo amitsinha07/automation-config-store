@@ -3,7 +3,7 @@ import constants, {
   ApiSequence,
   buyerCancellationRid,
 } from "../utils/constants";
-import { isValidISO8601Duration } from "../utils/helper";
+import { addActionToRedisSet, isValidISO8601Duration } from "../utils/helper";
 import { RedisService } from "ondc-automation-cache-lib";
 import { contextChecker }from "../utils/contextUtils"
 const addError = (result: any[], code: number, description: string): void => {
@@ -144,6 +144,12 @@ export const cancel = async (data: any) => {
       JSON.stringify(data),
       TTL_IN_SECONDS
     );
+    await addActionToRedisSet(
+      context.transaction_id,
+      ApiSequence.CANCEL,
+      ApiSequence.CANCEL
+    );
+
 
     return result;
   } catch (err: any) {

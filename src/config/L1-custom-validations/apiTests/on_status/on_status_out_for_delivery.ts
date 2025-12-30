@@ -15,6 +15,7 @@ import {
   sumQuoteBreakUp,
   payment_status,
   compareCoordinates,
+  addActionToRedisSet,
 } from "../../utils/helper";
 import { FLOW } from "../../utils/enums";
 import { contextChecker } from "../../utils/contextUtils";
@@ -982,6 +983,11 @@ const checkOnStatusOutForDelivery = async (
         `${transaction_id}_${ApiSequence.ON_STATUS_OUT_FOR_DELIVERY}`,
         JSON.stringify(data),
         TTL_IN_SECONDS
+      ),
+      addActionToRedisSet(
+        transaction_id,
+        ApiSequence.ON_STATUS_OUT_FOR_DELIVERY,
+        ApiSequence.ON_STATUS_OUT_FOR_DELIVERY
       ),
     ]);
 
