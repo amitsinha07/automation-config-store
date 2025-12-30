@@ -13,7 +13,7 @@ export const onCancelRouter = async (data: any) => {
     );
     
     if (onStatusPresent) {
-      actionCall = `${ApiSequence.ON_CANCEL_RTO}`;
+      actionCall = ApiSequence.ON_CANCEL_RTO;
     }
 
     const cancelPresent = await addActionToRedisSet(
