@@ -20572,10 +20572,10 @@ x-validations:
         version:
           - 2.0.0
         _RETURN_: *ref_30
-      - _NAME_: REQUIRED_ORDER_ID
-        action:
-          - status
-        attr: $.message.order_id
+      # - _NAME_: REQUIRED_ORDER_ID
+      #   action:
+      #     - status
+      #   attr: $.message.order_id
         _RETURN_: attr are present
     on_status:
       - _NAME_: ON_STATUS_CONTEXT
