@@ -5,6 +5,8 @@ export async function onCancelConfirmTechnicalCancellationGenerator(existingPayl
   }
   existingPayload.message.order.status = "CANCELLED";
 
+  existingPayload.message.order.updated_at = existingPayload?.context?.timestamp ?? new Date().toISOString()
+
     if(sessionData.cancellation_reason_id){
     existingPayload.message.order.cancellation = {
       "cancelled_by": "CONSUMER",
