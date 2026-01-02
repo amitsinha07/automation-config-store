@@ -11,7 +11,7 @@ export async function search_seller_pagination_generator(
 	const now = new Date();
 	const end = new Date(now);
 	end.setDate(now.getDate() + 2);
-	
+
 	if (
 		existingPayload.message?.intent?.fulfillment?.stops?.[0]?.time?.range
 	) {
