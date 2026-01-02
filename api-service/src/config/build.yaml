@@ -20576,7 +20576,7 @@ x-validations:
       #   action:
       #     - status
       #   attr: $.message.order_id
-        _RETURN_: attr are present
+      #   _RETURN_: attr are present
     on_status:
       - _NAME_: ON_STATUS_CONTEXT
         action:
