@@ -7,6 +7,10 @@ export async function onStatusTechnicalCancellationGenerator(existingPayload: an
 // Update order status to COMPLETED
 existingPayload.message.order.status = "COMPLETED";
 
+if (sessionData.flow_id === "technical_cancellation") {
+    existingPayload.message.order.status = "ACTIVE";
+}
+
 // Load items from session
 if (sessionData.items) {
   existingPayload.message.order.items = sessionData.items;
