@@ -169,6 +169,8 @@ export async function onCancelSoftTechnicalCancellationGenerator(existingPayload
       }
     }
   }
-  
+
+  existingPayload.message.order.updated_at = existingPayload?.context?.timestamp ?? new Date().toISOString()
+
   return existingPayload;
 } 
