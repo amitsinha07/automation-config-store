@@ -48,7 +48,7 @@ export async function onCancelSoftTechnicalCancellationGenerator(existingPayload
         },
         price: {
           currency: "INR",
-          value: basePrice.toString()
+          value: String((Number(basePrice) || 0) * (Number(quantity) || 0)),
         }
       });
 
@@ -121,7 +121,10 @@ export async function onCancelSoftTechnicalCancellationGenerator(existingPayload
           id: addon.id,
           price: {
             currency: "INR",
-            value: (-parseFloat(addon.price.value)).toString()
+            value: (-(
+              Number(addon?.price?.value || 0) *
+              Number(addon?.quantity?.selected?.count || 1)
+            )).toString(),
           }
         }));
       }
