@@ -36,7 +36,7 @@ function createItemPayload(selectedItem: any): any {
       id: addOn.id,
       quantity: {
         selected: {
-          count: 2  // Hardcoded to 2 for partial cancellation flow
+          count: selectedItem?.addOnsQuantity ?? 2  // Hardcoded to 2 for partial cancellation flow
         }
       }
     }));
