@@ -6,7 +6,7 @@ export async function selectGenerator(
 ) {
   existingPayload.context.location.city.code = sessionData.city_code;
   existingPayload.message.order.fulfillments = transformFulfillments(
-    sessionData.on_select_fulfillments,
+    sessionData.on_select_fulfillments?.[0],
     sessionData?.on_select_fulfillments_tags,
     sessionData
   );
