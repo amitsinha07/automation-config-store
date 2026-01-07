@@ -9,7 +9,7 @@ export async function onSelectGenerator(
   existingPayload.message.order.items = [sessionData.on_select_items];
   existingPayload.message.order.provider = sessionData.provider;
   existingPayload.message.order.fulfillments = transformFulfillments(
-    sessionData.on_select_fulfillments,
+    sessionData.on_select_fulfillments?.[0],
     sessionData?.on_select_fulfillments_tags,
     sessionData?.select_2_fulfillments,
 
