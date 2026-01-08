@@ -20,6 +20,14 @@ export async function onCancelGenerator(
   existingPayload.message.order.fulfillments = sessionData.fulfillments.map(
     ({ state, ...f }: any) => f
   );
+
+  const cancellationCharge = 10;
+  const breakupSum = sessionData.quote.breakup.reduce((total: number, item: any) => {
+    return total + parseFloat(item.price.value);
+  }, 0);
+  const totalAmount = breakupSum + cancellationCharge;
+  const refundAmount = -totalAmount;
+
   existingPayload.message.order.quote = {
     ...sessionData.quote,
     breakup: [
@@ -27,21 +35,23 @@ export async function onCancelGenerator(
         (b: any) => b.title !== "SELLER_FEES"
       ),
       {
-        price: { currency: "INR", value: "10" },
+        price: { currency: "INR", value: String(cancellationCharge) },
         title: "CANCELLATION_CHARGES",
       },
       {
-        price: { currency: "INR", value: "-1773" },
+        price: { currency: "INR", value: String(refundAmount) },
         title: "REFUND",
       },
       ...sessionData.quote.breakup.filter(
         (b: any) => b.title === "SELLER_FEES"
       ),
     ],
-    price: { currency: "INR", value: "10" },
+    price: { currency: "INR", value: String(cancellationCharge) },
   };
 
-  existingPayload.message.order.created_at = sessionData.created_at;
-  existingPayload.message.order.updated_at = sessionData.updated_at;
+  existingPayload.message.order.created_at =
+    sessionData?.created_at ?? new Date().toISOString();
+  existingPayload.message.order.updated_at =
+    existingPayload?.context?.timestamp ?? new Date().toISOString();
   return existingPayload;
 }
