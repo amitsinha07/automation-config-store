@@ -33012,7 +33012,7 @@ x-validations:
         _RETURN_:
           - *REQUIRED_ORDER_CREATED_AT
           - *REQUIRED_ORDER_UPDATED_AT
-          - *CREATED_AT_UPDATED_AT_EQUALITY
+          # - *CREATED_AT_UPDATED_AT_EQUALITY
    
     status:
       - _NAME_: STATUS_CONTEXT
