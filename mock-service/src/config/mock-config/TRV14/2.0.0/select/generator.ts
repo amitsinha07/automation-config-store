@@ -36,7 +36,7 @@ function createItemPayload(userInputItem: any): any {
       id: addOnId,
       quantity: {
         selected: {
-          count: userInputItem?.addOnsQuantity ?? 1
+          count: 1
         }
       }
     }));
