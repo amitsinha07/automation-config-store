@@ -6,5 +6,6 @@ save-data:
   payments: "$.message.order.payments[*]"
   quote: "$.message.order.quote"
   tags: "$.message.order.tags[*]"
+  newPaymentId: "$.message.order.payments[1].id"
   
   

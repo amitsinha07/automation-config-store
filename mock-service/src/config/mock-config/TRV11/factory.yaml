@@ -773,6 +773,28 @@ codes:
     default: BUS/2.0.1/on_status/on_status_order_delivered/default.yaml
     message_id: true
 
+  # __________________IGM 1.0.0 BUS___________________________
+  - code: 340
+    action_id: issue_open_100
+    action: issue
+    default: BUS/2.0.1/issue/issue_100/issue_open/default.yaml
+    message_id: true
+  - code: 341
+    action_id: on_issue_processing_100
+    action: on_issue
+    default: BUS/2.0.1/on_issue/on_issue_100/on_issue_processing/default.yaml
+    message_id: false  
+  - code: 342
+    action_id: on_issue_resolved_100
+    action: on_issue_status
+    default: BUS/2.0.1/on_issue/on_issue_100/on_issue_resolved/default.yaml
+    message_id: true  
+  - code: 343
+    action_id: issue_close_100
+    action: issue
+    default: BUS/2.0.1/issue/issue_100/issue_close/default.yaml
+    message_id: true  
+
 
      # ___________________IMG FLOW METRO 201_____________________
 
@@ -906,3 +928,25 @@ codes:
     action: on_search
     default: BUS/2.0.1/on_search/on_search0/default.yaml
     message_id: false
+
+    # __________________IGM 1.0.0 METRO___________________________
+  - code: 340
+    action_id: issue_open_metro_100
+    action: issue
+    default: METRO/2.0.1/issue/issue_100/issue_open/default.yaml
+    message_id: true
+  - code: 341
+    action_id: on_issue_processing_metro_100
+    action: on_issue
+    default: METRO/2.0.1/on_issue/on_issue_100/on_issue_processing/default.yaml
+    message_id: false  
+  - code: 342
+    action_id: on_issue_resolved_metro_100
+    action: on_issue_status
+    default: METRO/2.0.1/on_issue/on_issue_100/on_issue_resolved/default.yaml
+    message_id: true  
+  - code: 343
+    action_id: issue_close_metro_100
+    action: issue
+    default: METRO/2.0.1/issue/issue_100/issue_close/default.yaml
+    message_id: true

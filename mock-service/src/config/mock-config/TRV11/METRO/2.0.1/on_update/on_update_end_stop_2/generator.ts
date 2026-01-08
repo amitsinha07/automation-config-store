@@ -24,12 +24,18 @@ export async function onUpdateStopEndGenerator(
 
   if (sessionData.payments.length > 0) {
     existingPayload.message.order.payments = sessionData.payments;
+    const updatedPrice =
+      Number(sessionData.newQuote) - Number(sessionData.oldQuote);
     const newPayment = {
       ...existingPayload.message.order.payments[1],
       id: generateRandomId(),
-      status: "PAID",
+      status: "NOT-PAID",
       collected_by: existingPayload.message.order.payments[0].collected_by,
-      type: 'POST-FULFILLMENT',
+      type: "POST-FULFILLMENT",
+      params: {
+        amount: updatedPrice.toString(),
+        currency: "INR",
+      },
     };
     existingPayload.message.order.payments[1] = newPayment;
   }

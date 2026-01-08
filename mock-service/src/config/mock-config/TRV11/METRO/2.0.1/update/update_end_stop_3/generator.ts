@@ -8,6 +8,7 @@ export async function updateEndStopGenerator(
       Number(sessionData.newQuote) - Number(sessionData.oldQuote);
     existingPayload.message.order.payments[0].params.amount =
       updatedPrice.toString();
+    existingPayload.message.order.payments[0].id = sessionData.newPaymentId;
   }
   return existingPayload;
 }
