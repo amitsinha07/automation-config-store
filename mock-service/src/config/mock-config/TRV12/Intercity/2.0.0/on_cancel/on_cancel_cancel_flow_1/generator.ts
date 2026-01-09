@@ -25,8 +25,7 @@ export async function onCancelGenerator(
   const breakupSum = sessionData.quote.breakup.reduce((total: number, item: any) => {
     return total + parseFloat(item.price.value);
   }, 0);
-  const totalAmount = breakupSum + cancellationCharge;
-  const refundAmount = -totalAmount;
+  const refundAmount = -breakupSum;
 
   existingPayload.message.order.quote = {
     ...sessionData.quote,
