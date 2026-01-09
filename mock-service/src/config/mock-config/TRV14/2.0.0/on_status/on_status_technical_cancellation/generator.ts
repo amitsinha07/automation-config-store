@@ -6,7 +6,7 @@ export async function onStatusTechnicalCancellationGenerator(existingPayload: an
 
 // Update order status to COMPLETED
 existingPayload.message.order.status = "COMPLETED";
-if (sessionData.flow_id === "technical_cancellation") {
+if (sessionData.flow_id === "technical_cancellation" || sessionData.flow_id === "technical_cancellation_with_form") {
     existingPayload.message.order.status = "ACTIVE";
   }
 
