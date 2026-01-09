@@ -45,6 +45,48 @@ export async function onInitGenerator(existingPayload: any, sessionData: any) {
   const tags = [];
   const settlemntAmount = (sessionData.quote.price.value / 100)
 
+  const bapTerms =
+  {
+    "descriptor": {
+      "code": "BAP_TERMS",
+      "name": "BAP Terms of Engagement"
+    },
+    "display": false,
+    "list": [
+      {
+        "descriptor": {
+          "code": "BUYER_FINDER_FEES_PERCENTAGE"
+        },
+        "value": "1"
+      },
+      {
+        "descriptor": {
+          "code": "BUYER_FINDER_FEES_TYPE"
+        },
+        "value": "percent"
+      },
+      {
+        "descriptor": {
+          "code": "STATIC_TERMS"
+        },
+        "value": "https://dev-automation.ondc.org/booking/terms"
+      },
+      {
+        "descriptor": {
+          "code": "SETTLEMENT_BASIS"
+        },
+        "value": "INVOICE_RECEIPT"
+      },
+      {
+        "descriptor": {
+          "code": "SETTLEMENT_WINDOW"
+        },
+        "value": "P30D"
+      }
+    ]
+
+  }
+  tags.push(bapTerms)
   // Add BPP Terms structure
   const bppTerms = {
     "descriptor": {
