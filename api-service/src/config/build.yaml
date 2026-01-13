@@ -25012,10 +25012,10 @@ x-validations:
       - _NAME_: SHORT_DESRIPTION_REQUIRED
         _SCOPE_: "$.message.catalog.providers[*].fulfillments[*].stops[*]"
         des: "$.instructions.short_desc"
-        type: "$.type"
+        type1: "$.type"
         typeOptions:
           - TRANSIT_STOP
-        _CONTINUE_: "!(typeOptions all in type)"
+        _CONTINUE_: "!(typeOptions all in type1)"
         _RETURN_: des are present
       - _NAME_: REQUIRED_CONTEXT_CODE_1
         attr: "$.context.location.country.code"
