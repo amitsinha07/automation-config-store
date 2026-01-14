@@ -20,7 +20,7 @@ function createItemPayload(userInputItem: any): any {
     id: userInputItem.itemId,
     quantity: {
       selected: {
-        count: userInputItem.count || 1
+        count: userInputItem.quantity || userInputItem.count || 1
       }
     }
   };
@@ -36,7 +36,7 @@ function createItemPayload(userInputItem: any): any {
       id: addOnId,
       quantity: {
         selected: {
-          count: 1
+          count: userInputItem?.addOnsQuantity
         }
       }
     }));
@@ -59,7 +59,7 @@ export async function selectDefaultGenerator(existingPayload: any, sessionData: 
 
   // Create fulfillment object with the selected fulfillment ID
   const contextTimestamp = existingPayload.context?.timestamp || new Date().toISOString();
-  
+
   existingPayload.message.order.fulfillments = [
     {
       id: userInputs.fulfillment,
@@ -75,5 +75,5 @@ export async function selectDefaultGenerator(existingPayload: any, sessionData: 
   ];
 
   return existingPayload;
-} 
+}
 

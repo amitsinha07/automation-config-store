@@ -1,7 +1,10 @@
-export async function onCancelSoftUserCancellationGenerator(existingPayload: any, sessionData: any) {
-  if(sessionData.order){
+export async function onCancelSoftUserCancellationGenerator(
+  existingPayload: any,
+  sessionData: any
+) {
+  if (sessionData.order) {
     existingPayload.message = {
-      order: sessionData.order
+      order: sessionData.order,
     };
   }
 
@@ -38,18 +41,18 @@ export async function onCancelSoftUserCancellationGenerator(existingPayload: any
           id: item.id,
           price: {
             currency: "INR",
-            value: basePrice.toString()
+            value: basePrice.toString(),
           },
           quantity: {
             selected: {
-              count: quantity
-            }
-          }
+              count: quantity,
+            },
+          },
         },
         price: {
           currency: "INR",
-          value: basePrice.toString()
-        }
+          value: String((Number(basePrice) || 0) * (Number(quantity) || 0)),
+        },
       });
 
       // Handle add-ons if present
@@ -67,14 +70,14 @@ export async function onCancelSoftUserCancellationGenerator(existingPayload: any
               id: item.id,
               add_ons: [
                 {
-                  id: addon.id
-                }
-              ]
+                  id: addon.id,
+                },
+              ],
             },
             price: {
               currency: "INR",
-              value: addonTotal.toString()
-            }
+              value: addonTotal.toString(),
+            },
           });
         });
         itemTotalAmount += itemAddOnsAmount;
@@ -85,12 +88,12 @@ export async function onCancelSoftUserCancellationGenerator(existingPayload: any
         addOnsBreakup.push({
           title: "ADD_ONS",
           item: {
-            id: item.id
+            id: item.id,
           },
           price: {
             currency: "INR",
-            value: basePrice.toString()
-          }
+            value: basePrice.toString(),
+          },
         });
       }
 
@@ -101,18 +104,18 @@ export async function onCancelSoftUserCancellationGenerator(existingPayload: any
           id: item.id,
           price: {
             currency: "INR",
-            value: (-basePrice).toString()
+            value: (-basePrice).toString(),
           },
           quantity: {
             selected: {
-              count: quantity
-            }
-          }
+              count: quantity,
+            },
+          },
         },
         price: {
           currency: "INR",
-          value: (-itemTotalAmount).toString()
-        }
+          value: (-itemTotalAmount).toString(),
+        },
       };
 
       // Add add-ons to refund entry if present
@@ -121,8 +124,11 @@ export async function onCancelSoftUserCancellationGenerator(existingPayload: any
           id: addon.id,
           price: {
             currency: "INR",
-            value: (-parseFloat(addon.price.value)).toString()
-          }
+            value: (-(
+              Number(addon?.price?.value || 0) *
+              Number(addon?.quantity?.selected?.count || 1)
+            )).toString(),
+          },
         }));
       }
 
@@ -137,8 +143,8 @@ export async function onCancelSoftUserCancellationGenerator(existingPayload: any
         title: "TAX",
         price: {
           currency: "INR",
-          value: "0"
-        }
+          value: "0",
+        },
       },
       ...addOnsBreakup,
       ...refundBreakup,
@@ -146,28 +152,29 @@ export async function onCancelSoftUserCancellationGenerator(existingPayload: any
         title: "CANCELLATION_CHARGES",
         price: {
           currency: "INR",
-          value: Math.ceil(totalRefundAmount * 0.1).toString()
-        }
-      }
+          value: Math.ceil(totalRefundAmount * 0.1).toString(),
+        },
+      },
     ];
 
     // Update quote breakup and price
     quote.breakup = breakup;
     quote.price = {
       currency: "INR",
-      value: Math.ceil(totalRefundAmount * 0.1).toString()
+      value: Math.ceil(totalRefundAmount * 0.1).toString(),
     };
   }
 
-  if(sessionData.cancellation_reason_id){
+  if (sessionData.cancellation_reason_id) {
     existingPayload.message.order.cancellation = {
-      "cancelled_by": "CONSUMER",
-      "reason": {
-        "descriptor": {
-          "code": sessionData.cancellation_reason_id
-        }
-      }
-    }
+      cancelled_by: "CONSUMER",
+      reason: {
+        descriptor: {
+          code: sessionData.cancellation_reason_id,
+        },
+      },
+    };
   }
-  
-  return existingPayload;} 
+
+  return existingPayload;
+}

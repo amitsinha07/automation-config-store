@@ -6,7 +6,7 @@ save-data:
   order_status_partial_cancel: "$.message.order.status"
   
   # Updated order data after partial cancellation
-  items_partial_cancel: "$.message.order.items[*]"
+  items_partial_cancel: "$.message.order.items"
   quote_partial_cancel: "$.message.order.quote"
   
   # Keep existing order data

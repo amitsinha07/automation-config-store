@@ -38,7 +38,8 @@ function createItemPayload(userInputItem: any, index: number): any {
       id: addOnId,
       quantity: {
         selected: {
-          count: 1
+          count: userInputItem?.addOnsQuantity
+
         }
       }
     }));
@@ -61,7 +62,7 @@ export async function selectForPartialCancellationGenerator(existingPayload: any
 
   // Create fulfillment object with the selected fulfillment ID
   const contextTimestamp = existingPayload.context?.timestamp || new Date().toISOString();
-  
+
   existingPayload.message.order.fulfillments = [
     {
       id: userInputs.fulfillment,

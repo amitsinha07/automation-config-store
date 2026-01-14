@@ -11,19 +11,23 @@
 export async function updateSoftPartialCancellationGenerator(existingPayload: any, sessionData: any) {
   // Get the selected item from session (stored during select)
   const selectedItem = sessionData.selected_items?.[0];
-  
   if (!selectedItem) {
     throw new Error("No selected item found in session for partial cancellation");
   }
 
+  const selectedQtyCount = selectedItem.quantity?.selected?.count ?? 0;
+  const cancelQtyCount = sessionData.user_inputs?.select_quantity ?? 0;
+
+  const remainingQtyCount = Math.max(selectedQtyCount - cancelQtyCount, 0);
+
   // Set the update target - using the item index
-  existingPayload.message.update_target = "order.items[0]";
-  
+  existingPayload.message.update_target = "order.items[1]";
+
   // Set cancellation reason
   existingPayload.message.order = {
     cancellation: {
       reason: {
-        id: "0",
+        id: "001",
         descriptor: {
           code: "SOFT_CANCEL"
         }
@@ -34,7 +38,7 @@ export async function updateSoftPartialCancellationGenerator(existingPayload: an
         id: selectedItem.id,
         quantity: {
           selected: {
-            count: 1  // Reduce from 2 to 1
+            count: remainingQtyCount
           }
         }
       }
@@ -47,7 +51,7 @@ export async function updateSoftPartialCancellationGenerator(existingPayload: an
       id: addOn.id,
       quantity: {
         selected: {
-          count: 1  // Reduce from 2 to 1
+          count: addOn.quantity.selected.count
         }
       }
     }));

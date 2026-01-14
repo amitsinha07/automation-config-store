@@ -11,19 +11,18 @@
 export async function updateConfirmPartialCancellationGenerator(existingPayload: any, sessionData: any) {
   // Get the selected item from session (stored during select)
   const selectedItem = sessionData.selected_items?.[0];
-  
   if (!selectedItem) {
     throw new Error("No selected item found in session for partial cancellation");
   }
 
   // Set the update target - using the item index
-  existingPayload.message.update_target = "order.items[0]";
-  
+  existingPayload.message.update_target = "order.items[1]";
+
   // Set cancellation reason
   existingPayload.message.order = {
     cancellation: {
       reason: {
-        id: "0",
+        id: "001",
         descriptor: {
           code: "CONFIRM_CANCEL"
         }
@@ -34,7 +33,7 @@ export async function updateConfirmPartialCancellationGenerator(existingPayload:
         id: selectedItem.id,
         quantity: {
           selected: {
-            count: 1  // Reduce from 2 to 1
+            count: sessionData.updated_items.quantity.selected.count
           }
         }
       }
@@ -47,7 +46,7 @@ export async function updateConfirmPartialCancellationGenerator(existingPayload:
       id: addOn.id,
       quantity: {
         selected: {
-          count: 1  // Reduce from 2 to 1
+          count: addOn.quantity.selected.count
         }
       }
     }));

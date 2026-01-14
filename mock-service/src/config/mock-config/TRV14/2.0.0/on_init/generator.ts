@@ -12,38 +12,81 @@ export async function onInitGenerator(existingPayload: any, sessionData: any) {
   if (sessionData.items) {
     existingPayload.message.order.items = sessionData.items;
   }
-  
+
   if (sessionData.fulfillments) {
     existingPayload.message.order.fulfillments = sessionData.fulfillments;
   }
-  
+
   if (sessionData.provider) {
     existingPayload.message.order.provider = sessionData.provider;
   }
-  
+
   if (sessionData.quote) {
     existingPayload.message.order.quote = sessionData.quote;
   }
-  
+
   if (sessionData.cancellation_terms) {
     existingPayload.message.order.cancellation_terms = [...sessionData.cancellation_terms[0]];
   }
-  
+
   if (sessionData.replacement_terms) {
     existingPayload.message.order.replacement_terms = [...sessionData.replacement_terms[0]];
   }
-  
+
   if (sessionData.payments) {
     existingPayload.message.order.payments = sessionData.payments;
   }
-  
+
   if (sessionData.billing) {
     existingPayload.message.order.billing = sessionData.billing;
   }
 
   // Combine bpp_terms and bap_terms from session into tags array
   const tags = [];
-  
+  const settlemntAmount = (sessionData.quote.price.value / 100)
+
+  const bapTerms =
+  {
+    "descriptor": {
+      "code": "BAP_TERMS",
+      "name": "BAP Terms of Engagement"
+    },
+    "display": false,
+    "list": [
+      {
+        "descriptor": {
+          "code": "BUYER_FINDER_FEES_PERCENTAGE"
+        },
+        "value": "1"
+      },
+      {
+        "descriptor": {
+          "code": "BUYER_FINDER_FEES_TYPE"
+        },
+        "value": "percent"
+      },
+      {
+        "descriptor": {
+          "code": "STATIC_TERMS"
+        },
+        "value": "https://dev-automation.ondc.org/booking/terms"
+      },
+      {
+        "descriptor": {
+          "code": "SETTLEMENT_BASIS"
+        },
+        "value": "INVOICE_RECEIPT"
+      },
+      {
+        "descriptor": {
+          "code": "SETTLEMENT_WINDOW"
+        },
+        "value": "P30D"
+      }
+    ]
+
+  }
+  tags.push(bapTerms)
   // Add BPP Terms structure
   const bppTerms = {
     "descriptor": {
@@ -68,7 +111,7 @@ export async function onInitGenerator(existingPayload: any, sessionData: any) {
         "descriptor": {
           "code": "STATIC_TERMS"
         },
-        "value": "https://api.example-bap.com/booking/terms"
+        "value": "https://dev-automation.ondc.org/booking/terms"
       },
       {
         "descriptor": {
@@ -92,7 +135,7 @@ export async function onInitGenerator(existingPayload: any, sessionData: any) {
         "descriptor": {
           "code": "SETTLEMENT_AMOUNT"
         },
-        "value": "7 INR"
+        "value": `${(sessionData.quote.price.value - settlemntAmount).toFixed(2)}`
       },
       {
         "descriptor": {
@@ -114,20 +157,19 @@ export async function onInitGenerator(existingPayload: any, sessionData: any) {
       }
     ]
   };
-  
+
   tags.push(bppTerms);
-  
+
   // Add BAP Terms from session if available
   if (sessionData.bap_terms) {
     tags.push(sessionData.bap_terms);
   }
-  
-  
+
+
   // Set the combined tags array
   if (tags.length > 0) {
     existingPayload.message.order.tags = tags;
   }
 
-  
   return existingPayload;
 } 
