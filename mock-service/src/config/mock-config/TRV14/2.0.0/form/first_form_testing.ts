@@ -25,6 +25,8 @@ export class MockFirstFormTestingClass extends MockAction {
 			};
 		}
 		const formLink = sessionData["first_form_testing"];
+		console.log("Form link", formLink);
+		console.log("Session data", JSON.stringify(sessionData));
 		if (!formLink) {
 			return { valid: false, message: "Form link not found in session data" };
 		}
