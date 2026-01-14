@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 export async function onCancelConfirmTechnicalCancellationGenerator(existingPayload: any, sessionData: any) {
 
   if(sessionData.order){
@@ -17,4 +18,27 @@ export async function onCancelConfirmTechnicalCancellationGenerator(existingPayl
   }
 
   return existingPayload;
+=======
+export async function onCancelConfirmTechnicalCancellationGenerator(existingPayload: any, sessionData: any) {
+
+  if(sessionData.order){
+    existingPayload.message.order = sessionData.order;
+  }
+  existingPayload.message.order.status = "CANCELLED";
+
+  existingPayload.message.order.updated_at = existingPayload?.context?.timestamp ?? new Date().toISOString()
+
+    if(sessionData.cancellation_reason_id){
+    existingPayload.message.order.cancellation = {
+      "cancelled_by": "CONSUMER",
+      "reason": {
+        "descriptor": {
+          "code": sessionData.cancellation_reason_id
+        }
+      }
+    }
+  }
+
+  return existingPayload;
+>>>>>>> fc654ab8cb9c3095a107d3c7fd522305cab92ffc
 } 
