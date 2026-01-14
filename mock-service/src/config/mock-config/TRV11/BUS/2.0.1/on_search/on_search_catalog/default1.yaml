@@ -27,7 +27,7 @@ message:
               - type: START
                 location:
                   descriptor:
-                    code: "std:011"
+                    code: "MOCK_STATION_1"
                   gps: "28.666576, 77.233332"
                 id: "1"
             vehicle:
@@ -46,7 +46,7 @@ message:
               - type: START
                 location:
                   descriptor:
-                    code: "std:011"
+                    code: "MOCK_STATION_1"
                   gps: "28.666576, 77.233332"
                 id: "1"
             vehicle:
