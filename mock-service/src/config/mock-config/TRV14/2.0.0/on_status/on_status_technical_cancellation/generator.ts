@@ -10,6 +10,10 @@ if (sessionData.flow_id === "technical_cancellation" || sessionData.flow_id === 
     existingPayload.message.order.status = "ACTIVE";
   }
 
+if (sessionData.flow_id === "technical_cancellation") {
+    existingPayload.message.order.status = "ACTIVE";
+}
+
 // Load items from session
 if (sessionData.items) {
   existingPayload.message.order.items = sessionData.items;
