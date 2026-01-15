@@ -167,19 +167,19 @@ export function validateFormHtml(html: string): ValidationResult {
 	);
 
 	// Date of birth: a date input OR name/id contains "dob" or "dateofbirth"
-	const hasDob =
-		fields.some((f) => f.type === "date") ||
-		fields.some((f) => {
-			const key = (f.name + " " + (f.id ?? "")).toLowerCase();
-			return (
-				key.includes("dob") ||
-				key.includes("dateofbirth") ||
-				key.includes("date_of_birth")
-			);
-		});
+	// const hasDob =
+	// 	fields.some((f) => f.type === "date") ||
+	// 	fields.some((f) => {
+	// 		const key = (f.name + " " + (f.id ?? "")).toLowerCase();
+	// 		return (
+	// 			key.includes("dob") ||
+	// 			key.includes("dateofbirth") ||
+	// 			key.includes("date_of_birth")
+	// 		);
+	// 	});
 
 	if (!hasPassport) errors.push('Required "passport" field not found.');
-	if (!hasDob) errors.push('Required "date of birth" field not found.');
+	// if (!hasDob) errors.push('Required "date of birth" field not found.');
 
 	// Extra sanity: flag suspicious hidden fields (heuristic)
 	const suspiciousHiddenNames = ["redirect", "callback", "token", "url"];
