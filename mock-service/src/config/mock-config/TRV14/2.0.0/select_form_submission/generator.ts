@@ -1,6 +1,7 @@
 export async function select2Generator(existingPayload: any, sessionData: any) {
   // Replace the entire items array with sessionData.items if available, then inject xinput into each item
   // let submission_id = sessionData?.user_inputs?.form_submission_id || "F01_SUBMISSION_ID"
+  console.log('sessionData----', JSON.stringify(sessionData))
   let submission_id = sessionData?.form_data?.additional_details_form?.form_submission_id || "F02_SUBMISSION_ID"
 
   if (
