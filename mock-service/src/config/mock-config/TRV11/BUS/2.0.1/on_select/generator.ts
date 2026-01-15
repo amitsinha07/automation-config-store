@@ -57,7 +57,7 @@ const createQuoteFromItems = (items: any): any => {
   };
 };
 
-function createAndAppendFulfillments(items: any[], fulfillments: any[]): any {
+function createAndAppendFulfillments(items: any[], fulfillments: any[],sessionData: SessionData): any {
   items.forEach((item) => {
     // Ensure item.fulfillment_ids exists
     if (!item.fulfillment_ids) {
@@ -71,13 +71,18 @@ function createAndAppendFulfillments(items: any[], fulfillments: any[]): any {
       const newFulfillment = {
         id: `F${Math.random().toString(36).substring(2, 9)}`,
         type: "TICKET",
+        stops: [
+          {
+            authorization: { type: "QR" },
+          },
+        ],
         tags: [
           {
             descriptor: { code: "INFO" },
             list: [
               {
                 descriptor: { code: "PARENT_ID" },
-                value: "NONE", // since no parent logic needed
+                value: sessionData.fulfillments[0].id,
               },
             ],
           },
@@ -91,7 +96,7 @@ function createAndAppendFulfillments(items: any[], fulfillments: any[]): any {
       item.fulfillment_ids.push(newFulfillment.id);
     }
   });
-  return {items,fulfillments}
+  return { items, fulfillments };
 }
 
 function getUniqueFulfillmentIdsAndFilterFulfillments(
@@ -145,9 +150,9 @@ export async function onSelectGenerator(
   const updatedItems = items
     .map((item: any, index: number) => ({
       ...item,
-      price:{
-        "currency":"INR",
-        "value": item.price.value
+      price: {
+        currency: "INR",
+        value: item.price.value,
       },
       quantity: {
         selected: {
@@ -156,7 +161,11 @@ export async function onSelectGenerator(
       },
     }))
     .filter((item) => item.quantity.selected.count > 0);
-  ({ items, fulfillments } = createAndAppendFulfillments(updatedItems, fulfillments));
+  ({ items, fulfillments } = createAndAppendFulfillments(
+    updatedItems,
+    fulfillments,
+    sessionData
+  ));
   const quote = createQuoteFromItems(items);
   existingPayload.message.order.items = items;
   existingPayload.message.order.fulfillments = fulfillments;
