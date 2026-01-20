@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { randomUUID } from 'crypto';
+import logger from '@ondc/automation-logger';
 
 export async function onSelect1Generator(existingPayload: any, sessionData: any) {
   console.log("=== On Select1 Generator Start ===");
@@ -116,13 +117,29 @@ export async function onSelect1Generator(existingPayload: any, sessionData: any)
       });
       
       const consentHandler = response.data.consentHandler;
-      console.log("✅ Consent handler generated:", consentHandler);
+      logger.info(
+        "Finvu consent handler generated",
+        {
+          flow_id: sessionData?.flow_id,
+          session_id: sessionData?.session_id,
+          domain: sessionData?.domain,
+          transaction_id: existingPayload?.context?.transaction_id || sessionData?.transaction_id,
+        },
+        { consent_handler: consentHandler }
+      );
       
       // Store consent handler in session data for later use (verify step)
       sessionData.consent_handler = consentHandler;
-      console.log("sessionData.consent_handler", sessionData.consent_handler);
-      console.log("Stored consent_handler in session data");
-      console.log("consent handler in response", consentHandler);
+      logger.info(
+        "Stored consent_handler in session data",
+        {
+          flow_id: sessionData?.flow_id,
+          session_id: sessionData?.session_id,
+          domain: sessionData?.domain,
+          transaction_id: existingPayload?.context?.transaction_id || sessionData?.transaction_id,
+        },
+        { consent_handler: sessionData?.consent_handler }
+      );
       
       // Inject consent handler into payload tags
       if (existingPayload.message?.order?.items?.[0]) {
@@ -143,8 +160,20 @@ export async function onSelect1Generator(existingPayload: any, sessionData: any)
         if (consentInfoTagIndex >= 0) {
           consentInfoTag = item.tags[consentInfoTagIndex];
           console.log("Found existing CONSENT_INFO tag at index:", consentInfoTagIndex);
-          console.log("Existing CONSENT_HANDLER value:", 
-            consentInfoTag.list?.find((l: any) => l.descriptor?.code === 'CONSENT_HANDLER')?.value || 'not found');
+          logger.info(
+            "Existing CONSENT_HANDLER value (before update)",
+            {
+              flow_id: sessionData?.flow_id,
+              session_id: sessionData?.session_id,
+              domain: sessionData?.domain,
+              transaction_id: existingPayload?.context?.transaction_id || sessionData?.transaction_id,
+            },
+            {
+              consent_handler:
+                consentInfoTag.list?.find((l: any) => l.descriptor?.code === "CONSENT_HANDLER")?.value ||
+                "not found",
+            }
+          );
         } else {
           // Create new CONSENT_INFO tag structure
           consentInfoTag = {
@@ -182,15 +211,29 @@ export async function onSelect1Generator(existingPayload: any, sessionData: any)
         if (existingHandlerIndex >= 0) {
           // Update existing CONSENT_HANDLER value directly
           consentInfoTag.list[existingHandlerIndex].value = consentHandler;
-          console.log(`✅ Updated existing CONSENT_HANDLER at index ${existingHandlerIndex} with new value: ${consentHandler}`);
-          console.log("Verification - CONSENT_HANDLER value in payload:", 
-            item.tags[consentInfoTagIndex].list[existingHandlerIndex].value);
+          logger.info(
+            "✅ Updated existing CONSENT_HANDLER in payload",
+            {
+              flow_id: sessionData?.flow_id,
+              session_id: sessionData?.session_id,
+              domain: sessionData?.domain,
+              transaction_id: existingPayload?.context?.transaction_id || sessionData?.transaction_id,
+            },
+            { index: existingHandlerIndex, consent_handler: consentHandler }
+          );
         } else {
           // Add new CONSENT_HANDLER
           consentInfoTag.list.push(consentHandlerItem);
-          console.log(`✅ Added new CONSENT_HANDLER to list with value: ${consentHandler}`);
-          console.log("Verification - CONSENT_HANDLER value in payload:", 
-            item.tags[consentInfoTagIndex].list[consentInfoTag.list.length - 1].value);
+          logger.info(
+            "✅ Added new CONSENT_HANDLER to payload",
+            {
+              flow_id: sessionData?.flow_id,
+              session_id: sessionData?.session_id,
+              domain: sessionData?.domain,
+              transaction_id: existingPayload?.context?.transaction_id || sessionData?.transaction_id,
+            },
+            { consent_handler: consentHandler }
+          );
         }
         
         // Final verification - check the actual payload structure
@@ -200,26 +243,70 @@ export async function onSelect1Generator(existingPayload: any, sessionData: any)
           ?.value;
         
         if (finalValue === consentHandler) {
-          console.log("✅ Verification passed - consent handler successfully updated in payload");
+          logger.info(
+            "✅ Verification passed - consent handler successfully updated in payload",
+            {
+              flow_id: sessionData?.flow_id,
+              session_id: sessionData?.session_id,
+              domain: sessionData?.domain,
+              transaction_id: existingPayload?.context?.transaction_id || sessionData?.transaction_id,
+            },
+            { consent_handler: consentHandler }
+          );
         } else {
-          console.error("❌ Verification failed - consent handler not properly updated. Expected:", consentHandler, "Got:", finalValue);
+          logger.error(
+            "❌ Verification failed - consent handler not properly updated in payload",
+            {
+              flow_id: sessionData?.flow_id,
+              session_id: sessionData?.session_id,
+              domain: sessionData?.domain,
+              transaction_id: existingPayload?.context?.transaction_id || sessionData?.transaction_id,
+            },
+            { expected: consentHandler, got: finalValue }
+          );
         }
       } else {
-        console.warn("⚠️ Cannot inject consent handler - items[0] not found in payload");
-        console.log("Payload structure:", JSON.stringify(existingPayload.message?.order, null, 2));
+        logger.info(
+          "⚠️ Cannot inject consent handler - items[0] not found in payload",
+          {
+            flow_id: sessionData?.flow_id,
+            session_id: sessionData?.session_id,
+            domain: sessionData?.domain,
+            transaction_id: existingPayload?.context?.transaction_id || sessionData?.transaction_id,
+          },
+          {}
+        );
       }
       
     } catch (error: any) {
-      console.error("❌ Finvu AA consent generation failed:", error.message);
-      console.error("Error details:", {
-        status: error.response?.status,
-        statusText: error.response?.statusText,
-        data: error.response?.data,
-        code: error.code
-      });
+      logger.error(
+        "❌ Finvu AA consent generation failed",
+        {
+          flow_id: sessionData?.flow_id,
+          session_id: sessionData?.session_id,
+          domain: sessionData?.domain,
+          transaction_id: existingPayload?.context?.transaction_id || sessionData?.transaction_id,
+        },
+        {
+          message: error?.message,
+          status: error?.response?.status,
+          statusText: error?.response?.statusText,
+          data: error?.response?.data,
+          code: error?.code,
+        }
+      );
       
       // Fail-safe: Continue without consent handler (or you can throw error to stop flow)
-      console.warn("⚠️ Continuing without consent handler due to error");
+      logger.info(
+        "⚠️ Continuing without consent handler due to error",
+        {
+          flow_id: sessionData?.flow_id,
+          session_id: sessionData?.session_id,
+          domain: sessionData?.domain,
+          transaction_id: existingPayload?.context?.transaction_id || sessionData?.transaction_id,
+        },
+        {}
+      );
     }
   } else if (!isAAItem) {
     console.log("✅ Skipping Finvu AA integration - Item is Bureau loan type, AA consent not required");
@@ -238,6 +325,26 @@ export async function onSelect1Generator(existingPayload: any, sessionData: any)
     existingPayload.message.order.items[0].xinput.form.url = formUrl;
     console.log("Updated form URL for kyc_verification_status:", formUrl);
   }
+  
+  // ========== SUBMISSION ID MAPPING ==========
+  
+
+  const submission_id = sessionData?.form_data?.consumer_information_form?.form_submission_id;
+  
+  console.log("Submission ID for on_select_1 (from consumer_information_form):", submission_id);
+  
+  // Update form_response with submission_id (preserve existing structure)
+  if (existingPayload.message?.order?.items?.[0]?.xinput?.form_response) {
+    if (submission_id) {
+      // Use the actual submission_id from form service (UUID generated by form service)
+      existingPayload.message.order.items[0].xinput.form_response.submission_id = submission_id;
+      console.log("Updated form_response with submission_id from form service:", submission_id);
+    } else {
+      console.warn("⚠️ No submission_id found in session data - form may not have been submitted yet");
+    }
+    console.log("Updated form_response with submission_id");
+  }
+  
   
   console.log("existingPayload on_select_1", existingPayload);
   console.log("=== On Select1 Generator End ===");
