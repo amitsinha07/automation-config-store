@@ -89,16 +89,6 @@ export async function onSelect2Generator(existingPayload: any, sessionData: any)
     console.log("Updated xinput index to cur: 1, max: 1");
   }
   
-  // Ensure form_response exists and has proper status (PENDING for new form)
-  if (existingPayload.message?.order?.items?.[0]?.xinput) {
-    if (!existingPayload.message.order.items[0].xinput.form_response) {
-      existingPayload.message.order.items[0].xinput.form_response = {};
-    }
-    // Set status to PENDING for the new form (Ekyc_details_form)
-    existingPayload.message.order.items[0].xinput.form_response.status = "PENDING";
-    console.log("Set form_response status to PENDING for new form");
-  }
-  
   // Update form URL for kyc_verification_status (preserve existing structure)
   if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
     const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/verification_status?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
