@@ -1,0 +1,4 @@
+save-data:
+  message_id: "$.context.message_id"
+  status: "$.message.order.status"
+  cancellation_quote: "$.message.order.quote"

@@ -1,0 +1,87 @@
+import { SessionData } from "../../../session-types";
+
+function generateOTP(): string {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+export async function onCancelHardGenerator(
+  existingPayload: any,
+  sessionData: SessionData,
+) {
+  if (sessionData.payments.length > 0) {
+    existingPayload.message.order.payments = sessionData.payments;
+  }
+  existingPayload.message.order.cancellation.reason.descriptor.code =
+    sessionData.cancellation_reason_id;
+  if (sessionData.items.length > 0) {
+    existingPayload.message.order.items = sessionData.items;
+  }
+
+  if (sessionData.fulfillments.length > 0) {
+    existingPayload.message.order.fulfillments =
+      sessionData.selected_fulfillments;
+  }
+
+  for (const fulfillment of existingPayload.message.order.fulfillments) {
+    // update vehicle
+    fulfillment.vehicle = {
+      ...fulfillment.vehicle,
+      energy_type: "CNG",
+    };
+
+    fulfillment.state.descriptor.code = "RIDE_CANCELLED"
+
+    if (Array.isArray(fulfillment.stops)) {
+      fulfillment.stops = fulfillment.stops
+        .filter((stop: any) => stop.type !== "END")
+        .map((stop: any) =>
+          stop.type === "START"
+            ? {
+                ...stop,
+                authorization: {
+                  status: "UNCLAIMED",
+                  type: "OTP",
+                  token: generateOTP(),
+                  valid_to: new Date(
+                    Date.now() + 30 * 60 * 1000, // 30 minutes
+                  ).toISOString(),
+                },
+                time: {
+                  duration: "PT2H",
+                },
+              }
+            : stop,
+        );
+    }
+  }
+
+  if (sessionData.order_id) {
+    existingPayload.message.order.id = sessionData.order_id;
+  }
+  if (sessionData.quote != null) {
+    existingPayload.message.order.quote = sessionData.quote;
+  }
+  let quote = existingPayload.message.order.quote;
+  const refund_price = existingPayload.message.order.quote.price.value;
+  quote.breakup.push(
+    {
+      title: "CANCELLATION_CHARGES",
+      price: {
+        currency: "INR",
+        value: "10",
+      },
+    },
+    {
+      title: "REFUND",
+      price: {
+        currency: "INR",
+        value: String("-" + refund_price),
+      },
+    },
+  );
+  existingPayload.message.order.quote.price = { currency: "INR", value: "10" };
+  const now = new Date().toISOString();
+  existingPayload.message.order.created_at = sessionData.created_at;
+  existingPayload.message.order.updated_at = now;
+  return existingPayload;
+}

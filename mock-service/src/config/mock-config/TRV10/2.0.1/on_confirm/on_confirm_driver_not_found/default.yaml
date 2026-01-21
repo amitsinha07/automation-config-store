@@ -1,0 +1,3 @@
+error:
+  code: "90203"
+  message: "Driver not assigned to the order"

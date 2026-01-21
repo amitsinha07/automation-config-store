@@ -1,0 +1,12 @@
+  update_target: order.fulfillments
+  order:
+    id: '01'
+    status: SOFT_UPDATE
+    fulfillments:
+      - id: F1
+        stops:
+          - location:
+              gps: '12.968540, 77.564459'
+            type: END
+            id: '3'
+            parent_stop_id: '2'

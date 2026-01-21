@@ -1,0 +1,29 @@
+  intent:
+    category:
+      descriptor:
+        code: ON_DEMAND_TRIP # Specifies this is an on-demand trip request
+    tags:
+      - descriptor:
+          name: BAP Terms of Engagement # Business terms between BAP and BPP
+          code: BAP_TERMS
+        display: false
+        list:
+          - descriptor:
+              code: BUYER_FINDER_FEES_PERCENTAGE
+            value: "1" # Standard marketplace fee percentage
+          - descriptor:
+              code: DELAY_INTEREST
+            value: "5" # Annual interest rate for delayed settlements
+          - descriptor:
+              code: STATIC_TERMS
+            value: https://example-test-bap.com/static-terms.txt # Terms and conditions URL
+    fulfillment:
+      stops:
+        - location:
+            gps: "13.008935, 77.644408" # Koramangala, Bangalore
+          type: START
+        - location:
+            gps: "12.971186, 77.586812" # Basavanagudi, Bangalore
+          type: END
+    payment:
+      collected_by: BPP # Payment collected by mobility service provider

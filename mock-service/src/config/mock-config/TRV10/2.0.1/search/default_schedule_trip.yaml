@@ -1,0 +1,31 @@
+  intent:
+    category:
+      descriptor:
+        code: SCHEDULED_TRIP
+    tags:
+      - descriptor:
+          name: BAP Terms of Engagement
+          code: BAP_TERMS
+        display: false
+        list:
+          - descriptor:
+              code: BUYER_FINDER_FEES_PERCENTAGE
+            value: '1'
+          - descriptor:
+              code: DELAY_INTEREST
+            value: '5'
+          - descriptor:
+              code: STATIC_TERMS
+            value: 'https://example-test-bap.com/static-terms.txt'
+    fulfillment:
+      stops:
+        - location:
+            gps: '13.008935, 77.644408'
+          type: START
+          time:
+            timestamp: '2024-11-07T00:32:19.000Z'
+        - location:
+            gps: '12.971186, 77.586812'
+          type: END
+    payment:
+      collected_by: BPP

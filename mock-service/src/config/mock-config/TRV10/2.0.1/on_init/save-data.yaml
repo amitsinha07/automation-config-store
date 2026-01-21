@@ -1,0 +1,6 @@
+save-data:
+  cancellation_terms: "$.message.order.cancellation_terms[*]"
+  selected_fulfillments: "$.message.order.fulfillments[*]"
+  payments: "$.message.order.payments[*]"
+  payment_ids: "$.message.order.payments[*].id"
+  items: "$.message.order.items[*]"

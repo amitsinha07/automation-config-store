@@ -1,0 +1,5 @@
+save-data:
+  message_id: "$.context.message_id"
+  update_stop: "$.message.order.fulfillments[0].stops[0]"
+  update_quote: "$.message.order.quote"
+  updated_price: "$.message.order.quote.price.value"

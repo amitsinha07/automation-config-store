@@ -1,0 +1,7 @@
+order:
+  items:
+    - id: I1
+  provider:
+    id: P1
+  fulfillments:
+    - id: F1

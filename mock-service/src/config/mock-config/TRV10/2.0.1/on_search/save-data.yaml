@@ -1,0 +1,13 @@
+save-data:
+  fulfillments: "$.message.catalog.providers[*].fulfillments[*]"
+  categories: "$.message.catalog.providers[*].categories[*]"
+  provider_id: "$.message.catalog.providers[*].id"
+  fulfillment_ids: "$.message.catalog.providers[*].fulfillments[*].id"
+  items: "$.message.catalog.providers[*].items[*]"
+  item_ids: "$.message.catalog.providers[*].items[*].id"
+  bpp_id: "$.context.bpp_id"
+  bpp_uri: "$.context.bpp_uri"
+  city_code: "$.context.location.city.code"
+  locations: "$.message.catalog.providers[*].locations"
+  locations_id: "$.message.catalog.providers[*].locations[*].id"
+  payments: "$.message.catalog.providers[*].payments[*]"

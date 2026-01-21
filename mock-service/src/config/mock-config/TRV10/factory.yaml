@@ -1,0 +1,326 @@
+codes:
+  - code: 100
+    action_id: search
+    action: search
+    default: TRV10/2.0.1/search/default_multiple_stops.yaml
+    message_id: true
+  - code: 101
+    action_id: on_search
+    action: on_search
+    default: TRV10/2.0.1/on_search/default.yaml
+    message_id: false
+  - code: 102
+    action_id: select
+    action: select
+    default: TRV10/2.0.1/select/default.yaml
+    message_id: true
+  - code: 103
+    action_id: on_select
+    action: on_select
+    default: TRV10/2.0.1/on_select/default.yaml
+    message_id: false
+  - code: 104
+    action_id: init
+    action: init
+    default: TRV10/2.0.1/init/default.yaml
+    message_id: true
+  - code: 105
+    action_id: on_init
+    action: on_init
+    default: TRV10/2.0.1/on_init/default.yaml
+    message_id: false
+  - code: 106
+    action_id: confirm
+    action: confirm
+    default: TRV10/2.0.1/confirm/default.yaml
+    message_id: true
+  - code: 107
+    action_id: on_confirm
+    action: on_confirm
+    default: TRV10/2.0.1/on_confirm/on_confirm_driver_assigned/default.yaml
+    message_id: false
+  - code: 108
+    action_id: on_status_unsolicited
+    action: on_status
+    default: TRV10/2.0.1/on_status/default.yaml
+    message_id: true
+  - code: 109
+    action_id: track
+    action: track
+    default: TRV10/2.0.1/track/default.yaml
+    message_id: true
+  - code: 110
+    action_id: on_track
+    action: on_track
+    default: TRV10/2.0.1/on_track/default.yaml
+    message_id: false
+  - code: 111
+    action_id: on_status_ride_arrived
+    action: on_status
+    default: TRV10/2.0.1/on_status/default.yaml
+    message_id: true
+  - code: 112
+    action_id: on_status_ride_started
+    action: on_status
+    default: TRV10/2.0.1/on_status/default.yaml
+    message_id: true
+  - code: 113
+    action_id: on_update
+    action: on_update
+    default: TRV10/2.0.1/on_update/default.yaml
+    message_id: true
+  - code: 114
+    action_id: status
+    action: status
+    default: TRV10/2.0.1/status/default.yaml
+    message_id: true
+  - code: 115
+    action_id: on_status_solicited
+    action: on_status
+    default: TRV10/2.0.1/on_status/default.yaml
+    message_id: false
+  - code: 116
+    action_id: update
+    action: update
+    default: TRV10/2.0.1/update_/default.yaml
+    message_id: true
+  - code: 117
+    action_id: on_update_soft_update
+    action: on_update
+    default: TRV10/2.0.1/on_update/default.yaml
+    message_id: false
+  - code: 118
+    action_id: update_hard
+    action: update
+    default: TRV10/2.0.1/update_/default.yaml
+    message_id: true
+  - code: 119
+    action_id: on_update_ride_updated
+    action: on_update
+    default: TRV10/2.0.1/on_update/default.yaml
+    message_id: false
+  - code: 120
+    action_id: update_quote
+    action: update
+    default: TRV10/2.0.1/update_/default.yaml
+    message_id: true
+  - code: 121
+    action_id: on_update_quote
+    action: on_update
+    default: TRV10/2.0.1/on_update/default.yaml
+    message_id: false
+  - code: 122
+    action_id: search_rental
+    action: search
+    default: TRV10/2.0.1/search/default.yaml
+    message_id: true
+  - code: 123
+    action_id: on_search_rental
+    action: on_search
+    default: TRV10/2.0.1/on_search/default-rental.yaml
+    message_id: false
+  - code: 124
+    action_id: search_rental_end
+    action: search
+    default: TRV10/2.0.1/search/default.yaml
+    message_id: true
+  - code: 125
+    action_id: on_search_rental_end
+    action: on_search
+    default: TRV10/2.0.1/on_search/default-rental-end.yaml
+    message_id: false
+  - code: 126
+    action_id: cancel
+    action: cancel
+    default: TRV10/2.0.1/cancel/default.yaml
+    message_id: true
+  - code: 127
+    action_id: on_cancel
+    action: on_cancel
+    default: TRV10/2.0.1/on_cancel/on_cancel_soft/default.yaml
+  - code: 128
+    action_id: search_ride
+    action: search
+    default: TRV10/2.0.1/search/default.yaml
+    message_id: true
+  - code: 129
+    action_id: on_search_ride
+    action: on_search
+    default: TRV10/2.0.1/on_search/default.yaml
+    message_id: false
+  - code: 130
+    action_id: select_ride
+    action: select
+    default: TRV10/2.0.1/select/default.yaml
+    message_id: true
+  - code: 131
+    action_id: on_select_ride
+    action: on_select
+    default: TRV10/2.0.1/on_select/default.yaml
+    message_id: false
+  - code: 132
+    action_id: init_ride
+    action: init
+    default: TRV10/2.0.1/init/default.yaml
+    message_id: true
+  - code: 133
+    action_id: on_init_ride
+    action: on_init
+    default: TRV10/2.0.1/on_init/default.yaml
+    message_id: false
+  - code: 134
+    action_id: confirm_ride
+    action: confirm
+    default: TRV10/2.0.1/confirm/default.yaml
+    message_id: true
+  - code: 135
+    action_id: on_confirm_ride
+    action: on_confirm
+    default: TRV10/2.0.1/on_confirm/on_confirm_driver_assigned/default.yaml
+    message_id: false
+  - code: 136
+    action_id: track_ride
+    action: track
+    default: TRV10/2.0.1/track/default.yaml
+    message_id: true
+  - code: 137
+    action_id: on_track_ride
+    action: on_track
+    default: TRV10/2.0.1/on_track/default.yaml
+    message_id: false
+  - code: 138
+    action_id: on_update_ride
+    action: on_update
+    default: TRV10/2.0.1/on_update/default.yaml
+    message_id: true
+  - code: 139
+    action_id: on_confirm_driver_not_assigned
+    action: on_confirm
+    default: TRV10/2.0.1/on_confirm/on_confirm_driver_not_assigned/default.yaml
+    message_id: false
+  - code: 140
+    action_id: on_confirm_driver_not_found
+    action: on_confirm
+    default: TRV10/2.0.1/on_confirm/on_confirm_driver_not_found/default.yaml
+    message_id: false
+  - code: 141
+    action_id: on_cancel_async
+    action: on_cancel
+    default: TRV10/2.0.1/on_cancel/on_cancel_async/default.yaml
+    message_id: true
+  - code: 142
+    action_id: cancel_hard
+    action: cancel
+    default: TRV10/2.0.1/cancel/default.yaml
+    message_id: true
+  - code: 143
+    action_id: on_cancel_hard
+    action: on_cancel
+    default: TRV10/2.0.1/on_cancel/on_cancel_hard/default.yaml
+    message_id: false
+  - code: 144
+    action_id: on_cancel_ride_cancel
+    action: on_cancel
+    default: TRV10/2.0.1/on_cancel/on_cancel_soft/default.yaml
+    message_id: false
+  - code: 145
+    action_id: on_cancel_rider_not_found
+    action: on_cancel
+    default: TRV10/2.0.1/on_cancel/on_cancel_rider_not_found/default.yaml
+    message_id: true
+  - code: 146
+    action_id: on_update_2
+    action: on_update
+    default: TRV10/2.0.1/on_update/default.yaml
+    message_id: true
+  - code: 147
+    action_id: select_preorder_bid
+    action: select
+    default: TRV10/2.0.1/select/default.yaml
+    message_id: true
+  - code: 148
+    action_id: on_status_ride_arrived_2
+    action: on_status
+    default: TRV10/2.0.1/on_status/default.yaml
+    message_id: true
+  - code: 149
+    action_id: select_rental
+    action: select
+    default: TRV10/2.0.1/select/default.yaml
+    message_id: true
+  - code: 150
+    action_id: on_select_rental
+    action: on_select
+    default: TRV10/2.0.1/on_select/default.yaml
+    message_id: false
+  - code: 151
+    action_id: search_schedule_rental
+    action: search
+    default: TRV10/2.0.1/search/default_schedule_rental.yaml
+    message_id: true
+  - code: 152
+    action_id: on_update_ride_assigned
+    action: on_update
+    default: TRV10/2.0.1/on_update/default.yaml
+    message_id: true
+  - code: 153
+    action_id: on_search_schedule_rental
+    action: on_search
+    default: TRV10/2.0.1/on_search/default_schedule_rental.yaml
+    message_id: false
+  - code: 154
+    action_id: search_schedule_trip
+    action: search
+    default: TRV10/2.0.1/search/default_schedule_trip.yaml
+    message_id: true
+  - code: 155
+    action_id: on_search_schedule_trip
+    action: on_search
+    default: TRV10/2.0.1/on_search/default_schedule_trip.yaml
+    message_id: false
+  - code: 156
+    action_id: on_select_preorder
+    action: on_select
+    default: TRV10/2.0.1/on_select/default.yaml
+    message_id: false
+  - code: 157
+    action_id: on_confirm_rental
+    action: on_confirm
+    default: TRV10/2.0.1/on_confirm/on_confirm_driver_not_assigned/default.yaml
+    message_id: false
+
+# _________________Female Driver__________________
+
+  - code: 450
+    action_id: search_ride_female
+    action: search
+    default: TRV10/2.0.1/search/default_multiple_stops.yaml
+    message_id: true
+  - code: 451
+    action_id: on_search_female
+    action: on_search
+    default: TRV10/2.0.1/on_search/default.yaml
+    message_id: false
+
+# _____________________IMG(1.0.0)__________________
+
+  - code: 340
+    action_id: issue_open_100
+    action: issue
+    default: TRV10/2.0.1/issue/issue_100/issue_open/default.yaml
+    message_id: true
+  - code: 341
+    action_id: on_issue_processing_100
+    action: on_issue
+    default: TRV10/2.0.1/on_issue/on_issue_100/on_issue_processing/default.yaml
+    message_id: false  
+  - code: 342
+    action_id: on_issue_resolved_100
+    action: on_issue_status
+    default: TRV10/2.0.1/on_issue/on_issue_100/on_issue_resolved/default.yaml
+    message_id: true  
+  - code: 343
+    action_id: issue_close_100
+    action: issue
+    default: TRV10/2.0.1/issue/issue_100/issue_close/default.yaml
+    message_id: true    
