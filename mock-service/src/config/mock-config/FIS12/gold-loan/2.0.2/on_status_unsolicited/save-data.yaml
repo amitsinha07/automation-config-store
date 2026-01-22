@@ -6,4 +6,5 @@ save-data:
   loan_status: "$.message.order.fulfillments[0].state.descriptor.code"
   quote_id: "$.message.order.quote.id"
   quote: "$.message.order.quote"  
+  form_id: "$.message.order.items[0].xinput.form.id"
 

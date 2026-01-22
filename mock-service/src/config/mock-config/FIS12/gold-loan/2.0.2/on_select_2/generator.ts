@@ -89,8 +89,14 @@ export async function onSelect2Generator(existingPayload: any, sessionData: any)
     console.log("Updated xinput index to cur: 1, max: 1");
   }
   
-  // Update form URL for kyc_verification_status (preserve existing structure)
+  // Update form ID and URL for verification_status (preserve existing structure)
   if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
+    // Always generate a NEW form ID for the next form (verification_status)
+    // and let downstream steps (on_status/init) carry-forward using sessionData.form_id.
+    const formId = `form_${randomUUID()}`;
+    existingPayload.message.order.items[0].xinput.form.id = formId;
+    console.log("Updated form ID:", formId);
+    
     const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/verification_status?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
     console.log("URL for verification_status in on_select_2", url);
     existingPayload.message.order.items[0].xinput.form.url = url;
