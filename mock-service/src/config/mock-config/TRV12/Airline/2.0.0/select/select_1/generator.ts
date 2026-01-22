@@ -1,4 +1,4 @@
-function createItemPayload(userInputItem: any, includeAddOns: boolean = false): any {
+function createItemPayload(userInputItem: any, addOnsToInclude: any[] = []): any {
   const itemPayload: any = {
     quantity: {
       selected: {
@@ -7,27 +7,18 @@ function createItemPayload(userInputItem: any, includeAddOns: boolean = false): 
     },
   };
 
-  if (
-    includeAddOns &&
-    userInputItem.addOns &&
-    Array.isArray(userInputItem.addOns) &&
-    userInputItem.addOns.length > 0
-  ) {
-    // Only use parent_item_id when add-ons exist
-    itemPayload.parent_item_id = userInputItem.itemId;
+  itemPayload.parent_item_id = userInputItem.itemId;
 
-    console.log('userInputItem.addOns', userInputItem.addOns)
+  if (addOnsToInclude.length > 0) {
+    console.log('Distributing add-ons for item:', userInputItem.itemId, addOnsToInclude);
 
-    // Add add-ons
-    itemPayload.add_ons = userInputItem.addOns.map((addOn: any) => ({
+
+    itemPayload.add_ons = addOnsToInclude.map((addOn: any) => ({
       id: addOn.id,
       quantity: {
-        selected: { count: 1 },
+        selected: { count: addOn.count },
       },
     }));
-  } else {
-    // Use id only when no add-ons
-    itemPayload.parent_item_id = userInputItem.itemId;
   }
 
   return itemPayload;
@@ -46,16 +37,33 @@ export async function select_1_DefaultGenerator(
 
   const itemPayloads = userInputs.items.flatMap((item: any) => {
     const itemCount = Number(item.count) || 1;
-    const totalAddOns = Array.isArray(item.addOns)
-      ? item.addOns.reduce(
-        (total: number, current: any) => total + (Number(current.count) || 0),
-        0
-      )
-      : 0;
+
+    const remainingAddOns = (item.addOns || []).map((ao: any) => ({
+      id: ao.id,
+      remaining: Number(ao.count) || 0
+    }));
 
     return Array.from({ length: itemCount }, (_, index) => {
-      const includeAddOns = index < totalAddOns;
-      return createItemPayload({ ...item, count: 1 }, includeAddOns);
+      const isLastItem = index === itemCount - 1;
+      const currentAddOns: any[] = [];
+
+      remainingAddOns.forEach((ao: any) => {
+        let countToAssign = 0;
+        if (isLastItem) {
+
+          countToAssign = ao.remaining;
+        } else if (ao.remaining > 0) {
+
+          countToAssign = 1;
+        }
+
+        if (countToAssign > 0) {
+          currentAddOns.push({ id: ao.id, count: countToAssign });
+          ao.remaining -= countToAssign;
+        }
+      });
+
+      return createItemPayload({ ...item, count: 1 }, currentAddOns);
     });
   });
 

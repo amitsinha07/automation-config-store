@@ -43,7 +43,6 @@ export async function onSelect_1_DefaultGenerator(
 
     const { add_ons, cancellation_terms, ...rest } = data;
 
-    // ✅ Parent Item (I1 / I2)
     const parentItem = {
       ...rest,
       quantity: {
@@ -55,7 +54,6 @@ export async function onSelect_1_DefaultGenerator(
 
     on_select_item.push(parentItem);
 
-    // ✅ Child Items (I1-1, I1-2, ...)
     const childItems = sessionData?.select_1_items.filter(
       (i: any) => (i.parent_item_id || i.id) === parentId
     );
@@ -64,12 +62,25 @@ export async function onSelect_1_DefaultGenerator(
       let selectedAddOns: any[] | undefined;
 
       if (child?.add_ons && add_ons) {
-        const itemAddOnIds = child.add_ons.map((x: any) =>
-          typeof x === "string" ? x : x.id
-        );
-        selectedAddOns = add_ons.filter((a: any) =>
-          itemAddOnIds.includes(a.id)
-        );
+        selectedAddOns = child.add_ons
+          .map((cao: any) => {
+            const addonId = typeof cao === "string" ? cao : cao.id;
+            const catalogAddOn = add_ons.find((a: any) => a.id === addonId);
+            if (!catalogAddOn) return null;
+
+            const addonCount =
+              (typeof cao === "object" ? cao.quantity?.selected?.count : 1) || 1;
+
+            return {
+              ...catalogAddOn,
+              quantity: {
+                selected: {
+                  count: addonCount,
+                },
+              },
+            };
+          })
+          .filter(Boolean);
       }
 
       const childItem: any = {
@@ -142,49 +153,7 @@ export async function onSelect_1_DefaultGenerator(
 
   existingPayload.message.order.items = updatedItems;
 
-  // let items: any = on_search_default?.message.catalog.providers[0]?.items || [];
-  // items = items?.map((it: any) => {
-  //   return {
-  //     ...it,
-  //     tags: it.tags.filter((i: any) => i.descriptor.code !== "FARE_BREAK_UP"),
-  //   };
-  // });
 
-  // const on_select_item = sessionData?.select_1_items.map((item: any) => {
-  //   const data = items.find(
-  //     (i: any) => i.id === (item?.parent_item_id || item?.id)
-  //   );
-  //   if (!data) return null;
-
-  //   const { add_ons, cancellation_terms, ...rest } = data;
-
-  //   let selectedAddOns: any[] | undefined;
-
-  //   if (item?.add_ons && add_ons) {
-  //     const itemAddOnIds = item.add_ons.map((x: any) =>
-  //       typeof x === "string" ? x : x.id
-  //     );
-  //     selectedAddOns = add_ons.filter((a: any) => itemAddOnIds.includes(a.id));
-  //   }
-
-  //   const result: any = {
-  //     ...rest,
-  //     quantity: item?.quantity ?? 1,
-  //   };
-
-  //   // Only attach add_ons, parent_item_id, and id if add_ons exist
-  //   if (selectedAddOns && selectedAddOns.length > 0) {
-  //     const parentId = item?.parent_item_id || item?.id;
-  //     result.add_ons = selectedAddOns;
-  //     result.parent_item_id = parentId;
-  //     result.id = `${parentId}-${count}`;
-  //     count++;
-  //   }
-
-  //   return result;
-  // });
-
-  // existingPayload.message.order.items = on_select_item;
 
   const selectedFulfillmentIds =
     sessionData?.select_1_fulfillments?.map((f: any) => f.id) || [];
@@ -281,8 +250,6 @@ export async function onSelect_1_DefaultGenerator(
   ];
 
 
-  existingPayload.message.order.fulfillments = [
-    ...existingPayload.message.order.fulfillments,
-  ];
+  existingPayload.message.order.fulfillments = existingPayload.message.order.fulfillments;
   return existingPayload;
 }
