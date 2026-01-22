@@ -1,4 +1,4 @@
-function createItemPayload(userInputItem: any): any {
+function createItemPayload(userInputItem: any, includeAddOns: boolean = false): any {
   const itemPayload: any = {
     quantity: {
       selected: {
@@ -8,6 +8,7 @@ function createItemPayload(userInputItem: any): any {
   };
 
   if (
+    includeAddOns &&
     userInputItem.addOns &&
     Array.isArray(userInputItem.addOns) &&
     userInputItem.addOns.length > 0
@@ -21,7 +22,7 @@ function createItemPayload(userInputItem: any): any {
     itemPayload.add_ons = userInputItem.addOns.map((addOn: any) => ({
       id: addOn.id,
       quantity: {
-        selected: { count: addOn.count || 1},
+        selected: { count: 1 },
       },
     }));
   } else {
@@ -37,34 +38,29 @@ export async function select_1_DefaultGenerator(
   existingPayload: any,
   sessionData: any
 ) {
-  
-  // delete existingPayload.context.bpp_uri;
-  // delete existingPayload.context.bpp_id;
-    const userInputs = typeof sessionData.user_inputs?.data === "string"
+
+  const userInputs = typeof sessionData.user_inputs?.data === "string"
     ? JSON.parse(sessionData.user_inputs.data)
     : sessionData.user_inputs;
 
-  console.log('userInputs.items', userInputs.items, userInputs)
 
-  // Process all items from user_inputs
-const itemPayloads = userInputs.items.flatMap((item: any) => {
-  const count = Number(item.count) || 1;
+  const itemPayloads = userInputs.items.flatMap((item: any) => {
+    const itemCount = Number(item.count) || 1;
+    const totalAddOns = Array.isArray(item.addOns)
+      ? item.addOns.reduce(
+        (total: number, current: any) => total + (Number(current.count) || 0),
+        0
+      )
+      : 0;
 
-  return Array.from({ length: count }, () =>
-    createItemPayload({ ...item, count: 1 })
-  );
-});
+    return Array.from({ length: itemCount }, (_, index) => {
+      const includeAddOns = index < totalAddOns;
+      return createItemPayload({ ...item, count: 1 }, includeAddOns);
+    });
+  });
 
 
-  // Update the payload with all selected items
   existingPayload.message.order.items = itemPayloads;
-
-  // Set provider ID from user_inputs
-  // existingPayload.message.order.provider.id = userInputs.provider;
-
-  // Create fulfillment object with the selected fulfillment ID
-  // const contextTimestamp =
-  //   existingPayload.context?.timestamp || new Date().toISOString();
 
   existingPayload.message.order.fulfillments = [
     {
