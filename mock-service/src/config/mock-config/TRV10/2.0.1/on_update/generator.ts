@@ -215,7 +215,7 @@ export async function onUpdateGenerator(
       if (!fulfillment.state) {
         fulfillment.state = {
           descriptor: {
-            code: "RIDE_ENDED",
+            code: "RIDE_ASSIGNED",
           },
         };
       } else if (!fulfillment.state.descriptor) {

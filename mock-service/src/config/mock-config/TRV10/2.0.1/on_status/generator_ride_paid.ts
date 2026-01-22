@@ -46,21 +46,21 @@ export async function onStatusRidePaidGenerator(
     existingPayload.message.order,
   );
   existingPayload.message.order.status = "COMPLETE";
-  existingPayload.message.order.fulfillments =
-    existingPayload.message.order.fulfillments.map((fulfillment: any) => ({
-      ...fulfillment,
-      stops: fulfillment.stops.map((stop: any) =>
-        stop.type === "START" && stop.authorization
-          ? {
-              ...stop,
-              authorization: {
-                ...stop.authorization,
-                status: "CLAIMED",
-              },
-            }
-          : stop,
-      ),
-    }));
+  // existingPayload.message.order.fulfillments =
+  //   existingPayload.message.order.fulfillments.map((fulfillment: any) => ({
+  //     ...fulfillment,
+  //     stops: fulfillment.stops.map((stop: any) =>
+  //       stop.type === "START" && stop.authorization
+  //         ? {
+  //             ...stop,
+  //             authorization: {
+  //               ...stop.authorization,
+  //               status: "CLAIMED",
+  //             },
+  //           }
+  //         : stop,
+  //     ),
+  //   }));
 
   return existingPayload;
 }
