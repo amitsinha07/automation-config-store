@@ -9,7 +9,7 @@ function updateFulfillmentStatus(order: any, sessionData: SessionData) {
         sessionData?.flow_id ===
         "OnDemand_Assign_driver_post_onconfirmSelfPickup"
       ) {
-        fulfillment.type === "SELF_PICKUP";
+        fulfillment.type = "SELF_PICKUP";
       }
       fulfillment.state.descriptor.code = "RIDE_ENDED";
     });
