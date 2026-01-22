@@ -1,10 +1,16 @@
 import { SessionData } from "../../session-types";
 import { onStatusMultipleStopsGenerator } from "./generator_multiple_stops";
 
-function updateFulfillmentStatus(order: any) {
+function updateFulfillmentStatus(order: any, sessionData: SessionData) {
   // Check if fulfillments exist
   if (order.fulfillments) {
     order.fulfillments.forEach((fulfillment: any) => {
+      if (
+        sessionData?.flow_id ===
+        "OnDemand_Assign_driver_post_onconfirmSelfPickup"
+      ) {
+        fulfillment.type === "SELF_PICKUP";
+      }
       fulfillment.state.descriptor.code = "RIDE_ENDED";
       fulfillment.state.descriptor.name = "Your ride has ended";
     });
@@ -44,6 +50,7 @@ export async function onStatusRidePaidGenerator(
   );
   existingPayload.message.order = updateFulfillmentStatus(
     existingPayload.message.order,
+    sessionData,
   );
   existingPayload.message.order.status = "COMPLETE";
   // existingPayload.message.order.fulfillments =
