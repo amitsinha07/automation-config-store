@@ -52,7 +52,7 @@ export async function onStatusRidePaidGenerator(
     existingPayload.message.order,
     sessionData,
   );
-  existingPayload.message.order.status = "COMPLETE";
+  existingPayload.message.order.status = "COMPLETED";
   // existingPayload.message.order.fulfillments =
   //   existingPayload.message.order.fulfillments.map((fulfillment: any) => ({
   //     ...fulfillment,
