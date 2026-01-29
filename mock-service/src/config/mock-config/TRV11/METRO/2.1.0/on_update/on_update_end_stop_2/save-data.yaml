@@ -1,0 +1,14 @@
+save-data:
+  status: "$.message.order.status"
+  cancellation_terms: "$.message.order.cancellation_terms[*]"
+  fulfillments: "$.message.order.fulfillments[*]"
+  items: "$.message.order.items[*]"
+  payments: "$.message.order.payments[*]"
+  quote: "$.message.order.quote"
+  tags: "$.message.order.tags[*]"
+  newPaymentId: "$.message.order.payments[1].id"
+  newPayment_collected_by: "$.message.order.payments[1].collected_by"
+  newPayment_status: "$.message.order.payments[1].status"
+  newPayment_type: "$.message.order.payments[1].type"
+  
+  

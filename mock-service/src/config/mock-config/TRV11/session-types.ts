@@ -12,13 +12,21 @@ export interface SessionData {
   start_code: string | undefined;
   end_code: string | undefined;
   buyer_app_fee: string | undefined;
+  provider_descriptor: any
+  init_tags: any
+  provider_time: any
+  update_1_order: any
+  select_city_code: any
   vehicle_type: string | undefined;
+  confirm_cancellation_terms: any
   fulfillments: any[]; // Replace `any` with a specific type if known
   onselect_fulfillments: any[]; // Replace `any` with a specific type if known
   update_1_fulfillments: any[]; // Replace `any` with a specific type if known
   cancellation_terms: any[]; // Replace `any` with a specific type if known
   category_ids: string[]; // Assuming these are strings; adjust if needed
   provider_id: string | undefined;
+  select_tags: any
+  selected_fulfillments: any
   fullfillment_ids: string[]; // Assuming these are strings; adjust if needed
   item_ids: string[]; // Assuming these are strings; adjust if needed
   items: any[]; // Replace `any` with a specific type if known
@@ -28,6 +36,7 @@ export interface SessionData {
   payments: any[]; // Replace `any` with a specific type if known
   updated_payments: any[]; // Replace `any` with a specific type if known
   order_id: string | undefined;
+  tags: any
   quote: any;
   update_end_stop: any;
   provider: any;

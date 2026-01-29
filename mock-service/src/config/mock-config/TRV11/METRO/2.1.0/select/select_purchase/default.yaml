@@ -1,0 +1,10 @@
+message:
+  order:
+    provider:
+      id: P1
+    items:
+      - id: I3
+        price:
+          value: "200"
+    fulfillments:
+      - id: F2

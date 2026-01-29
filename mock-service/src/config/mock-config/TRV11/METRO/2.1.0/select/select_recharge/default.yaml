@@ -1,0 +1,16 @@
+message:
+  order:
+    provider:
+      id: P1
+    items:
+      - id: I4
+        price:
+          value: "100"
+    fulfillments:
+      - id: F3
+        type: ONLINE
+        customer:
+          person:
+            creds:
+              - id: 7ed21b6f
+                type: CARD_IDENTIFIER

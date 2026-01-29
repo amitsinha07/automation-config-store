@@ -1,7 +1,0 @@
-save-data:
-  status: "$.message.order.status"
-  order_id: "$.message.order.id"
-  message_id: "$.context.message_id"
-  update_1_fulfillments: "$.message.order.fulfillments[*]"
-  update_end_stop: "$.message.order.fulfillments[*].stops[*]"
-  

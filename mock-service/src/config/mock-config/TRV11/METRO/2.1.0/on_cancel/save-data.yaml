@@ -1,0 +1,6 @@
+save-data:
+  status: "$.message.order.status"
+  quote: "$.message.order.quote"
+  fulfillments: "$.message.order.fulfillments[*]"
+  soft_on_cancel_cancellation: "$.message.order.cancellation"
+  soft_technical_on_cancel: "$.message.order"

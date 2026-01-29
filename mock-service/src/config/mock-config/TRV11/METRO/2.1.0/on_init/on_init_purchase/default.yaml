@@ -1,0 +1,127 @@
+message:
+  order:
+    provider:
+      id: P1
+      descriptor:
+        name: Delhi Metro Rail Limited
+        images:
+          - url: https://delhimetrorail.com/logos/logo.icon
+    items:
+      - id: I3
+        category_ids:
+          - C3
+        descriptor:
+          name: Metro Card Purchase
+          code: PURCHASE
+          images:
+            - url: https://delhimetrorail.com/logos/logo.ico
+        fulfillment_ids:
+          - F2
+        price:
+          currency: INR
+          value: "200"
+    cancellation_terms:
+      - external_ref:
+          mimetype: text/html
+          url: https://transitsolutions.com/mf/tnc.html
+    fulfillments:
+      - id: F2
+        customer:
+          contact:
+            email: joe.adam@abc.org
+            phone: "+91-9999999999"
+          person:
+            name: Joe Adam
+        type: PASS
+    quote:
+      id: Q1
+      price:
+        value: "220"
+        currency: INR
+      breakup:
+        - title: BASE_FARE
+          item:
+            id: I1
+            price:
+              currency: INR
+              value: "200"
+        - title: CONVENIENCE_FEE
+          price:
+            currency: INR
+            value: "10"
+        - title: TAX
+          price:
+            currency: INR
+            value: "10"
+          item:
+            tags:
+              - descriptor:
+                  code: TAX
+                list:
+                  - descriptor:
+                      code: CGST
+                    value: "2%"
+                  - descriptor:
+                      code: SGST
+                    value: "2%"
+        - title: OTHER_CHARGES
+          price:
+            currency: INR
+            value: "0"
+          item:
+            tags:
+              - descriptor:
+                  code: OTHER_CHARGES
+                list:
+                  - descriptor:
+                      code: SURCHARGE
+                    value: "0"
+        - title: OFFER
+          price:
+            currency: INR
+            value: "0"
+    payments:
+      - id: PAYMENT_ID
+        type: PRE-ORDER
+        status: NOT-PAID
+        collected_by: BAP
+    billing:
+      name: John Doe
+      email: john.doe@example.com
+      phone: "+91-9897867564"
+    tags:
+      - descriptor:
+          code: BPP_TERMS
+          name: BPP Terms of Engagement
+        display: false
+        list:
+          - descriptor:
+              code: BUYER_FINDER_FEES_PERCENTAGE
+            value: "1"
+          - descriptor:
+              code: BUYER_FINDER_FEES_TYPE
+            value: percent
+          - descriptor:
+              code: STATIC_TERMS
+            value: https://api.example-bap.com/booking/terms
+          - descriptor:
+              code: MANDATORY_ARBITRATION
+            value: "true"
+          - descriptor:
+              code: COURT_JURISDICTION
+            value: New Delhi
+          - descriptor:
+              code: DELAY_INTEREST
+            value: "2.5 %"
+          - descriptor:
+              code: SETTLEMENT_AMOUNT
+            value: 7 INR
+          - descriptor:
+              code: SETTLEMENT_TYPE
+            value: upi
+          - descriptor:
+              code: SETTLEMENT_BANK_CODE
+            value: XXXXXXXX
+          - descriptor:
+              code: SETTLEMENT_BANK_ACCOUNT_NUMBER
+            value: xxxxxxxxxxxxxx

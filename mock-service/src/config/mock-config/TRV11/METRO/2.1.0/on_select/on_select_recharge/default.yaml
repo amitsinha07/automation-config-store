@@ -1,0 +1,86 @@
+message:
+  order:
+    provider:
+      id: P1
+      descriptor:
+        name: Delhi Metro Rail Limited
+        images:
+          - url: https://delhimetrorail.com/logos/logo.icon
+    items:
+      - id: I4
+        category_ids:
+          - C3
+        descriptor:
+          name: Metro Card Recharge
+          code: RECHARGE
+          images:
+            - url: https://delhimetrorail.com/logos/logo.ico
+        price:
+          currency: INR
+          value: "100"
+        fulfillment_ids:
+          - F3
+    fulfillments:
+      - id: F3
+        customer:
+          person:
+            creds:
+              - id: 7ed21b6f
+                type: CARD_IDENTIFIER
+        type: ONLINE
+        stops:
+          - instructions:
+              name: How to use?
+              short_desc: short description about how to use?
+              long_desc: Description about how to use?
+    cancellation_terms:
+      - external_ref:
+          mimetype: text/html
+          url: https://transitsolutions.com/mf/tnc.html
+    quote:
+      id: Q1
+      price:
+        value: "100"
+        currency: INR
+      breakup:
+        - title: BASE_FARE
+          item:
+            id: I1
+            price:
+              currency: INR
+              value: "100"
+        - title: CONVENIENCE_FEE
+          price:
+            currency: INR
+            value: "10"
+        - title: TAX
+          price:
+            currency: INR
+            value: "10"
+          item:
+            tags:
+              - descriptor:
+                  code: TAX
+                list:
+                  - descriptor:
+                      code: CGST
+                    value: "4%"
+                  - descriptor:
+                      code: SGST
+                    value: "4%"
+        - title: OTHER_CHARGES
+          price:
+            currency: INR
+            value: "0"
+          item:
+            tags:
+              - descriptor:
+                  code: OTHER_CHARGES
+                list:
+                  - descriptor:
+                      code: SURCHARGE
+                    value: "0"
+        - title: OFFER
+          price:
+            currency: INR
+            value: "-10"

@@ -1,0 +1,23 @@
+save-data:
+  vehicle_category: "$.message.intent.fulfillment.vehicle.category"
+  category_ids: "$.message.catalog.providers[*].categories[*].id"
+  categories: "$.message.catalog.providers[*].categories[*]"
+  ticket_category_id: "$.message.catalog.providers[*].categories[?(@.descriptor.name=='Ticket')].id"
+  fulfillments: "$.message.catalog.providers[*].fulfillments[*]"
+    # path: "$.message.catalog.providers[*].fulfillments[*]"
+    # mode: override
+  provider_id: "$.message.catalog.providers[*].id"
+  provider_descriptor: "$.message.catalog.providers[*].descriptor"
+  provider_time: "$.message.catalog.providers[*].time"
+  fulfillment_ids: "$.message.catalog.providers[*].fulfillments[*].id"
+    # path: "$.message.catalog.providers[*].fulfillments[*].id"
+    # mode: override
+  items: "$.message.catalog.providers[*].items[*]"
+    # path: "$.message.catalog.providers[*].items[*]"
+    # mode: override
+  item_ids: "$.message.catalog.providers[*].items[*].id"
+    # path: "$.message.catalog.providers[*].items[*].id"
+    # mode: override
+  bpp_id: "$.context.bpp_id"
+  bpp_uri: "$.context.bpp_uri"
+  city_code: "$.context.location.city.code"
