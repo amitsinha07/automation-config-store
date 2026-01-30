@@ -25,20 +25,6 @@ type Quote = {
   price: Price;
   breakup: Breakup[];
 };
-export function updateCancellationTimestamp(payload: any) {
-  // deep clone to avoid mutating input
-  const clone =
-    typeof structuredClone === "function"
-      ? structuredClone(payload)
-      : JSON.parse(JSON.stringify(payload));
-
-  const order = clone?.message?.order;
-  if (!order || !order.cancellation) return clone;
-
-  order.cancellation.time = new Date().toISOString();
-
-  return clone;
-}
 export function updateSettlementAmount(order: any, sessionData: SessionData) {
   if (!order?.payments || !order?.quote?.price?.value) return order;
 
@@ -175,7 +161,7 @@ export async function onCancelGenerator(
     existingPayload.message.order,
     sessionData
   );
-  existingPayload = updateCancellationTimestamp(existingPayload);
+  existingPayload.message.order.cancellation.reason.descriptor.code = sessionData.cancellation_reason_id || "000";
   const now = new Date().toISOString();
   existingPayload.message.order.created_at = sessionData.created_at;
   existingPayload.message.order.updated_at = now;
