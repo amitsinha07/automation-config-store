@@ -69,7 +69,10 @@ export async function onCancelHardGenerator(
       price: {
         currency: "INR",
         value:
-          sessionData?.flow_id === "Technical_cancellation_flow" ? "0" : "10",
+          sessionData?.flow_id === "Technical_cancellation_flow" ||
+          sessionData?.flow_id === "OnDemand_Ride_cancellation_by_driver"
+            ? "0"
+            : "10",
       },
     },
     {
@@ -82,7 +85,11 @@ export async function onCancelHardGenerator(
   );
   existingPayload.message.order.quote.price = {
     currency: "INR",
-    value: sessionData?.flow_id === "Technical_cancellation_flow" ? "0" : "10",
+    value:
+      sessionData?.flow_id === "Technical_cancellation_flow" ||
+      sessionData?.flow_id === "OnDemand_Ride_cancellation_by_driver"
+        ? "0"
+        : "10",
   };
   const now = new Date().toISOString();
 
