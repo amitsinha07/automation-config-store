@@ -114,18 +114,18 @@ export async function onCancelAsyncGenerator(
     // Using standard cancellation charges for async cancellation
     existingPayload.message.order.quote = applyCancellation(
       sessionData.quote,
-      20,
+      sessionData?.flow_id === "OnDemand_Ride_cancellation_by_driver" ? 0 : 20,
     );
   }
   const now = new Date().toISOString();
-
-
 
   const payment0 = existingPayload?.message?.order?.payments?.[0];
   if (!payment0) return;
 
   const collectedBy = payment0?.collected_by; // "BAP" | "BPP"
-  const price = Number(existingPayload?.message?.order?.quote?.price?.value ?? 0);
+  const price = Number(
+    existingPayload?.message?.order?.quote?.price?.value ?? 0,
+  );
 
   const buyerFinderFeesTag = payment0?.tags?.find(
     (tag: any) => tag?.descriptor?.code === "BUYER_FINDER_FEES",
