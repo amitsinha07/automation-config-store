@@ -69,13 +69,8 @@ function stripTicketAuthorizations(order: any) {
 
   order.fulfillments = order.fulfillments.map((fulfillment: any) => {
     if (fulfillment.type === "TICKET") {
-      return {
-        ...fulfillment,
-        stops: fulfillment.stops.map((stop: any) => {
-          const { authorization, ...rest } = stop;
-          return rest;
-        }),
-      };
+      const { stops, ...restFulfillment } = fulfillment;
+      return restFulfillment; 
     }
     return fulfillment;
   });
