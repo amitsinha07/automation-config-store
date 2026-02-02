@@ -170,7 +170,7 @@ export async function onCancelGenerator(
   }
 }
   existingPayload.message.order.cancellation.reason.descriptor.code = sessionData.cancellation_reason_id || "000";
-  const now = new Date().toISOString();
+  const now = new Date().toISOString();  // Current Timestamp
   existingPayload.message.order.created_at = sessionData.created_at;
   existingPayload.message.order.updated_at = now;
   return existingPayload;
