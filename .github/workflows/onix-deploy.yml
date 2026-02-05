@@ -22,6 +22,7 @@ jobs:
       image_tag: ${{ steps.meta.outputs.image_tag }}
       build_tag: ${{ steps.meta.outputs.build_tag }}
       build_type: ${{ steps.detect-env.outputs.build_type }}
+      deployment_tag: ${{ steps.meta.outputs.deployment_tag }} # ✅ NEW: Tag for deployment
 
     steps:
       - name: Checkout code
@@ -116,6 +117,7 @@ jobs:
           # Collect all SHAs
           CONFIG_SHA="${GITHUB_SHA}"
           GENERATOR_SHA="${{ steps.prepare.outputs.GENERATOR_SHA }}"
+          BUILD_TYPE="${{ steps.detect-env.outputs.build_type }}"
 
           # Get plugin SHA if exists
           if [ -d "./build-output/temp/automation-beckn-plugins" ]; then
@@ -133,13 +135,24 @@ jobs:
           TAG_HASH=$(echo -n "$BUILD_TAG" | sha256sum | awk '{print substr($1,1,16)}')
 
           # Construct image name
-          IMAGE_NAME="${{ env.REGISTRY }}/${{ env.REGISTRY_NAMESPACE }}/automation-api-service-${{ vars.CONTAINER_NAME }}"
+          IMAGE_NAME="${{ env.REGISTRY }}/${{ env.REGISTRY_NAMESPACE }}/ondc-onix-${{ vars.CONTAINER_NAME }}"
+
+          # ✅ NEW: Determine deployment tag based on build type
+          if [[ "$BUILD_TYPE" == "release" ]]; then
+            DEPLOYMENT_TAG="prod-${TAG_HASH}"
+            echo "🏷️  Release build - will tag as 'stable' and '${DEPLOYMENT_TAG}'"
+          else
+            DEPLOYMENT_TAG="dev-${TAG_HASH}"
+            echo "🏷️  Draft build - will tag as '${DEPLOYMENT_TAG}' only"
+          fi
 
           # Set outputs
           echo "build_tag=${BUILD_TAG}" >> $GITHUB_OUTPUT
           echo "tag_hash=${TAG_HASH}" >> $GITHUB_OUTPUT
           echo "image_name=${IMAGE_NAME}" >> $GITHUB_OUTPUT
           echo "image_tag=${BUILD_TAG}" >> $GITHUB_OUTPUT
+          echo "deployment_tag=${DEPLOYMENT_TAG}" >> $GITHUB_OUTPUT  # ✅ NEW
+          echo "build_type=${BUILD_TYPE}" >> $GITHUB_OUTPUT
 
           # Display metadata
           echo "📊 Build Metadata:"
@@ -149,7 +162,8 @@ jobs:
           echo "  📦 Onix SHA:      ${ONIX_SHA:0:8}"
           echo "  🏷️  Build tag:     ${BUILD_TAG}"
           echo "  #️⃣  Tag hash:      ${TAG_HASH}"
-          echo "  🐳 Image:         ${IMAGE_NAME}:${BUILD_TAG}"
+          echo "  🚀 Deploy tag:    ${DEPLOYMENT_TAG}"
+          echo "  🐳 Image:         ${IMAGE_NAME}"
 
       - name: Create Dockerfile
         working-directory: generator
@@ -191,17 +205,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GIT_PAT }}
 
-      - name: Build and push Docker image
-        id: build
+      # ✅ MODIFIED: Conditional tagging based on build type
+      - name: Build and push Docker image (Release)
+        if: steps.meta.outputs.build_type == 'release'
+        id: build-release
         uses: docker/build-push-action@v5
         with:
           context: ./generator
           file: ./generator/Dockerfile
           push: true
           tags: |
-            ${{ steps.meta.outputs.image_name }}:${{ steps.meta.outputs.image_tag }}
-            ${{ steps.meta.outputs.image_name }}:${{ steps.meta.outputs.tag_hash }}
-            ${{ steps.meta.outputs.image_name }}:latest
+            ${{ steps.meta.outputs.image_name }}:${{ steps.meta.outputs.build_tag }}
+            ${{ steps.meta.outputs.image_name }}:${{ steps.meta.outputs.deployment_tag }}
             ${{ steps.meta.outputs.image_name }}:stable
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -210,9 +225,33 @@ jobs:
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.created=${{ github.event.head_commit.timestamp }}
             org.opencontainers.image.version=${{ steps.meta.outputs.build_tag }}
+            build.type=release
+
+      - name: Build and push Docker image (Draft)
+        if: steps.meta.outputs.build_type != 'release'
+        id: build-draft
+        uses: docker/build-push-action@v5
+        with:
+          context: ./generator
+          file: ./generator/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.image_name }}:${{ steps.meta.outputs.build_tag }}
+            ${{ steps.meta.outputs.image_name }}:${{ steps.meta.outputs.deployment_tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          labels: |
+            org.opencontainers.image.source=${{ github.repositoryUrl }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.created=${{ github.event.head_commit.timestamp }}
+            org.opencontainers.image.version=${{ steps.meta.outputs.build_tag }}
+            build.type=draft
 
       - name: Generate build summary
         run: |
+          BUILD_TYPE="${{ steps.meta.outputs.build_type }}"
+          DEPLOYMENT_TAG="${{ steps.meta.outputs.deployment_tag }}"
+
           cat >> $GITHUB_STEP_SUMMARY <<EOF
           ## 🚀 Build Complete
 
@@ -224,18 +263,30 @@ jobs:
           | Component | SHA |
           |-----------|-----|
           | Config | \`${GITHUB_SHA:0:8}\` |
-          | Generator | \`${{ steps.prepare.outputs.GENERATOR_SHA }}:0:8}\` |
+          | Generator | \`${{ steps.prepare.outputs.GENERATOR_SHA }}\` |
           | Onix | \`${BECKN_ONIX_SHA:0:8}\` |
 
-          ### 🏷️ Available Tags
-          - \`${{ steps.meta.outputs.image_tag }}\` (full version)
-          - \`${{ steps.meta.outputs.tag_hash }}\` (hash)
-          - \`latest\` (latest build)
-          - \`stable\` (deployment tag)
+          ### 🏷️ Image Tags Created
+          EOF
 
-          ### 📦 Image Details
-          \`\`\`
-          ${{ steps.meta.outputs.image_name }}:stable
+          if [[ "$BUILD_TYPE" == "release" ]]; then
+            cat >> $GITHUB_STEP_SUMMARY <<EOF
+          - \`${{ steps.meta.outputs.build_tag }}\` (full version)
+          - \`${DEPLOYMENT_TAG}\` (for deployment - **use this**)
+          - \`stable\` (for external use)
+          EOF
+          else
+            cat >> $GITHUB_STEP_SUMMARY <<EOF
+          - \`${{ steps.meta.outputs.build_tag }}\` (full version)
+          - \`${DEPLOYMENT_TAG}\` (for deployment - **use this**)
+          EOF
+          fi
+
+          cat >> $GITHUB_STEP_SUMMARY <<EOF
+
+          ### 📦 Deployment Command
+          \`\`\`bash
+          docker pull ${{ steps.meta.outputs.image_name }}:${DEPLOYMENT_TAG}
           \`\`\`
           EOF
 
@@ -269,6 +320,7 @@ jobs:
 
           echo "✅ Environment file prepared for deployment"
 
+      # ✅ MODIFIED: Use deployment_tag instead of stable
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -283,17 +335,19 @@ jobs:
             BUILD_TYPE="${{ needs.build-and-push.outputs.build_type }}"
             IMAGE_NAME="${{ needs.build-and-push.outputs.image_name }}"
             BUILD_TAG="${{ needs.build-and-push.outputs.build_tag }}"
-            CONTAINER_NAME="automation-api-service-${{ vars.CONTAINER_NAME }}"
+            DEPLOYMENT_TAG="${{ needs.build-and-push.outputs.deployment_tag }}"  # ✅ NEW
+            CONTAINER_NAME="ondc-onix-${{ vars.CONTAINER_NAME }}"
             REPO_DIR="$HOME/ONDC-automation-framework/api-service/${CONTAINER_NAME}"
 
             echo "================================================"
             echo "🚀 Starting Deployment"
             echo "================================================"
-            echo "Build type:  ${BUILD_TYPE}"
-            echo "Image:       ${IMAGE_NAME}:stable"
-            echo "Build tag:   ${BUILD_TAG}"
-            echo "Container:   ${CONTAINER_NAME}"
-            echo "Deploy dir:  ${REPO_DIR}"
+            echo "Build type:       ${BUILD_TYPE}"
+            echo "Image:            ${IMAGE_NAME}"
+            echo "Deployment tag:   ${DEPLOYMENT_TAG}"  # ✅ CHANGED
+            echo "Build tag:        ${BUILD_TAG}"
+            echo "Container:        ${CONTAINER_NAME}"
+            echo "Deploy dir:       ${REPO_DIR}"
             echo "================================================"
 
             # Prepare deployment directory
@@ -323,7 +377,7 @@ jobs:
             CONTAINER_NAME=${{ vars.CONTAINER_NAME }}
             DOMAIN=${{ vars.DOMAIN }}
             VERSION=${{ vars.VERSION }}
-            SERVICE_NAME=automation-api-service-${{ vars.CONTAINER_NAME }}
+            SERVICE_NAME=ondc-onix-${{ vars.CONTAINER_NAME }}
             TRACE_URL=${{ vars.TRACE_URL }}
             API_SERVICE_KEY=${{ secrets.API_SERVICE_KEY_DEV }}
             LOKI_HOST=${{ vars.LOKI_HOST }}
@@ -355,7 +409,7 @@ jobs:
             CONFIG_SERVICE_URL=${{ vars.CONFIG_SERVICE_URL_STAGING }}
             DOMAIN=${{ vars.DOMAIN }}
             VERSION=${{ vars.VERSION }}
-            SERVICE_NAME=automation-api-service-${{ vars.CONTAINER_NAME }}
+            SERVICE_NAME=ondc-onix-${{ vars.CONTAINER_NAME }}
             TRACE_URL=${{ vars.TRACE_URL_STAGING }}
             API_SERVICE_KEY=${{ secrets.API_SERVICE_KEY_STAGING }}
             LOKI_HOST=${{ vars.LOKI_HOST }}
@@ -384,9 +438,9 @@ jobs:
               echo "ℹ️  No existing container found"
             fi
 
-            # Pull new image
+            # ✅ CHANGED: Pull using deployment tag
             echo "📥 Pulling new image..."
-            docker pull ${IMAGE_NAME}:stable
+            docker pull ${IMAGE_NAME}:${DEPLOYMENT_TAG}
 
             # Stop and remove old container
             if [ -n "$OLD_CONTAINER_ID" ]; then
@@ -395,7 +449,7 @@ jobs:
               docker rm ${CONTAINER_NAME} 2>/dev/null || true
             fi
 
-            # Start new container
+            # ✅ CHANGED: Start container with deployment tag
             echo "🚀 Starting new container..."
             docker run -d \
               --name ${CONTAINER_NAME} \
@@ -407,7 +461,7 @@ jobs:
               --health-timeout=10s \
               --health-retries=3 \
               --health-start-period=40s \
-              ${IMAGE_NAME}:stable
+              ${IMAGE_NAME}:${DEPLOYMENT_TAG}
 
             # Wait for container to be healthy
             echo "⏳ Waiting for container to be healthy..."
@@ -464,10 +518,10 @@ jobs:
             echo "================================================"
             echo "✅ Deployment Successful!"
             echo "================================================"
-            echo "Container:   ${CONTAINER_NAME}"
-            echo "Image:       ${IMAGE_NAME}:stable"
-            echo "Build tag:   ${BUILD_TAG}"
-            echo "Port:        ${{ vars.API_SERVICE_PORT }}"
+            echo "Container:        ${CONTAINER_NAME}"
+            echo "Image:            ${IMAGE_NAME}:${DEPLOYMENT_TAG}"
+            echo "Build tag:        ${BUILD_TAG}"
+            echo "Port:             ${{ vars.API_SERVICE_PORT }}"
             echo "================================================"
 
             # Display container status
@@ -482,8 +536,8 @@ jobs:
           ## ✅ Deployment Successful
 
           **Environment:** \`${{ github.ref_name }}\`
-          **Container:** \`automation-api-service-${{ vars.CONTAINER_NAME }}\`
-          **Image:** \`${{ needs.build-and-push.outputs.image_name }}:stable\`
+          **Container:** \`ondc-onix-${{ vars.CONTAINER_NAME }}\`
+          **Image:** \`${{ needs.build-and-push.outputs.image_name }}:${{ needs.build-and-push.outputs.deployment_tag }}\`
           **Build Tag:** \`${{ needs.build-and-push.outputs.build_tag }}\`
 
           ### 🌐 Service Details
@@ -502,7 +556,7 @@ jobs:
           ## ❌ Deployment Failed
 
           **Environment:** \`${{ github.ref_name }}\`
-          **Container:** \`automation-api-service-${{ vars.CONTAINER_NAME }}\`
+          **Container:** \`ondc-onix-${{ vars.CONTAINER_NAME }}\`
 
           The deployment failed. Please check the workflow logs for details.
 
