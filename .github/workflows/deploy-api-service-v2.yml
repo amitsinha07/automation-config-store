@@ -10,12 +10,10 @@ on:
   #     - "draft-*"
   #     - "release-*"
 
-      
 jobs:
   build-and-verify:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}  # environment exactly matches branch name
-
+    environment: ${{ github.ref_name }} # environment exactly matches branch name
 
     outputs:
       IMAGE_NAME_OUTPUT: ${{ steps.generate.outputs.IMAGE_NAME }}
@@ -35,7 +33,6 @@ jobs:
           fi
           echo "Detected BUILD_TYPE=$BUILD_TYPE"
           echo "Detected BUILD_TYPE=${{ steps.set_build_type.outputs.build_type }}"
-
 
       - name: Prepare build repo
         run: |
@@ -57,7 +54,7 @@ jobs:
           echo "Build repo ready at $(pwd)"
 
           if [[ "$BUILD_TYPE" == "draft" ]]; then
-  
+
           cat > ./.env <<EOF
           NODE_ENV=${{ vars.NODE_ENV }}
           SIGNING_PRIVATE=${{ secrets.SIGN_PRIVATE_KEY }}
@@ -91,9 +88,9 @@ jobs:
           IS_ONIX_ENABLED=${{ vars.IS_ONIX_ENABLED }}
           RECORDER_SERVICE_GRPC_URL=${{ vars.RECORDER_SERVICE_GRPC_URL }}
           RECORDER_SERVICE_HTTP_URL=${{ vars.RECORDER_SERVICE_HTTP_URL }}
-          
+
           EOF
-          
+
           elif [[ "$BUILD_TYPE" == "release" ]]; then
           cat > ./.env <<EOF
           NODE_ENV=${{ vars.NODE_ENV }}
@@ -137,7 +134,7 @@ jobs:
           BECKN_ONIX_SHA=$(git -C ./automation-beckn-onix rev-parse HEAD)
 
           #build the hash
-          
+
 
           TAG="$GITHUB_SHA-$GENERATOR_SHA-$PLUGIN_SHA-$BECKN_ONIX_SHA" #config-store sha + generator
           HASH=$(echo -n "$TAG" | sha256sum | awk '{print $1}')
@@ -151,7 +148,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GIT_PAT }}
-
 
       - name: Build Docker image
         run: |
@@ -184,16 +180,16 @@ jobs:
           #   -p ${{ vars. API_SERVICE_PORT }}:${{ vars. API_SERVICE_PORT }} \
           #   --env-file .env \
           #   $IMAGE_NAME:$TAG
-      
+
           echo "⏳ Waiting for service..."
           sleep 5
-      
+
           echo "📋 Container status:"
           docker ps -a
-      
+
           echo "📜 Logs:"
           docker logs api-test || true
-      
+
           # echo "🔍 Health check:"
           # curl -v http://localhost:${{ vars. API_SERVICE_PORT }}/health || true
 
@@ -219,7 +215,7 @@ jobs:
   deploy:
     needs: build-and-verify
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}  # environment exactly matches branch name
+    environment: ${{ github.ref_name }} # environment exactly matches branch name
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -253,9 +249,9 @@ jobs:
             echo "Writing .env file..."
             cd $REPO_DIR
 
-            
+
             if [[ "$BUILD_TYPE" == "draft" ]]; then
-    
+
             cat > ./.env <<EOF
             NODE_ENV=${{ vars.NODE_ENV }}
             SIGNING_PRIVATE=${{ secrets.SIGN_PRIVATE_KEY }}
@@ -284,13 +280,13 @@ jobs:
             HOSTED_ENV=${{ vars.HOSTED_ENV_DEV }}
             NO_URL=${{ vars.NO_URL }}
             NO_TOKEN=${{ secrets.NO_TOKEN }}
-  
-  
+
+
             IS_ONIX_ENABLED=${{ vars.IS_ONIX_ENABLED }}
             RECORDER_SERVICE_GRPC_URL=${{ vars.RECORDER_SERVICE_GRPC_URL }}
             RECORDER_SERVICE_HTTP_URL=${{ vars.RECORDER_SERVICE_HTTP_URL }}
             EOF
-            
+
             elif [[ "$BUILD_TYPE" == "release" ]]; then
             cat > ./.env <<EOF
             NODE_ENV=${{ vars.NODE_ENV }}
@@ -324,7 +320,7 @@ jobs:
             EOF
             fi
               
-            
+
 
 
             # IMAGE_NAME=ghcr.io/ondc-official/automation-api-service-${{vars.CONTAINER_NAME}}
