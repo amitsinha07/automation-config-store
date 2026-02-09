@@ -55,6 +55,6 @@ export async function onUpdateStopEndGenerator(
   const now = new Date().toISOString();
   existingPayload.message.order.created_at = sessionData.created_at;
   existingPayload.message.order.updated_at = now;
-  existingPayload.message.order.tags = sessionData.tags.flat();
+  existingPayload.message.order.tags = sessionData.on_update_tags.flat();
   return existingPayload;
 }
