@@ -84,7 +84,7 @@ jobs:
           NO_TOKEN=${{ secrets.NO_TOKEN }}
 
 
-          IS_ONIX_ENABLED=${{ vars.IS_ONIX_ENABLED }}
+          IS_ONIX_ENABLED=true
           RECORDER_SERVICE_GRPC_URL=${{ vars.RECORDER_SERVICE_GRPC_URL }}
           RECORDER_SERVICE_HTTP_URL=${{ vars.RECORDER_SERVICE_HTTP_URL }}
 
@@ -118,7 +118,7 @@ jobs:
           HOSTED_ENV=${{ vars.HOSTED_ENV_STAGING }}
           NO_URL=${{ vars.NO_URL }}
           NO_TOKEN=${{ secrets.NO_TOKEN }}
-          IS_ONIX_ENABLED=${{ vars.IS_ONIX_ENABLED }}
+          IS_ONIX_ENABLED=true
           RECORDER_SERVICE_GRPC_URL=${{ vars.RECORDER_SERVICE_GRPC_URL_STAGING }}
           RECORDER_SERVICE_HTTP_URL=${{ vars.RECORDER_SERVICE_HTTP_URL_STAGING }}
           EOF
@@ -292,7 +292,7 @@ jobs:
             NO_TOKEN=${{ secrets.NO_TOKEN }}
 
 
-            IS_ONIX_ENABLED=${{ vars.IS_ONIX_ENABLED }}
+            IS_ONIX_ENABLED=true
             RECORDER_SERVICE_GRPC_URL=${{ vars.RECORDER_SERVICE_GRPC_URL }}
             RECORDER_SERVICE_HTTP_URL=${{ vars.RECORDER_SERVICE_HTTP_URL }}
             EOF
@@ -325,7 +325,7 @@ jobs:
             HOSTED_ENV=${{ vars.HOSTED_ENV_STAGING }}
             NO_URL=${{ vars.NO_URL }}
             NO_TOKEN=${{ secrets.NO_TOKEN }}
-            IS_ONIX_ENABLED=${{ vars.IS_ONIX_ENABLED }}
+            IS_ONIX_ENABLED=true
             RECORDER_SERVICE_GRPC_URL=${{ vars.RECORDER_SERVICE_GRPC_URL_STAGING }}
             RECORDER_SERVICE_HTTP_URL=${{ vars.RECORDER_SERVICE_HTTP_URL_STAGING }}
             EOF
