@@ -39,7 +39,7 @@ export async function confirmPurchaseGenerator(existingPayload: any, sessionData
 
   existingPayload.message.order.tags = [
     ...sessionData?.init_tags?.flat(),
-    ...sessionData?.tags?.flat()
+    ...sessionData?.on_init_tags?.flat()
   ];
   return existingPayload;
 }

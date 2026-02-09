@@ -70,53 +70,12 @@ export async function onInitGenerator(
       },
       display: false,
       list: [
-        {
-          descriptor: {
-            code: "BUYER_FINDER_FEES_PERCENTAGE",
-          },
-          value: "1",
-        },
+        ...sessionData?.init_tags?.flat()[0]?.list,
         {
           descriptor: {
             code: "SETTLEMENT_WINDOW",
           },
           value: "P30D",
-        },
-        {
-          descriptor: {
-            code: "SETTLEMENT_BASIS",
-          },
-          value: "INVOICE_RECEIPT",
-        },
-        {
-          descriptor: {
-            code: "MANDATORY_ARBITRATION",
-          },
-          value: "TRUE",
-        },
-        {
-          descriptor: {
-            code: "COURT_JURISDICTION",
-          },
-          value: "New Delhi",
-        },
-        {
-          descriptor: {
-            code: "STATIC_TERMS",
-          },
-          value: "https://api.example-bpp.com/booking/terms",
-        },
-        {
-          descriptor: {
-            code: "SETTLEMENT_AMOUNT",
-          },
-          value: "59",
-        },
-        {
-          descriptor: {
-            code: "SETTLEMENT_TYPE",
-          },
-          value: "NEFT",
         },
         {
           descriptor: {
@@ -132,7 +91,7 @@ export async function onInitGenerator(
         },
       ],
     },
-    ...sessionData.tags.flat(),
+    ...sessionData.select_tags.flat(),
   ];
   return existingPayload;
 }
