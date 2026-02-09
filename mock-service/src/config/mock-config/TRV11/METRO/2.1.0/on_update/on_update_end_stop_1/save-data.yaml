@@ -5,3 +5,4 @@ save-data:
   items: "$.message.order.items[*]"
   payments: "$.message.order.payments[*]"
   newQuote: "$.message.order.quote.price.value"
+  on_update_tags: "$.message.order.tags"

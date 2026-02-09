@@ -37,6 +37,7 @@ export interface SessionData {
   updated_payments: any[]; // Replace `any` with a specific type if known
   order_id: string | undefined;
   tags: any
+  confirm_tags: any
   quote: any;
   update_end_stop: any;
   provider: any;

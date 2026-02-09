@@ -62,5 +62,6 @@ export async function onConfirmPurchaseGenerator(
     sessionData?.updated_payments?.flat() ?? [];
   existingPayload.message.order.created_at = currentDate;
   existingPayload.message.order.updated_at = currentDate;
+  existingPayload.message.order.tags = sessionData?.confirm_tags?.flat()
   return existingPayload;
 }

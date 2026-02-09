@@ -197,6 +197,58 @@ export async function onCancelHardGenerator(
   }
   existingPayload.message.order.tags = sessionData?.tags?.flat() ?? [];
   existingPayload.message.order.created_at = sessionData.created_at;
+
+  //______SETTLEMENT_AMOUNT____________
+  const tags = existingPayload?.message?.order?.tags;
+  if (!tags) return;
+
+  const collectedBy = sessionData?.collected_by;
+  const price = Number(
+    existingPayload?.message?.order?.quote?.price?.value ?? 0,
+  );
+
+  const buyerFinderFeesTag = tags?.find(
+    (tag: any) => tag?.descriptor?.code === "BAP_TERMS",
+  );
+
+  const feePercentage = Number(
+    buyerFinderFeesTag?.list?.find(
+      (item: any) => item?.descriptor?.code === "BUYER_FINDER_FEES_PERCENTAGE",
+    )?.value ?? 0,
+  );
+
+  const feeAmount = (price * feePercentage) / 100;
+
+  let settlementAmount = 0;
+  if (collectedBy === "BAP") {
+    settlementAmount = price - feeAmount;
+  } else if (collectedBy === "BPP") {
+    settlementAmount = feeAmount;
+  } else {
+    settlementAmount = price;
+  }
+
+  const settlementTermsTag = tags?.find(
+    (tag: any) => tag?.descriptor?.code === "BAP_TERMS",
+  );
+  const settlementTermsTagBpp = tags?.find(
+    (tag: any) => tag?.descriptor?.code === "BPP_TERMS",
+  );
+
+  const settlementAmountItem = settlementTermsTag?.list?.find(
+    (item: any) => item?.descriptor?.code === "SETTLEMENT_AMOUNT",
+  );
+  const settlementAmountItemBpp = settlementTermsTagBpp?.list?.find(
+    (item: any) => item?.descriptor?.code === "SETTLEMENT_AMOUNT",
+  );
+
+  if (settlementAmountItem) {
+    settlementAmountItem.value = settlementAmount.toString();
+  }
+
+  if (settlementAmountItemBpp) {
+    settlementAmountItemBpp.value = settlementAmount.toString();
+  }
   existingPayload.message.order.updated_at = now;
   return existingPayload;
 }

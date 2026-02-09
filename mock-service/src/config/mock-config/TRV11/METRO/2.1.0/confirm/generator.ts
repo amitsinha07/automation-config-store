@@ -32,23 +32,22 @@ export async function confirmGenerator(existingPayload: any, sessionData: any) {
       sessionData.price,
     );
   }
-  const tags = sessionData.tags.flat().filter(
-    (item: any) => item.descriptor.code !== "ADDITIONAL_APIS",
+  const tags = sessionData.on_init_tags
+    .flat()
+    .filter((item: any) => item.descriptor.code !== "ADDITIONAL_APIS");
+  const mergedTags = [...sessionData?.init_tags?.flat(), ...tags];
+
+  const bapTermsTag = mergedTags.find(
+    (tag: any) => tag?.descriptor?.code === "BAP_TERMS",
   );
-  existingPayload.message.order.tags = [
-    {
-      descriptor: {
-        code: "BAP_TERMS",
-        name: "BAP Terms of Engagemen",
-      },
-      display: false,
-      list: [
-        {
-          descriptor: {
-            code: "BUYER_FINDER_FEES_PERCENTAGE",
-          },
-          value: "1",
-        },
+
+  if (bapTermsTag && bapTermsTag.list) {
+    const hasSettlementWindow = bapTermsTag.list.some(
+      (item: any) => item?.descriptor?.code === "SETTLEMENT_WINDOW",
+    );
+
+    if (!hasSettlementWindow) {
+      bapTermsTag.list.push(
         {
           descriptor: {
             code: "SETTLEMENT_WINDOW",
@@ -61,45 +60,10 @@ export async function confirmGenerator(existingPayload: any, sessionData: any) {
           },
           value: "Delivery",
         },
-        {
-          descriptor: {
-            code: "SETTLEMENT_TYPE",
-          },
-          value: "NEFT",
-        },
-        {
-          descriptor: {
-            code: "MANDATORY_ARBITRATION",
-          },
-          value: "true",
-        },
-        {
-          descriptor: {
-            code: "COURT_JURISDICTION",
-          },
-          value: "New Delhi",
-        },
-        {
-          descriptor: {
-            code: "DELAY_INTEREST",
-          },
-          value: "2.5",
-        },
-        {
-          descriptor: {
-            code: "STATIC_TERMS",
-          },
-          value: "https://www.abc.com/settlement-terms/",
-        },
-        {
-          descriptor: {
-            code: "SETTLEMENT_AMOUNT",
-          },
-          value: "59",
-        },
-      ],
-    },
-    ...tags,
-  ];
+      );
+    }
+  }
+
+  existingPayload.message.order.tags = mergedTags;
   return existingPayload;
 }

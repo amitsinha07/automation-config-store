@@ -25,12 +25,13 @@ export async function onUpdateStopEndGenerator(
   }
   if (sessionData.payments) {
     existingPayload.message.order.payments = sessionData.payments;
-    existingPayload.message.order.payments[1] = sessionData?. update_3_payment
+    existingPayload.message.order.payments[1] = sessionData?.update_3_payment
     existingPayload.message.order.payments[1].status = "PAID";
   }
 
   const now = new Date().toISOString();
   existingPayload.message.order.created_at = sessionData.created_at;
   existingPayload.message.order.updated_at = now;
+  existingPayload.message.order.tags = sessionData.on_update_tags.flat();
   return existingPayload;
 }

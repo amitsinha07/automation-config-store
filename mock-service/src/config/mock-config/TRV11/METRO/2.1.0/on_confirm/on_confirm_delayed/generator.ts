@@ -122,9 +122,16 @@ export async function onConfirmDelayedGenerator(
     existingPayload.message.order.provider = sessionData.provider;
   }
   existingPayload.message.order.id = order_id;
+  // existingPayload.message.order.tags = [
+  //   ...sessionData.tags.flat(),
+  //   ...sessionData.select_tags.flat(),
+  // ];
+  const confirmBapTags = sessionData.confirm_tags
+    .flat()
+    .filter((item: any) => item.descriptor.code === "BAP_TERMS");
   existingPayload.message.order.tags = [
-    ...sessionData.tags.flat(),
-    ...sessionData.select_tags.flat(),
+    ...confirmBapTags,
+    ...sessionData.on_init_tags.flat(),
   ];
   const now = new Date().toISOString();
   const delay_duration = isoDurationToSeconds(sessionData.ttl) + 2;

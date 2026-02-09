@@ -21,5 +21,44 @@ export async function onInitPurchaseGenerator(
       };
     }) ?? [];
 
+    //______SETTLEMENT_AMOUNT____________
+  const tags = existingPayload?.message?.order?.tags;
+  if (!tags) return;
+
+  const collectedBy = sessionData?.collected_by
+  const price = Number(existingPayload?.message?.order?.quote?.price?.value ?? 0);
+
+  const buyerFinderFeesTag = tags?.find(
+    (tag: any) => tag?.descriptor?.code === "BPP_TERMS",
+  );
+
+  const feePercentage = Number(
+    buyerFinderFeesTag?.list?.find(
+      (item: any) => item?.descriptor?.code === "BUYER_FINDER_FEES_PERCENTAGE",
+    )?.value ?? 0,
+  );
+
+  const feeAmount = (price * feePercentage) / 100;
+
+  let settlementAmount = 0;
+  if (collectedBy === "BAP") {
+    settlementAmount = price - feeAmount;
+  } else if (collectedBy === "BPP") {
+    settlementAmount = feeAmount;
+  } else {
+    settlementAmount = price;
+  }
+
+  const settlementTermsTag = tags?.find(
+    (tag: any) => tag?.descriptor?.code === "BPP_TERMS",
+  );
+
+  const settlementAmountItem = settlementTermsTag?.list?.find(
+    (item: any) => item?.descriptor?.code === "SETTLEMENT_AMOUNT",
+  );
+
+  if (settlementAmountItem) {
+    settlementAmountItem.value = settlementAmount.toString();
+  }
   return existingPayload;
 }

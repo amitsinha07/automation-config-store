@@ -2,3 +2,4 @@ save-data:
   payments: "$.message.order.payments[*]"
   payment_id: "$.message.order.payments[*].id"
   tags: "$.message.order.tags"
+  on_init_tags: "$.message.order.tags" 

@@ -4,3 +4,4 @@ save-data:
   ttl: "$.context.ttl"
   buyer_side_fulfillment_ids: "$.message.order.fulfillments[*]"
   tags: "$.message.order.tags"
+  confirm_tags: "$.message.order.tags"
